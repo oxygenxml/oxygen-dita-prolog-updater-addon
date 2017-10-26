@@ -13,6 +13,7 @@ import ro.sync.ecss.extensions.api.AuthorDocumentController;
 import ro.sync.ecss.extensions.api.AuthorOperationException;
 import ro.sync.ecss.extensions.api.node.AttrValue;
 import ro.sync.ecss.extensions.api.node.AuthorElement;
+import ro.sync.ecss.extensions.api.node.AuthorNode;
 
 public class PrologContentCreater {
 
@@ -79,6 +80,11 @@ public class PrologContentCreater {
 
 	}
 
+	/**
+	 * 
+	 * @param authorPrologElement
+	 * @param isNewDocument
+	 */
 	private void updateAuthorElements(final AuthorElement authorPrologElement, final boolean isNewDocument) {
 		boolean foundCreator = false;
 		boolean foundContributor = false;
@@ -103,27 +109,8 @@ public class PrologContentCreater {
 				}
 				//if wasn't found a creator
 				if (!foundCreator) {
-					try {
-						SwingUtilities.invokeAndWait(new Runnable() {
-
-							public void run() {
-								try {
-									//insert a author creator before first author.
-									documentController.insertXMLFragment(authorCreatorXmlFragment, authorElements[0],
-											AuthorConstants.POSITION_BEFORE);
-								} catch (AuthorOperationException e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-								}
-							}
-						});
-					} catch (InvocationTargetException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+					addXmlFragment(authorCreatorXmlFragment, authorElements[0],
+							AuthorConstants.POSITION_BEFORE);
 				}
 				
 				
@@ -148,57 +135,20 @@ public class PrologContentCreater {
 				
 				//if wasn't found this contributor
 				if (!foundContributor) {
-					// TODO add contributor
-					try {
-						SwingUtilities.invokeAndWait(new Runnable() {
-							public void run() {
-								try {
-									//insert this contributer after last one.
-									documentController.insertXMLFragment(authorContributorXmlFragment, authorElements[length-1],
-											AuthorConstants.POSITION_AFTER);
-								} catch (AuthorOperationException e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-								}
-							}
-						});
-					} catch (InvocationTargetException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+					addXmlFragment(authorContributorXmlFragment, authorElements[length-1],
+							AuthorConstants.POSITION_AFTER);
 				}
 			}
 
 		}
 		else{
 			//It's not found author elements
-			try {
-				SwingUtilities.invokeAndWait(new Runnable() {
-					public void run() {
-						try {
-							if(isNewDocument){
-								documentController.insertXMLFragment(authorCreatorXmlFragment, authorPrologElement.getStartOffset()+1);
-							}
-							else {
-								documentController.insertXMLFragment(authorContributorXmlFragment, authorPrologElement.getStartOffset()+1);
-							}
-						} catch (AuthorOperationException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					}
-				});
-			} catch (InvocationTargetException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			if(isNewDocument){
+				addXmlFragment(authorCreatorXmlFragment, authorPrologElement.getStartOffset()+1);
 			}
-			
+			else{
+				addXmlFragment(authorContributorXmlFragment, authorPrologElement.getStartOffset()+1);
+			}
 		}
 	}
 
@@ -210,70 +160,58 @@ public class PrologContentCreater {
 	 * @param isNewDocument
 	 */
 	private void updateCritdatesElements(AuthorElement authorPrologElement, boolean isNewDocument) {
-	
+		//get the critdates author elements
 		final AuthorElement[] critdatesElements = authorPrologElement.getElementsByLocalName("critdates");
-	
 		int length = critdatesElements.length;
 		
 		if(length != 0){
+			//was found critdates element
 			if(isNewDocument){
+				//is a new document
+				//get the created elements
 				 AuthorElement[] creatDateElements = critdatesElements[0].getElementsByLocalName("created");
+		
+				 //if wasn't found a created element.
 				 if(creatDateElements.length == 0){
-					 try {
-							SwingUtilities.invokeAndWait(new Runnable() {
-								public void run() {
-									try {
-										//insert create date .
-										documentController.insertXMLFragment(createdDateXmlFragment, critdatesElements[0].getStartOffset() + 1);
-									} catch (AuthorOperationException e) {
-										// TODO Auto-generated catch block
-										e.printStackTrace();
-									}
-								}
-							});
-						} catch (InvocationTargetException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
+					 addXmlFragment(createdDateXmlFragment, critdatesElements[0].getStartOffset() + 1);
 					 
 				 }else{
+					 //if was found a created element
 					 AttrValue date = creatDateElements[0].getAttribute("date");
-					 System.out.println("get date: " + date.getRawValue());
+					 //check if value of atribute date is empty
 					 if(date.getRawValue().isEmpty()){
+						 //add the localDate as value
 						 creatDateElements[0].setAttribute("date", new AttrValue(localDate));
 					 }
 				 }
 			}
 			else{
+				//it's not a new document
 				 AuthorElement[] reviDateElements = critdatesElements[0].getElementsByLocalName("revised");
-				 if(reviDateElements.length == 0){
-					 try {
-							SwingUtilities.invokeAndWait(new Runnable() {
-								public void run() {
-									try {
-										//insert create date .
-										documentController.insertXMLFragment(resivedModifiedXmlFragment, critdatesElements[0].getEndOffset() );
-									} catch (AuthorOperationException e) {
-										// TODO Auto-generated catch block
-										e.printStackTrace();
-									}
-								}
-							});
-						} catch (InvocationTargetException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
+				 int reviDateElementsLength = reviDateElements.length;
+				 
+				 if(reviDateElementsLength == 0){
+					 addXmlFragment(resivedModifiedXmlFragment, critdatesElements[0].getEndOffset());
 				 }else{
-						 reviDateElements[0].setAttribute("modified", new AttrValue(localDate));
+					 boolean localDateExist = false;
+					 for (int i = 0; i < reviDateElementsLength; i++) {
+						 AuthorElement curentRevisedElement = reviDateElements[i];
+						 
+						 String currentModifiedDate = curentRevisedElement.getAttribute("modified").getRawValue();
+						 if(localDate.equals(currentModifiedDate) ){
+							 localDateExist = true;
+							 break;
+						 }
+					}
+					 if(!localDateExist){
+						 addXmlFragment(resivedModifiedXmlFragment, reviDateElements[reviDateElementsLength-1], AuthorConstants.POSITION_AFTER);
+					 }
+					 
 				 }
 			}
+			
 		}else{
+			//wasn't found critdates element
 			final String toAdd;
 			if(isNewDocument){
 				toAdd = "<critdates>\n" + createdDateXmlFragment + "\n</critdates>";
@@ -282,13 +220,23 @@ public class PrologContentCreater {
 				toAdd = "<critdates>\n" + resivedModifiedXmlFragment + "\n</critdates>";
 			}
 			final AuthorElement[] authorElements = authorPrologElement.getElementsByLocalName("author");
-			try {
+			
+			addXmlFragment(toAdd, authorElements[authorElements.length-1], AuthorConstants.POSITION_AFTER);
+		}
+	}
+	
+	/**
+	 * 
+	 * @param xmlFragment
+	 * @param offset
+	 */
+	private void addXmlFragment(final String xmlFragment, final int offset){
+		 try {
 				SwingUtilities.invokeAndWait(new Runnable() {
 					public void run() {
 						try {
-							//insert this contributer after last one.
-							documentController.insertXMLFragment(toAdd, authorElements[authorElements.length-1],
-									AuthorConstants.POSITION_AFTER);
+							//insert create date .
+							documentController.insertXMLFragment(xmlFragment, offset );
 						} catch (AuthorOperationException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -302,6 +250,33 @@ public class PrologContentCreater {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+	}
+	
+	/**
+	 * 
+	 * @param xmlFragment
+	 * @param relativeTo
+	 * @param relativPosition
+	 */
+	private void addXmlFragment(final String xmlFragment, final AuthorNode relativeTo, final String relativPosition){
+		try {
+			SwingUtilities.invokeAndWait(new Runnable() {
+				public void run() {
+					try {
+						//insert create date .
+						documentController.insertXMLFragment(xmlFragment, relativeTo, relativPosition);
+					} catch (AuthorOperationException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			});
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 }
