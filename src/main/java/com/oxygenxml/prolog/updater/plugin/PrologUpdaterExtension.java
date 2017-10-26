@@ -2,6 +2,8 @@ package com.oxygenxml.prolog.updater.plugin;
 
 import java.net.URL;
 
+import com.oxygenxml.prolog.updater.DitaUpdater;
+
 import ro.sync.exml.plugin.workspace.WorkspaceAccessPluginExtension;
 import ro.sync.exml.workspace.api.PluginWorkspace;
 import ro.sync.exml.workspace.api.editor.WSEditor;
@@ -14,7 +16,7 @@ public class PrologUpdaterExtension implements WorkspaceAccessPluginExtension{
 	public void applicationStarted(final StandalonePluginWorkspace workspace) {
 
 		//create a XmlUpdater
-		final DitaUpdater xmlUpdater = new DitaUpdater(workspace);
+		final DitaUpdater xmlUpdater = new DitaUpdater();
 		
 		//add an WSEditorChangeListener
 		workspace.addEditorChangeListener(new WSEditorChangeListener(){
