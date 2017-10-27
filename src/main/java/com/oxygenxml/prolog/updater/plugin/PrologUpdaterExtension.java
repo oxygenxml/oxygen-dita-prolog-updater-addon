@@ -11,8 +11,16 @@ import ro.sync.exml.workspace.api.listeners.WSEditorChangeListener;
 import ro.sync.exml.workspace.api.listeners.WSEditorListener;
 import ro.sync.exml.workspace.api.standalone.StandalonePluginWorkspace;
 
+/**
+ * Prolog updater plugin extension.
+ * @author intern4
+ *
+ */
 public class PrologUpdaterExtension implements WorkspaceAccessPluginExtension{
 
+	/**
+	 * Main plugin method. Notified when the application is started. 
+	 */
 	public void applicationStarted(final StandalonePluginWorkspace workspace) {
 
 		//create a XmlUpdater
@@ -43,6 +51,9 @@ public class PrologUpdaterExtension implements WorkspaceAccessPluginExtension{
 		
 	}
 
+	/**
+	 * Notified before the editors are closed and the application exits
+	 */
 	public boolean applicationClosing() {
 		return true;
 	}

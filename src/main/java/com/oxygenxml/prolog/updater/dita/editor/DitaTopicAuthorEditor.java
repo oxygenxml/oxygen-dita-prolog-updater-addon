@@ -26,7 +26,7 @@ import ro.sync.exml.workspace.api.editor.page.author.WSAuthorEditorPage;
 public class DitaTopicAuthorEditor implements DitaTopicEditor{
 
 	/**
-	 * Contains all elements from prolog.
+	 * Contains all elements(tags) from prolog.
 	 */
 	private PrologContentCreater prologContentCreater;
 	
@@ -40,7 +40,7 @@ public class DitaTopicAuthorEditor implements DitaTopicEditor{
 	/**
 	 * Constructor
 	 * @param wsEditorPage workspace page editor.
-	 * @param prologContentCreater Content of prolog.
+	 * @param prologContentCreater Contains all elements from prolog.
 	 */
 	public DitaTopicAuthorEditor(WSEditorPage wsEditorPage, PrologContentCreater prologContentCreater) {
 		this.documentController = ((WSAuthorEditorPage)wsEditorPage).getDocumentController();
@@ -95,17 +95,16 @@ public class DitaTopicAuthorEditor implements DitaTopicEditor{
 		boolean foundCreator = false;
 		boolean foundContributor = false;
 
-		//get the author elements
+		//get the author elements with name author"
 		final AuthorElement[] authorElements = authorPrologElement.getElementsByLocalName("author");
 		final int length = authorElements.length;
 		
-		//it's found author elements
+		//the element with author name doesn't exist
 		if (length != 0) {
 			
 			if (isNewDocument) {
 				//it's a new document
-
-				//check it's already set a creator
+				//check if it's already set a creator
 				for (int i = 0; i < length; i++) {
 					AuthorElement authorElement = authorElements[i];
 					if (authorElement.getAttribute("type").getRawValue().equals("creator")) {
@@ -135,6 +134,15 @@ public class DitaTopicAuthorEditor implements DitaTopicEditor{
 					}
 					if (authorElement.getAttribute("type").getRawValue().equals("contributor") && 
 							prologContentCreater.getAuthor().equals(textContent)) {
+						//check if text content is empty 
+						try {
+							if(authorElement.getTextContent().isEmpty()){
+								 //add the author name
+									//TODO setTextContent
+							 }
+						} catch (BadLocationException e) {
+							e.printStackTrace();
+						}
 						foundContributor = true;
 						break;
 					}
@@ -175,6 +183,7 @@ public class DitaTopicAuthorEditor implements DitaTopicEditor{
 		
 				 //if wasn't found a created element.
 				 if(creatDateElements.length == 0){
+					 //add a created element.
 					 addXmlFragment(prologContentCreater.getCreatedDateXmlFragment(), critdatesElements[0].getStartOffset() + 1);
 					 
 				 }else{

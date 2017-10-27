@@ -3,6 +3,11 @@ package com.oxygenxml.prolog.updater.plugin;
 import ro.sync.exml.plugin.Plugin;
 import ro.sync.exml.plugin.PluginDescriptor;
 
+/**
+ * Prolog updater class.
+ * @author intern4
+ *
+ */
 public class PrologUpdaterPlugin extends Plugin {
   /**
    * The static plugin instance.
