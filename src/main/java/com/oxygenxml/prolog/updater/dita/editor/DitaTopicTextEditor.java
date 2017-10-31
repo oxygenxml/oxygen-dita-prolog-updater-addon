@@ -112,6 +112,7 @@ public class DitaTopicTextEditor implements DitaTopicEditor {
 				String toAdd = "<critdates>\n" + prologContentCreater.getDateXmlFragment(isNewDocument) + "\n</critdates>";
 				addXmlFragment(toAdd, "//*[contains(@class,'topic/prolog')]/author[last()]",
 						RelativeInsertPosition.INSERT_LOCATION_AFTER);
+			
 			} else {
 				// the critdates element exists
 				if (isNewDocument) {
@@ -141,10 +142,11 @@ public class DitaTopicTextEditor implements DitaTopicEditor {
 					}
 				} else {
 					//it's not a new document
-					//search for revised elements that have local date as modified value.
-					WSXMLTextNodeRange[] revisedElements = wsTextEditorPage
+					//search for revised elements that have local date as modified and have contributor as comment
+					Object[] revisedElements = wsTextEditorPage
 							.findElementsByXPath("//*[contains(@class,'topic/prolog')]/critdates/revised[@modified = '"
-									+ prologContentCreater.getLocalDate() + "']");
+									+ prologContentCreater.getLocalDate() + "']/"
+											+ "preceding-sibling::node()[2][.='"+prologContentCreater.getAuthor()+"']"); 
 					
 					//if the element wasn't found
 					if (revisedElements.length == 0) {
@@ -194,27 +196,11 @@ public class DitaTopicTextEditor implements DitaTopicEditor {
 						// add the creator author xml fragment
 						addXmlFragment(prologContentCreater.getAuthorCreatorXmlFragment(), "//*[contains(@class,'topic/prolog')]",
 								RelativeInsertPosition.INSERT_LOCATION_AS_FIRST_CHILD);
-					} else {
-						// was found a creator
-						if (creatorAuthorElements[0] instanceof ElementNSImpl) {
-							ElementNSImpl currentCreatorAuthor = (ElementNSImpl) creatorAuthorElements[0];
-							// check if the text content is empty
-							System.out.println("textConte:"+ currentCreatorAuthor.getTextContent());
-							if (currentCreatorAuthor.getTextContent().isEmpty()) {
-								System.out.println("isEmpty");
-								//TODO Problema aici(setTextContent)
-								//set the author text content
-								try {
-									currentCreatorAuthor.setTextContent(prologContentCreater.getAuthor());
-								} catch (Throwable e) {
-									e.printStackTrace();
-								}
-							}
-						}
 					}
+					
 				} else {
 					// the document isn't new
-					// search for a contributor author that has local author name as text.
+					// search for a contributor author that has local author name as text 
 					Object[] contributorAuthorElements = wsTextEditorPage.evaluateXPath("//*[contains(@class,'topic/prolog')]/"
 							+ "author[@type='contributor' and text()= '" + prologContentCreater.getAuthor() + "']");
 					int contributorElementSize = contributorAuthorElements.length;
