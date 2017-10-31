@@ -43,7 +43,7 @@ public class DitaUpdateTestUtil extends TestCase{
 	 * @throws SAXException
 	 * @throws BadLocationException
 	 */
-	public static void testAuthorMode(String inputXML, boolean isNewDocument, String expectedXML) throws IOException, SAXException, BadLocationException{
+	public static void testInAuthorMode(String inputXML, boolean isNewDocument, String expectedXML) throws IOException, SAXException, BadLocationException{
 		//
 		//Create a AuthorDocumentController
 		//

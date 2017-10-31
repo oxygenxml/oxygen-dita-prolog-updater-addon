@@ -1,22 +1,13 @@
 package com.oxygenxml.prolog.updater;
 
-import com.ibm.icu.text.IDNA.Info;
 import com.oxygenxml.prolog.updater.dita.editor.DitaTopicAuthorEditor;
 import com.oxygenxml.prolog.updater.dita.editor.DitaTopicEditor;
 import com.oxygenxml.prolog.updater.dita.editor.DitaTopicTextEditor;
 
-import ro.sync.ecss.extensions.api.AuthorReviewController;
-import ro.sync.ecss.extensions.api.AuthorReviewerNameController;
-import ro.sync.ecss.extensions.api.review.ReviewActionsProvider;
-import ro.sync.exml.plugin.workspace.WorkspaceAccessPluginExtension;
-import ro.sync.exml.workspace.api.PluginWorkspace;
-import ro.sync.exml.workspace.api.PluginWorkspaceProvider;
 import ro.sync.exml.workspace.api.editor.WSEditor;
 import ro.sync.exml.workspace.api.editor.page.WSEditorPage;
 import ro.sync.exml.workspace.api.editor.page.author.WSAuthorEditorPage;
 import ro.sync.exml.workspace.api.editor.page.text.xml.WSXMLTextEditorPage;
-import ro.sync.exml.workspace.api.options.WSOptionsStorage;
-import ro.sync.exml.workspace.api.standalone.StandalonePluginWorkspace;
 
 /**
  * Update the prolog in DITA topics.

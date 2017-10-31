@@ -10,7 +10,7 @@ public interface DitaTopicEditor {
 	/**
 	 * Class's value of prolog anterior note.
 	 */
-	final String ANTERIOR_NODE_CLASS_VALUE = "topic/body";
+	final String FOLLOWING_NODE_CLASS_VALUE = "topic/body";
 	
 	/**
 	 * Update the prolog in DITA topic document according to given flag(isNewDocument)

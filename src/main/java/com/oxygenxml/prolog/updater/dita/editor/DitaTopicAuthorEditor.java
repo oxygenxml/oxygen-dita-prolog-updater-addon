@@ -195,20 +195,23 @@ public class DitaTopicAuthorEditor implements DitaTopicEditor{
 
 				if (reviDateElementsLength == 0) {
 					addXmlFragment(prologContentCreater.getResivedModifiedXmlFragment(), critdatesElements[0].getEndOffset());
+				
 				} else {
 					boolean localDateWithAuthorExist = false;
+					//Iterate over revised elements
 					for (int i = 0; i < reviDateElementsLength; i++) {
 						AuthorElement curentRevisedElement = reviDateElements[i];
 
+						//check the modified value.
 						String currentModifiedDate = curentRevisedElement.getAttribute("modified").getRawValue();
 						if (prologContentCreater.getLocalDate().equals(currentModifiedDate)) {
 
+							//check the comment
 							int currentElemetStartOffSet = curentRevisedElement.getStartOffset();
 							AuthorNode anteriorNode;
 							try {
 								anteriorNode = documentController.getNodeAtOffset(currentElemetStartOffSet - 1);
 
-								System.out.println("anterior node: " + anteriorNode);
 								if (anteriorNode.getType() == AuthorNode.NODE_TYPE_COMMENT) {
 									if (prologContentCreater.getAuthor().equals(anteriorNode.getTextContent())) {
 										localDateWithAuthorExist = true;
@@ -216,7 +219,6 @@ public class DitaTopicAuthorEditor implements DitaTopicEditor{
 									}
 								}
 							} catch (BadLocationException e) {
-								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
 
@@ -323,7 +325,7 @@ public class DitaTopicAuthorEditor implements DitaTopicEditor{
 				AttrValue attribute = authorElement.getAttribute("class");
 				
 				//if value of attribute contains ANTERIOR_NODE_CLASS_VALUE
-				if (attribute.toString().contains(ANTERIOR_NODE_CLASS_VALUE)) {
+				if (attribute.toString().contains(FOLLOWING_NODE_CLASS_VALUE)) {
 					// anterior node was found
 					return authorElement;
 				}

@@ -28,7 +28,7 @@ public class PrologUpdaterExtensionTest extends TestCase {
 		// Mock the XML Updater.
 		final boolean[] doUpdateProlog = new boolean[1];
 		final DitaUpdater ditaUpdater = Mockito.mock(DitaUpdater.class);
-		Mockito.doAnswer(new Answer() {
+		Mockito.doAnswer(new Answer<Object>() {
 			public Object answer(InvocationOnMock invocation) {
 				doUpdateProlog[0] = true;
 				return null;
@@ -51,7 +51,7 @@ public class PrologUpdaterExtensionTest extends TestCase {
 		// Mock the editor access.
 		final WSEditorListener[] editorListeners = new WSEditorListener[1];
 		final WSEditor editorAccess = Mockito.mock(WSEditor.class);
-		Mockito.doAnswer(new Answer() {
+		Mockito.doAnswer(new Answer<Object>() {
 			public Object answer(InvocationOnMock invocation) {
 				editorListeners[0] = (WSEditorListener) invocation.getArguments()[0];
 				return null;
@@ -62,14 +62,14 @@ public class PrologUpdaterExtensionTest extends TestCase {
 		// Mock the workspace.
 		final WSEditorChangeListener[] workspaceListeners = new WSEditorChangeListener[1];
 		StandalonePluginWorkspace workspace = Mockito.mock(StandalonePluginWorkspace.class);
-		Mockito.doAnswer(new Answer() {
+		Mockito.doAnswer(new Answer<Object>() {
 			public Object answer(InvocationOnMock invocation) {
 				workspaceListeners[0] = (WSEditorChangeListener) invocation.getArguments()[0];
 				return null;
 			}
 		}).when(workspace).addEditorChangeListener((WSEditorChangeListener) Mockito.anyObject(), Mockito.anyInt());
 
-		Mockito.when(workspace.getEditorAccess((URL) Mockito.anyObject(), Mockito.anyInt())).then(new Answer() {
+		Mockito.when(workspace.getEditorAccess((URL) Mockito.anyObject(), Mockito.anyInt())).then(new Answer<Object>() {
 			public Object answer(InvocationOnMock invocation) {
 				return editorAccess;
 			}

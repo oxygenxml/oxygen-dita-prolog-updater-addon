@@ -9,7 +9,9 @@ import javax.swing.text.BadLocationException;
 
 import org.xml.sax.SAXException;
 
-public class DitaUpdaterWithAuthorTest {
+import junit.framework.TestCase;
+
+public class DitaUpdaterAuthorTest extends TestCase{
 
 	/**
 	 * Test if the author tag is correct modified after save operation.
@@ -74,10 +76,10 @@ public class DitaUpdaterWithAuthorTest {
 				" ";
 		
 		// test when document is new
-		DitaUpdateTestUtil.testAuthorMode(xmlWithCreator, true,  expectedNewXMLWithCreator);
+		DitaUpdateTestUtil.testInAuthorMode(xmlWithCreator, true,  expectedNewXMLWithCreator);
 		
 		//test when document isn't new
-		DitaUpdateTestUtil.testAuthorMode(xmlWithCreator, false ,  expectedOldXmlWithCreator);
+		DitaUpdateTestUtil.testInAuthorMode(xmlWithCreator, false ,  expectedOldXmlWithCreator);
 		
 		
 		
@@ -129,10 +131,10 @@ public class DitaUpdaterWithAuthorTest {
 				" ";
 		
 		// test when document is new
-		DitaUpdateTestUtil.testAuthorMode(xmlWithContributor, true,  expectedNewXMLWithContributor);
+		DitaUpdateTestUtil.testInAuthorMode(xmlWithContributor, true,  expectedNewXMLWithContributor);
 		
 		//test when document isn't new
-		DitaUpdateTestUtil.testAuthorMode(xmlWithContributor, false ,  expectedOldXmlWithContributor);
+		DitaUpdateTestUtil.testInAuthorMode(xmlWithContributor, false ,  expectedOldXmlWithContributor);
 		
 	
 	
@@ -176,7 +178,7 @@ public class DitaUpdaterWithAuthorTest {
 			" ";
 	
 	// test when document isn't new
-	DitaUpdateTestUtil.testAuthorMode(xmlWithDifferentContributor, false,  expectedOldXmlWithDifferentContributor);
+	DitaUpdateTestUtil.testInAuthorMode(xmlWithDifferentContributor, false,  expectedOldXmlWithDifferentContributor);
 	
 	}
 

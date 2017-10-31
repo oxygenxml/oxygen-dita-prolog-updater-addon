@@ -9,7 +9,9 @@ import javax.swing.text.BadLocationException;
 
 import org.xml.sax.SAXException;
 
-public class DitaUpdaterWithoutPrologTest {
+import junit.framework.TestCase;
+
+public class DitaUpdaterWithoutPrologTest  extends TestCase{
 
 	/**
 	 * Test if the prolog is correct added after save operation.
@@ -69,10 +71,62 @@ public class DitaUpdaterWithoutPrologTest {
 				"";
 		
 		// test when document is new
-		DitaUpdateTestUtil.testAuthorMode(xmlWithoutProlog, true, expectedNewXML);
+		DitaUpdateTestUtil.testInAuthorMode(xmlWithoutProlog, true, expectedNewXML);
 		
 		//test when document isn't new
-		DitaUpdateTestUtil.testAuthorMode(xmlWithoutProlog, false, expectedOldXml);
+		DitaUpdateTestUtil.testInAuthorMode(xmlWithoutProlog, false, expectedOldXml);
+		
+		
+		//
+		//Test document with prolog element that doesn't has child.
+		//
+		//input document with author 
+		String xmlWithEmptyProlog ="<?xml version=\"1.0\" encoding=\"utf-8\"?><topic xmlns:ditaarch=\"http://dita.oasis-open.org/architecture/2005/\" id=\"topic_pmy_4gd_sbb\" ditaarch:DITAArchVersion=\"1.3\" domains=\"(topic abbrev-d)                            a(props deliveryTarget)                            (topic equation-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic mathml-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic svg-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)   \" class=\"- topic/topic \">" + 
+				"    <title class=\"- topic/title \"> </title>" + 
+				"    <prolog class=\"- topic/prolog \">" + 
+				"    </prolog>" + 
+				"    <body class=\"- topic/body \">" + 
+				"        <p class=\"- topic/p \"/>" + 
+				"    </body>" + 
+				"</topic>" + 
+				"";
+		
+		//expected XML output for new input document
+		String expectedNewXMLWithEmptyProlog = "<?xml version=\"1.0\" encoding=\"utf-8\"?><topic xmlns:ditaarch=\"http://dita.oasis-open.org/architecture/2005/\" id=\"topic_pmy_4gd_sbb\" ditaarch:DITAArchVersion=\"1.3\" domains=\"(topic abbrev-d)                            a(props deliveryTarget)                            (topic equation-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic mathml-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic svg-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)   \" class=\"- topic/topic \">" + 
+				"    <title class=\"- topic/title \"> </title>" + 
+				"    <prolog class=\"- topic/prolog \">" + 
+				"        <author type=\"creator\" >"+DitaUpdateTestUtil.AUTHOR_NAME+"</author> " + 
+				"        <critdates >" + 
+				"            <created date=\""+ localDate +"\" />  " + 
+				"        </critdates>" + 
+				"    </prolog>" + 
+				"    <body class=\"- topic/body \">" + 
+				"        <p class=\"- topic/p \"/>" + 
+				"    </body>" + 
+				"</topic>" + 
+				"";
+
+		//expected XML output for old input document
+		String expectedOldXmlWithEmptyProlog = "<?xml version=\"1.0\" encoding=\"utf-8\"?><topic xmlns:ditaarch=\"http://dita.oasis-open.org/architecture/2005/\" id=\"topic_pmy_4gd_sbb\" ditaarch:DITAArchVersion=\"1.3\" domains=\"(topic abbrev-d)                            a(props deliveryTarget)                            (topic equation-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic mathml-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic svg-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)   \" class=\"- topic/topic \">" + 
+				"    <title class=\"- topic/title \"> </title>" + 
+				"    <prolog class=\"- topic/prolog \">" + 
+				"        <author type=\"contributor\" >"+DitaUpdateTestUtil.AUTHOR_NAME+"</author>" + 
+				"        <critdates>" + 
+				"           <!--"+DitaUpdateTestUtil.AUTHOR_NAME+"-->" + 
+				"            <revised modified=\""+localDate+"\" />" + 
+				"        </critdates>" + 
+				"    </prolog>" + 
+				"    <body class=\"- topic/body \">" + 
+				"        <p class=\"- topic/p \"/>" + 
+				"    </body>" + 
+				"</topic>" + 
+				" ";
+		
+		// test when document is new
+		DitaUpdateTestUtil.testInAuthorMode(xmlWithEmptyProlog, true,  expectedNewXMLWithEmptyProlog);
+		
+		//test when document isn't new
+		DitaUpdateTestUtil.testInAuthorMode(xmlWithEmptyProlog, false ,  expectedOldXmlWithEmptyProlog);
 		
 	}
 
