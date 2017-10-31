@@ -54,8 +54,8 @@ public class PrologContentCreater {
 		Date date = new Date();
 		localDate = dateFormat.format(date);
 		
-		createdDateXmlFragment  =  "<created date=\"" + localDate + "\" />";
-		resivedModifiedXmlFragment = "<revised modified=\"" + localDate + "\" />";
+		createdDateXmlFragment  =  "  <created date=\"" + localDate + "\" />";
+		resivedModifiedXmlFragment = "<!--"+author+"-->\n<revised modified=\"" + localDate + "\" />";
 	}
 
 	/**

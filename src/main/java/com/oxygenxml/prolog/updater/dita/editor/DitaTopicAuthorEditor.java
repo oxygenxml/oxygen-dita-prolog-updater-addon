@@ -99,7 +99,7 @@ public class DitaTopicAuthorEditor implements DitaTopicEditor{
 		final AuthorElement[] authorElements = authorPrologElement.getElementsByLocalName("author");
 		final int length = authorElements.length;
 		
-		//the element with author name doesn't exist
+		//the elements with author name exist
 		if (length != 0) {
 			
 			if (isNewDocument) {
@@ -134,15 +134,6 @@ public class DitaTopicAuthorEditor implements DitaTopicEditor{
 					}
 					if (authorElement.getAttribute("type").getRawValue().equals("contributor") && 
 							prologContentCreater.getAuthor().equals(textContent)) {
-						//check if text content is empty 
-						try {
-							if(authorElement.getTextContent().isEmpty()){
-								 //add the author name
-									//TODO setTextContent
-							 }
-						} catch (BadLocationException e) {
-							e.printStackTrace();
-						}
 						foundContributor = true;
 						break;
 					}
@@ -189,37 +180,54 @@ public class DitaTopicAuthorEditor implements DitaTopicEditor{
 				 }else{
 					 //if was found a created element
 					 AttrValue date = creatDateElements[0].getAttribute("date");
-					 //check if value of atribute date is empty
+
+					 //check if value of attribute date is empty
 					 if(date.getRawValue().isEmpty()){
 						 //add the localDate as value
 						 creatDateElements[0].setAttribute("date", new AttrValue(prologContentCreater.getLocalDate()));
 					 }
 				 }
 			}
-			else{
-				//it's not a new document
-				 AuthorElement[] reviDateElements = critdatesElements[0].getElementsByLocalName("revised");
-				 int reviDateElementsLength = reviDateElements.length;
-				 
-				 if(reviDateElementsLength == 0){
-					 addXmlFragment(prologContentCreater.getResivedModifiedXmlFragment(), critdatesElements[0].getEndOffset());
-				 }else{
-					 boolean localDateExist = false;
-					 for (int i = 0; i < reviDateElementsLength; i++) {
-						 AuthorElement curentRevisedElement = reviDateElements[i];
-						 
-						 String currentModifiedDate = curentRevisedElement.getAttribute("modified").getRawValue();
-						 if(prologContentCreater.getLocalDate().equals(currentModifiedDate) ){
-							 localDateExist = true;
-							 break;
-						 }
+			else {
+				// it's not a new document
+				AuthorElement[] reviDateElements = critdatesElements[0].getElementsByLocalName("revised");
+				int reviDateElementsLength = reviDateElements.length;
+
+				if (reviDateElementsLength == 0) {
+					addXmlFragment(prologContentCreater.getResivedModifiedXmlFragment(), critdatesElements[0].getEndOffset());
+				} else {
+					boolean localDateWithAuthorExist = false;
+					for (int i = 0; i < reviDateElementsLength; i++) {
+						AuthorElement curentRevisedElement = reviDateElements[i];
+
+						String currentModifiedDate = curentRevisedElement.getAttribute("modified").getRawValue();
+						if (prologContentCreater.getLocalDate().equals(currentModifiedDate)) {
+
+							int currentElemetStartOffSet = curentRevisedElement.getStartOffset();
+							AuthorNode anteriorNode;
+							try {
+								anteriorNode = documentController.getNodeAtOffset(currentElemetStartOffSet - 1);
+
+								System.out.println("anterior node: " + anteriorNode);
+								if (anteriorNode.getType() == AuthorNode.NODE_TYPE_COMMENT) {
+									if (prologContentCreater.getAuthor().equals(anteriorNode.getTextContent())) {
+										localDateWithAuthorExist = true;
+										break;
+									}
+								}
+							} catch (BadLocationException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+
+						}
 					}
-					 if(!localDateExist){
-						 addXmlFragment(prologContentCreater.getResivedModifiedXmlFragment(), reviDateElements[reviDateElementsLength-1], 
-								 AuthorConstants.POSITION_AFTER);
-					 }
-					 
-				 }
+					if (!localDateWithAuthorExist) {
+						addXmlFragment(prologContentCreater.getResivedModifiedXmlFragment(),
+								reviDateElements[reviDateElementsLength - 1], AuthorConstants.POSITION_AFTER);
+					}
+
+				}
 			}
 			
 		}else{

@@ -1,13 +1,22 @@
 package com.oxygenxml.prolog.updater;
 
+import com.ibm.icu.text.IDNA.Info;
 import com.oxygenxml.prolog.updater.dita.editor.DitaTopicAuthorEditor;
 import com.oxygenxml.prolog.updater.dita.editor.DitaTopicEditor;
 import com.oxygenxml.prolog.updater.dita.editor.DitaTopicTextEditor;
 
+import ro.sync.ecss.extensions.api.AuthorReviewController;
+import ro.sync.ecss.extensions.api.AuthorReviewerNameController;
+import ro.sync.ecss.extensions.api.review.ReviewActionsProvider;
+import ro.sync.exml.plugin.workspace.WorkspaceAccessPluginExtension;
+import ro.sync.exml.workspace.api.PluginWorkspace;
+import ro.sync.exml.workspace.api.PluginWorkspaceProvider;
 import ro.sync.exml.workspace.api.editor.WSEditor;
 import ro.sync.exml.workspace.api.editor.page.WSEditorPage;
 import ro.sync.exml.workspace.api.editor.page.author.WSAuthorEditorPage;
 import ro.sync.exml.workspace.api.editor.page.text.xml.WSXMLTextEditorPage;
+import ro.sync.exml.workspace.api.options.WSOptionsStorage;
+import ro.sync.exml.workspace.api.standalone.StandalonePluginWorkspace;
 
 /**
  * Update the prolog in DITA topics.
@@ -16,7 +25,7 @@ import ro.sync.exml.workspace.api.editor.page.text.xml.WSXMLTextEditorPage;
  *
  */
 public class DitaUpdater {
-
+	
 	/**
 	 * Update the prolog of the current page from given wsEditor.
 	 * 
@@ -29,7 +38,7 @@ public class DitaUpdater {
 		WSEditorPage currentPage = wsEditor.getCurrentPage();
 
 		// get the reviewerAuthorName
-		String reviewerAuthorName ="test";// ((WSAuthorEditorPage) currentPage).getAuthorAccess().getReviewController().getReviewerAuthorName();
+		String reviewerAuthorName = getAuthorName();
 		
 		//create a PrologContentCreator
 		PrologContentCreater prologContentCreater = new PrologContentCreater(reviewerAuthorName);
@@ -48,6 +57,24 @@ public class DitaUpdater {
 		}
 	}
 
+	
+	/*
+	 * Get the name of the author.
+	 */
+	protected String getAuthorName(){
+	//TODO get the author name
+	// ((WSAuthorEditorPage) currentPage).getAuthorAccess().getReviewController().getReviewerAuthorName();
+		
+//	PluginWorkspace pluginWorkspace = PluginWorkspaceProvider.getPluginWorkspace();
+//	
+//	WSOptionsStorage optionsStorage = pluginWorkspace.getOptionsStorage();
+//	if (optionsStorage != null) {
+//		String nume = optionsStorage.getOption("change.tracking.author", authorName);
+//		System.out.println("author name: " + nume);
+//	}
+		
+		return "test";
+	}
 	
 
 }

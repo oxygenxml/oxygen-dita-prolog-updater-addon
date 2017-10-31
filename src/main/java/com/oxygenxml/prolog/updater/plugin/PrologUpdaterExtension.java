@@ -23,8 +23,13 @@ public class PrologUpdaterExtension implements WorkspaceAccessPluginExtension{
 	 */
 	public void applicationStarted(final StandalonePluginWorkspace workspace) {
 
+//TODO delete		
+//		String name = (String)workspace.getGlobalObjectProperty("change.tracking.author");
+//		System.out.println("name: " + name);
+		
+		
 		//create a XmlUpdater
-		final DitaUpdater xmlUpdater = new DitaUpdater();
+		final DitaUpdater xmlUpdater = createDitaUpdater();
 		
 		//add an WSEditorChangeListener
 		workspace.addEditorChangeListener(new WSEditorChangeListener(){
@@ -49,6 +54,15 @@ public class PrologUpdaterExtension implements WorkspaceAccessPluginExtension{
 			
 		}, PluginWorkspace.MAIN_EDITING_AREA);
 		
+	}
+
+	/**
+	 * Creates the udpater.
+	 * 
+	 * @return a new instance.
+	 */
+	protected DitaUpdater createDitaUpdater() {
+		return new DitaUpdater();
 	}
 
 	/**
