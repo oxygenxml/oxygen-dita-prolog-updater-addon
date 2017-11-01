@@ -20,7 +20,7 @@ import org.xml.sax.InputSource;
  */
 public class XmlPrettifierUtil {
 
-	public static String prettify(String xmlContent) {
+	public static String prettify(String xmlContent) throws IOException {
 		String prettifiedContent;
 
 		TransformerFactory transformerFactory = TransformerFactory.newInstance();
@@ -48,11 +48,7 @@ public class XmlPrettifierUtil {
 		}
 		prettifiedContent = sw.toString();
 
-		try {
-			sw.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		sw.close();
 
 		return prettifiedContent;
 	}

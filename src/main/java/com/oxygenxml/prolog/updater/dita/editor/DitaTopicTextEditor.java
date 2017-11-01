@@ -4,6 +4,8 @@ import java.lang.reflect.InvocationTargetException;
 
 import javax.swing.SwingUtilities;
 
+import org.apache.log4j.Logger;
+
 import com.oxygenxml.prolog.updater.PrologContentCreator;
 
 import ro.sync.exml.editor.xmleditor.operations.context.RelativeInsertPosition;
@@ -35,6 +37,11 @@ public class DitaTopicTextEditor implements DitaTopicEditor {
 	 */
 	private WSXMLTextEditorPage wsTextEditorPage;
 
+	/**
+	 * Logger
+	 */
+	 private static final Logger logger = Logger.getLogger(DitaTopicTextEditor.class);
+	
 
 	/**
 	 * Constructor
@@ -82,8 +89,7 @@ public class DitaTopicTextEditor implements DitaTopicEditor {
 			}
 
 		} catch (XPathException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.debug(e.getMessage(), e);
 		}
 
 	}
@@ -95,10 +101,10 @@ public class DitaTopicTextEditor implements DitaTopicEditor {
 	 * 
 	 * @param isNewDocument
 	 *          <code>true</code> if document is new, <code>false</code> otherwise
+	 * @throws XPathException 
 	 */
-	private void updateCritdates(boolean isNewDocument) {
+	private void updateCritdates(boolean isNewDocument) throws XPathException {
 
-		try {
 			// get the critdates element
 			WSXMLTextNodeRange[] critdateElements = wsTextEditorPage
 					.findElementsByXPath("//*[contains(@class,'topic/prolog')]/critdates");
@@ -142,67 +148,59 @@ public class DitaTopicTextEditor implements DitaTopicEditor {
 				}
 			}
 
-		} catch (XPathException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
 	}
 
 	
 	/**
 	 * Update the author elements of prolog.
 	 * @param isNewDocument <code>true</code> if document is new, <code>false</code> otherwise
+	 * @throws XPathException 
 	 */
-	private void updateAuthor( boolean isNewDocument) {
-		try {
-			//get the author elements
-			Object[] authorElements = wsTextEditorPage.findElementsByXPath("//*[contains(@class,'topic/prolog')]/author");
-			int authorElementSize = authorElements.length;
+	private void updateAuthor( boolean isNewDocument) throws XPathException {
+		// get the author elements
+		Object[] authorElements = wsTextEditorPage.findElementsByXPath("//*[contains(@class,'topic/prolog')]/author");
+		int authorElementSize = authorElements.length;
 
-			//if the author elements doesn't exist;
-			if (authorElementSize == 0) {
-				//add author xml fragment
-				addXmlFragment(prologContentCreater.getAuthorXmlFragment(isNewDocument), "//*[contains(@class,'topic/prolog')]",
-						RelativeInsertPosition.INSERT_LOCATION_AS_FIRST_CHILD);
-			}
-
-			else {
-				// prolog contains author elements
-				if (isNewDocument) {
-					//the document is new
-					// search for a author with value of attribute type equal with creator
-					Object[] creatorAuthorElements = wsTextEditorPage
-							.evaluateXPath("//*[contains(@class,'topic/prolog')]/author[@type='creator']");
-					int creatorElementSize = creatorAuthorElements.length;
-
-					//check if creator author was found 
-					if (creatorElementSize == 0) {
-						// there aren't creator author elements in prolog
-						// add the creator author xml fragment
-						addXmlFragment(prologContentCreater.getAuthorCreatorXmlFragment(), "//*[contains(@class,'topic/prolog')]",
-								RelativeInsertPosition.INSERT_LOCATION_AS_FIRST_CHILD);
-					}
-					
-				} else {
-					// the document isn't new
-					// search for a contributor author that has local author name as text 
-					Object[] contributorAuthorElements = wsTextEditorPage.evaluateXPath("//*[contains(@class,'topic/prolog')]/"
-							+ "author[@type='contributor' and text()= '" + prologContentCreater.getAuthor() + "']");
-					int contributorElementSize = contributorAuthorElements.length;
-
-					if (contributorElementSize == 0) {
-						// there aren't contributor author elements in prolog
-						//add the contributor author xml content
-						addXmlFragment(prologContentCreater.getAuthorContributorXmlFragment(),
-								"//*[contains(@class,'topic/prolog')]/author[last()]", RelativeInsertPosition.INSERT_LOCATION_AFTER);
-					}
-				}
-			}
-
-		} catch (XPathException e) {
-			e.printStackTrace();
+		// if the author elements doesn't exist;
+		if (authorElementSize == 0) {
+			// add author xml fragment
+			addXmlFragment(prologContentCreater.getAuthorXmlFragment(isNewDocument), "//*[contains(@class,'topic/prolog')]",
+					RelativeInsertPosition.INSERT_LOCATION_AS_FIRST_CHILD);
 		}
 
+		else {
+			// prolog contains author elements
+			if (isNewDocument) {
+				// the document is new
+				// search for a author with value of attribute type equal with creator
+				Object[] creatorAuthorElements = wsTextEditorPage
+						.evaluateXPath("//*[contains(@class,'topic/prolog')]/author[@type='creator']");
+				int creatorElementSize = creatorAuthorElements.length;
+
+				// check if creator author was found
+				if (creatorElementSize == 0) {
+					// there aren't creator author elements in prolog
+					// add the creator author xml fragment
+					addXmlFragment(prologContentCreater.getAuthorCreatorXmlFragment(), "//*[contains(@class,'topic/prolog')]",
+							RelativeInsertPosition.INSERT_LOCATION_AS_FIRST_CHILD);
+				}
+
+			} else {
+				// the document isn't new
+				// search for a contributor author that has local author name as text
+				Object[] contributorAuthorElements = wsTextEditorPage.evaluateXPath("//*[contains(@class,'topic/prolog')]/"
+						+ "author[@type='contributor' and text()= '" + prologContentCreater.getAuthor() + "']");
+				int contributorElementSize = contributorAuthorElements.length;
+
+				if (contributorElementSize == 0) {
+					// there aren't contributor author elements in prolog
+					// add the contributor author xml content
+					addXmlFragment(prologContentCreater.getAuthorContributorXmlFragment(),
+							"//*[contains(@class,'topic/prolog')]/author[last()]", RelativeInsertPosition.INSERT_LOCATION_AFTER);
+				}
+			}
+		}
 	}
 
 	/**
@@ -226,18 +224,15 @@ public class DitaTopicTextEditor implements DitaTopicEditor {
 					try {
 						documentController.insertXMLFragment(xmlFragment, xPath, position);
 					} catch (TextOperationException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						logger.debug(e.getMessage(), e);
 					}
 
 				}
 			});
 		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.debug(e.getMessage(), e);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.debug(e.getMessage(), e);
 		}
 	}
 }

@@ -7,6 +7,8 @@ import java.util.List;
 import javax.swing.SwingUtilities;
 import javax.swing.text.BadLocationException;
 
+import org.apache.log4j.Logger;
+
 import com.oxygenxml.prolog.updater.PrologContentCreator;
 
 import ro.sync.ecss.extensions.api.AuthorConstants;
@@ -34,7 +36,10 @@ public class DitaTopicAuthorEditor implements DitaTopicEditor{
 	 */
 	private AuthorDocumentController documentController;
 
-	
+	/**
+	 * Logger
+	 */
+	 private static final Logger logger = Logger.getLogger(DitaTopicAuthorEditor.class);
 	
 	/**
 	 * Constructor
@@ -74,11 +79,16 @@ public class DitaTopicAuthorEditor implements DitaTopicEditor{
 
 		} else {
 			// prolog node exists;
-			//update the author node
-			updateAuthorElements(prologElement[0], isNewDocument);
-			
-			//update the critdates node
-			updateCritdatesElements(prologElement[0], isNewDocument);
+			try {
+				// update the author node
+				updateAuthorElements(prologElement[0], isNewDocument);
+
+				// update the critdates node
+				updateCritdatesElements(prologElement[0], isNewDocument);
+				
+			} catch (BadLocationException e) {
+				logger.debug(e.getMessage(), e);
+			}
 		}
 
 	}
@@ -89,8 +99,9 @@ public class DitaTopicAuthorEditor implements DitaTopicEditor{
 	 * Update the author elements of prolog.
 	 * @param authorPrologElement The prolog element.
 	 * @param isNewDocument <code>true</code> if document is new, <code>false</code> otherwise
+	 * @throws BadLocationException 
 	 */
-	private void updateAuthorElements(final AuthorElement authorPrologElement, final boolean isNewDocument) {
+	private void updateAuthorElements(final AuthorElement authorPrologElement, final boolean isNewDocument) throws BadLocationException {
 		boolean foundCreator = false;
 		boolean foundContributor = false;
 
@@ -126,11 +137,7 @@ public class DitaTopicAuthorEditor implements DitaTopicEditor{
 					String textContent = "";
 
 					//get the text content of node
-					try {
 						textContent = authorElement.getTextContent();
-					} catch (BadLocationException e) {
-						e.printStackTrace();
-					}
 					if (authorElement.getAttribute("type").getRawValue().equals("contributor") && 
 							prologContentCreater.getAuthor().equals(textContent)) {
 						foundContributor = true;
@@ -158,8 +165,9 @@ public class DitaTopicAuthorEditor implements DitaTopicEditor{
 	 * Update the critdates element of prolog.
 	 * @param authorPrologElement The prolog element.
 	 * @param isNewDocument <code>true</code> if document is new, <code>false</code> otherwise
+	 * @throws BadLocationException 
 	 */
-	private void updateCritdatesElements(AuthorElement authorPrologElement, boolean isNewDocument) {
+	private void updateCritdatesElements(AuthorElement authorPrologElement, boolean isNewDocument) throws BadLocationException {
 		//get the critdates author elements
 		final AuthorElement[] critdatesElements = authorPrologElement.getElementsByLocalName("critdates");
 		int length = critdatesElements.length;
@@ -188,28 +196,24 @@ public class DitaTopicAuthorEditor implements DitaTopicEditor{
 				
 				} else {
 					boolean localDateWithAuthorExist = false;
-					//Iterate over revised elements
+					// Iterate over revised elements
 					for (int i = 0; i < reviDateElementsLength; i++) {
 						AuthorElement curentRevisedElement = reviDateElements[i];
 
-						//check the modified value.
+						// check the modified value.
 						String currentModifiedDate = curentRevisedElement.getAttribute("modified").getRawValue();
 						if (prologContentCreater.getLocalDate().equals(currentModifiedDate)) {
 
-							//check the comment
+							// check the comment
 							int currentElemetStartOffSet = curentRevisedElement.getStartOffset();
 							AuthorNode anteriorNode;
-							try {
-								anteriorNode = documentController.getNodeAtOffset(currentElemetStartOffSet - 1);
+							anteriorNode = documentController.getNodeAtOffset(currentElemetStartOffSet - 1);
 
-								if (anteriorNode.getType() == AuthorNode.NODE_TYPE_COMMENT) {
-									if (prologContentCreater.getAuthor().equals(anteriorNode.getTextContent())) {
-										localDateWithAuthorExist = true;
-										break;
-									}
+							if (anteriorNode.getType() == AuthorNode.NODE_TYPE_COMMENT) {
+								if (prologContentCreater.getAuthor().equals(anteriorNode.getTextContent())) {
+									localDateWithAuthorExist = true;
+									break;
 								}
-							} catch (BadLocationException e) {
-								e.printStackTrace();
 							}
 
 						}
@@ -246,17 +250,14 @@ public class DitaTopicAuthorEditor implements DitaTopicEditor{
 							//insert create date .
 							documentController.insertXMLFragment(xmlFragment, offset );
 						} catch (AuthorOperationException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+							logger.debug(e.getMessage(), e);
 						}
 					}
 				});
 			} catch (InvocationTargetException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.debug(e.getMessage(), e);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.debug(e.getMessage(), e);
 			}
 	}
 	
@@ -281,17 +282,14 @@ public class DitaTopicAuthorEditor implements DitaTopicEditor{
 						//insert create date .
 						documentController.insertXMLFragment(xmlFragment, relativeTo, relativPosition);
 					} catch (AuthorOperationException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						logger.debug(e.getMessage(), e);
 					}
 				}
 			});
 		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.debug(e.getMessage(), e);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.debug(e.getMessage(), e);
 		}
 	}
 
