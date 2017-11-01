@@ -48,8 +48,9 @@ public class DitaUpdater {
 	}
 
 	
-	/*
+	/**
 	 * Get the name of the author.
+	 * @return The name of the author.
 	 */
 	protected String getAuthorName(){
 	//TODO get the author name

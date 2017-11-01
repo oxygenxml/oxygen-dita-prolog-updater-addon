@@ -20,6 +20,7 @@ public class PrologUpdaterExtension implements WorkspaceAccessPluginExtension{
 
 	/**
 	 * Main plugin method. Notified when the application is started. 
+	 *@param workspace StandalonePluginWorkspace
 	 */
 	public void applicationStarted(final StandalonePluginWorkspace workspace) {
 
@@ -62,11 +63,10 @@ public class PrologUpdaterExtension implements WorkspaceAccessPluginExtension{
 
 	/**
 	 * Notified before the editors are closed and the application exits
+	 * @return <code>True</code> application can close, <code>false</code>, if vetoed
 	 */
 	public boolean applicationClosing() {
 		return true;
 	}
-
-	
 	
 }

@@ -167,9 +167,7 @@ public class DitaTopicTextEditor implements DitaTopicEditor {
 			// add author xml fragment
 			addXmlFragment(prologContentCreater.getAuthorXmlFragment(isNewDocument), "//*[contains(@class,'topic/prolog')]",
 					RelativeInsertPosition.INSERT_LOCATION_AS_FIRST_CHILD);
-		}
-
-		else {
+		}else {
 			// prolog contains author elements
 			if (isNewDocument) {
 				// the document is new

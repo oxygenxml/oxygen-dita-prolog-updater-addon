@@ -105,16 +105,16 @@ public class DitaTopicAuthorEditor implements DitaTopicEditor{
 		boolean foundCreator = false;
 		boolean foundContributor = false;
 
-		//get the author elements with name author"
+		// get the author elements with name author"
 		final AuthorElement[] authorElements = authorPrologElement.getElementsByLocalName("author");
 		final int length = authorElements.length;
-		
-		//the elements with author name exist
+
+		// the elements with author name exist
 		if (length != 0) {
-			
+
 			if (isNewDocument) {
-				//it's a new document
-				//check if it's already set a creator
+				// it's a new document
+				// check if it's already set a creator
 				for (int i = 0; i < length; i++) {
 					AuthorElement authorElement = authorElements[i];
 					if (authorElement.getAttribute("type").getRawValue().equals("creator")) {
@@ -122,43 +122,41 @@ public class DitaTopicAuthorEditor implements DitaTopicEditor{
 						break;
 					}
 				}
-				//if wasn't found a creator
+				// if wasn't found a creator
 				if (!foundCreator) {
 					addXmlFragment(prologContentCreater.getAuthorCreatorXmlFragment(), authorElements[0],
 							AuthorConstants.POSITION_BEFORE);
 				}
-				
-				
+
 			} else {
-				//it's not a new document
-				//check it's already set this contributor
+				// it's not a new document
+				// check it's already set this contributor
 				for (int i = 0; i < length; i++) {
 					AuthorElement authorElement = authorElements[i];
 					String textContent = "";
 
-					//get the text content of node
-						textContent = authorElement.getTextContent();
-					if (authorElement.getAttribute("type").getRawValue().equals("contributor") && 
-							prologContentCreater.getAuthor().equals(textContent)) {
+					// get the text content of node
+					textContent = authorElement.getTextContent();
+					if (authorElement.getAttribute("type").getRawValue().equals("contributor")
+							&& prologContentCreater.getAuthor().equals(textContent)) {
 						foundContributor = true;
 						break;
 					}
 				}
-				
-				//if wasn't found this contributor
+
+				// if wasn't found this contributor
 				if (!foundContributor) {
-					addXmlFragment(prologContentCreater.getAuthorContributorXmlFragment(), authorElements[length-1],
+					addXmlFragment(prologContentCreater.getAuthorContributorXmlFragment(), authorElements[length - 1],
 							AuthorConstants.POSITION_AFTER);
 				}
 			}
 
-		}
-		else{
-			//It's not found author elements
-				addXmlFragment(prologContentCreater.getAuthorXmlFragment(isNewDocument), authorPrologElement.getStartOffset()+1);
+		} else {
+			// It's not found author elements
+			addXmlFragment(prologContentCreater.getAuthorXmlFragment(isNewDocument),
+					authorPrologElement.getStartOffset() + 1);
 		}
 	}
-
 	
 	
 	/**
@@ -185,8 +183,7 @@ public class DitaTopicAuthorEditor implements DitaTopicEditor{
 					 addXmlFragment(prologContentCreater.getCreatedDateXmlFragment(), critdatesElements[0].getStartOffset() + 1);
 					 
 				 }
-			}
-			else {
+			}else {
 				// it's not a new document
 				AuthorElement[] reviDateElements = critdatesElements[0].getElementsByLocalName("revised");
 				int reviDateElementsLength = reviDateElements.length;
@@ -301,6 +298,7 @@ public class DitaTopicAuthorEditor implements DitaTopicEditor{
 	 * @return The anterior node of prolog node.
 	 */
 	private AuthorElement getPrologAnteriorAuthorElement(AuthorElement rootElement) {
+		AuthorElement toReturn = null;
 		//get all nodes
 		List<AuthorNode> contentNodes = rootElement.getContentNodes();
 
@@ -315,11 +313,11 @@ public class DitaTopicAuthorEditor implements DitaTopicEditor{
 				//if value of attribute contains ANTERIOR_NODE_CLASS_VALUE
 				if (attribute.toString().contains(FOLLOWING_NODE_CLASS_VALUE)) {
 					// anterior node was found
-					return authorElement;
+					toReturn = authorElement;
+					break;
 				}
 			}
-
 		}
-		return null;
+		return toReturn;
 	}
 }

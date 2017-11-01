@@ -11,7 +11,6 @@ import java.util.Date;
  */
 public class PrologContentCreator {
 
-	
 	/**
 	 * XML fragment for author that has type creator.
 	 */
@@ -108,12 +107,7 @@ public class PrologContentCreator {
 	 * @return the XML fragment in String format
 	 */
 	public String getAuthorXmlFragment(boolean isNewDocument){
-		if(isNewDocument){
-			return authorCreatorXmlFragment;
-		}
-		else{
-			return authorContributorXmlFragment;
-		}
+		return (isNewDocument)? authorCreatorXmlFragment : authorContributorXmlFragment;
 	}
 	
 	/**
@@ -122,16 +116,7 @@ public class PrologContentCreator {
 	 * @return the XML fragment in String format
 	 */
 	public String getDateXmlFragment(boolean isNewDocument){
-		if(isNewDocument){
-			return createdDateXmlFragment;
-		}
-		else{
-			return resivedModifiedXmlFragment;
-		}
+		return (isNewDocument)? createdDateXmlFragment : resivedModifiedXmlFragment;
 	}
-	
-	
-
-	
 	
 }
