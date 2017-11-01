@@ -16,7 +16,6 @@ import ro.sync.exml.workspace.api.editor.page.text.xml.WSXMLTextEditorPage;
  *
  */
 public class DitaUpdater {
-	
 	/**
 	 * Update the prolog of the current page from given wsEditor.
 	 * 
@@ -55,7 +54,7 @@ public class DitaUpdater {
 	protected String getAuthorName(){
 	//TODO get the author name
 	// ((WSAuthorEditorPage) currentPage).getAuthorAccess().getReviewController().getReviewerAuthorName();
-		
+//		
 //	PluginWorkspace pluginWorkspace = PluginWorkspaceProvider.getPluginWorkspace();
 //	
 //	WSOptionsStorage optionsStorage = pluginWorkspace.getOptionsStorage();
@@ -63,9 +62,6 @@ public class DitaUpdater {
 //		String nume = optionsStorage.getOption("change.tracking.author", authorName);
 //		System.out.println("author name: " + nume);
 //	}
-		
 		return "test";
 	}
-	
-
 }
