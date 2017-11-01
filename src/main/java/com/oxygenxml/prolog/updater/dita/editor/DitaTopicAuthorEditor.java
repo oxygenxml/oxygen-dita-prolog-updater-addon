@@ -7,7 +7,7 @@ import java.util.List;
 import javax.swing.SwingUtilities;
 import javax.swing.text.BadLocationException;
 
-import com.oxygenxml.prolog.updater.PrologContentCreater;
+import com.oxygenxml.prolog.updater.PrologContentCreator;
 
 import ro.sync.ecss.extensions.api.AuthorConstants;
 import ro.sync.ecss.extensions.api.AuthorDocumentController;
@@ -15,7 +15,6 @@ import ro.sync.ecss.extensions.api.AuthorOperationException;
 import ro.sync.ecss.extensions.api.node.AttrValue;
 import ro.sync.ecss.extensions.api.node.AuthorElement;
 import ro.sync.ecss.extensions.api.node.AuthorNode;
-import ro.sync.exml.workspace.api.editor.page.WSEditorPage;
 import ro.sync.exml.workspace.api.editor.page.author.WSAuthorEditorPage;
 
 /**
@@ -28,7 +27,7 @@ public class DitaTopicAuthorEditor implements DitaTopicEditor{
 	/**
 	 * Contains all elements(tags) from prolog.
 	 */
-	private PrologContentCreater prologContentCreater;
+	private PrologContentCreator prologContentCreater;
 	
 	/**
 	 * Author document controller
@@ -42,8 +41,8 @@ public class DitaTopicAuthorEditor implements DitaTopicEditor{
 	 * @param wsEditorPage workspace page editor.
 	 * @param prologContentCreater Contains all elements from prolog.
 	 */
-	public DitaTopicAuthorEditor(WSEditorPage wsEditorPage, PrologContentCreater prologContentCreater) {
-		this.documentController = ((WSAuthorEditorPage)wsEditorPage).getDocumentController();
+	public DitaTopicAuthorEditor(WSAuthorEditorPage wsEditorPage, PrologContentCreator prologContentCreater) {
+		this.documentController = wsEditorPage.getDocumentController();
 		this.prologContentCreater = prologContentCreater;
 	}
 	
@@ -177,15 +176,6 @@ public class DitaTopicAuthorEditor implements DitaTopicEditor{
 					 //add a created element.
 					 addXmlFragment(prologContentCreater.getCreatedDateXmlFragment(), critdatesElements[0].getStartOffset() + 1);
 					 
-				 }else{
-					 //if was found a created element
-					 AttrValue date = creatDateElements[0].getAttribute("date");
-
-					 //check if value of attribute date is empty
-					 if(date.getRawValue().isEmpty()){
-						 //add the localDate as value
-						 creatDateElements[0].setAttribute("date", new AttrValue(prologContentCreater.getLocalDate()));
-					 }
 				 }
 			}
 			else {

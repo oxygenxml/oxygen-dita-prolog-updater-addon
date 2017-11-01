@@ -32,15 +32,15 @@ public class DitaUpdater {
 		String reviewerAuthorName = getAuthorName();
 		
 		//create a PrologContentCreator
-		PrologContentCreater prologContentCreater = new PrologContentCreater(reviewerAuthorName);
+		PrologContentCreator prologContentCreater = new PrologContentCreator(reviewerAuthorName);
 		
 		DitaTopicEditor ditaEditor = null;
 		
 		if (currentPage instanceof WSAuthorEditorPage) {
-			ditaEditor = new DitaTopicAuthorEditor(currentPage, prologContentCreater);
+			ditaEditor = new DitaTopicAuthorEditor((WSAuthorEditorPage)currentPage, prologContentCreater);
 
 		} else if (currentPage instanceof WSXMLTextEditorPage) {
-			ditaEditor = new DitaTopicTextEditor(currentPage, prologContentCreater);
+			ditaEditor = new DitaTopicTextEditor((WSXMLTextEditorPage)currentPage, prologContentCreater);
 		}
 
 		if(ditaEditor != null){

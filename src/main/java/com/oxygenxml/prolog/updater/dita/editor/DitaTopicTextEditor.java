@@ -4,12 +4,9 @@ import java.lang.reflect.InvocationTargetException;
 
 import javax.swing.SwingUtilities;
 
-import org.apache.xerces.dom.ElementNSImpl;
-
-import com.oxygenxml.prolog.updater.PrologContentCreater;
+import com.oxygenxml.prolog.updater.PrologContentCreator;
 
 import ro.sync.exml.editor.xmleditor.operations.context.RelativeInsertPosition;
-import ro.sync.exml.workspace.api.editor.page.WSEditorPage;
 import ro.sync.exml.workspace.api.editor.page.text.xml.TextDocumentController;
 import ro.sync.exml.workspace.api.editor.page.text.xml.TextOperationException;
 import ro.sync.exml.workspace.api.editor.page.text.xml.WSXMLTextEditorPage;
@@ -27,7 +24,7 @@ public class DitaTopicTextEditor implements DitaTopicEditor {
 	/**
 	 * Contains all elements from prolog.
 	 */
-	private PrologContentCreater prologContentCreater;
+	private PrologContentCreator prologContentCreater;
 	/**
 	 * Text document controller
 	 */
@@ -44,8 +41,8 @@ public class DitaTopicTextEditor implements DitaTopicEditor {
 	 * @param wsEditorPage workspace page editor.
 	 * @param prologContentCreater Content of prolog.
 	 */
-	public DitaTopicTextEditor(WSEditorPage wsEditorPage, PrologContentCreater prologContentCreater) {
-		this.wsTextEditorPage = (WSXMLTextEditorPage) wsEditorPage;
+	public DitaTopicTextEditor(WSXMLTextEditorPage wsEditorPage, PrologContentCreator prologContentCreater) {
+		this.wsTextEditorPage = wsEditorPage;
 		this.documentController = wsTextEditorPage.getDocumentController();
 		this.prologContentCreater = prologContentCreater;
 	}
@@ -127,19 +124,7 @@ public class DitaTopicTextEditor implements DitaTopicEditor {
 						addXmlFragment(prologContentCreater.getAuthorXmlFragment(isNewDocument),
 								"//*[contains(@class,'topic/prolog')]/critdates",
 								RelativeInsertPosition.INSERT_LOCATION_AS_FIRST_CHILD);
-					} else {
-						// created element exists
-						if (createdElements[0] instanceof ElementNSImpl) {
-							ElementNSImpl createdElement = (ElementNSImpl) createdElements[0];
-							// check if value of attribute date is empty
-							if (createdElement.getAttribute("date").isEmpty()) {
-								System.out.println("data empty");
-								// TODO problema aici
-								// add the local date as value
-								createdElement.setAttribute("date", prologContentCreater.getLocalDate());
-							}
-						}
-					}
+					} 
 				} else {
 					//it's not a new document
 					//search for revised elements that have local date as modified and have contributor as comment

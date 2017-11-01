@@ -9,7 +9,7 @@ import java.util.Date;
  * @author intern4
  *
  */
-public class PrologContentCreater {
+public class PrologContentCreator {
 
 	
 	/**
@@ -45,7 +45,7 @@ public class PrologContentCreater {
 	 * Constructor
 	 * @param author The name of author
 	 */
-	public PrologContentCreater (String author) {
+	public PrologContentCreator (String author) {
 		this.author = author;
 		authorCreatorXmlFragment = "<author type=\"creator\">" + author + "</author>";
 		authorContributorXmlFragment = "<author type=\"contributor\">" + author + "</author>";

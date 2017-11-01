@@ -23,11 +23,6 @@ public class PrologUpdaterExtension implements WorkspaceAccessPluginExtension{
 	 */
 	public void applicationStarted(final StandalonePluginWorkspace workspace) {
 
-//TODO delete		
-//		String name = (String)workspace.getGlobalObjectProperty("change.tracking.author");
-//		System.out.println("name: " + name);
-		
-		
 		//create a XmlUpdater
 		final DitaUpdater xmlUpdater = createDitaUpdater();
 		
