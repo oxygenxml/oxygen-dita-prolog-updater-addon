@@ -27,6 +27,16 @@ import ro.sync.exml.workspace.api.editor.page.author.WSAuthorEditorPage;
 public class DitaTopicAuthorEditor implements DitaTopicEditor{
 
 	/**
+	 * Class's value of prolog anterior note.
+	 */
+	 private static final String FOLLOWING_NODE_CLASS_VALUE = "topic/body";
+	
+	 /**
+	  * Local name of author tag.
+	  */
+	 private static final String AUTHOR_TAG_LOCAL_NAME = "author";
+	 
+	/**
 	 * Contains all elements(tags) from prolog.
 	 */
 	private PrologContentCreator prologContentCreater;
@@ -78,8 +88,8 @@ public class DitaTopicAuthorEditor implements DitaTopicEditor{
 			}
 
 		} else {
-			// prolog node exists;
 			try {
+				// prolog node exists
 				// update the author node
 				updateAuthorElements(prologElement[0], isNewDocument);
 
@@ -102,62 +112,80 @@ public class DitaTopicAuthorEditor implements DitaTopicEditor{
 	 * @throws BadLocationException 
 	 */
 	private void updateAuthorElements(final AuthorElement authorPrologElement, final boolean isNewDocument) throws BadLocationException {
-		boolean foundCreator = false;
-		boolean foundContributor = false;
-
-		// get the author elements with name author"
-		final AuthorElement[] authorElements = authorPrologElement.getElementsByLocalName("author");
-		final int length = authorElements.length;
-
-		// the elements with author name exist
-		if (length != 0) {
 
 			if (isNewDocument) {
 				// it's a new document
-				// check if it's already set a creator
-				for (int i = 0; i < length; i++) {
-					AuthorElement authorElement = authorElements[i];
-					if (authorElement.getAttribute("type").getRawValue().equals("creator")) {
-						foundCreator = true;
-						break;
-					}
-				}
-				// if wasn't found a creator
-				if (!foundCreator) {
-					addXmlFragment(prologContentCreater.getAuthorCreatorXmlFragment(), authorElements[0],
-							AuthorConstants.POSITION_BEFORE);
-				}
-
-			} else {
+				//add the creator element.
+				addAuthorCreator(authorPrologElement);
+			}else {
 				// it's not a new document
-				// check it's already set this contributor
-				for (int i = 0; i < length; i++) {
-					AuthorElement authorElement = authorElements[i];
-					String textContent = "";
-
-					// get the text content of node
-					textContent = authorElement.getTextContent();
-					if (authorElement.getAttribute("type").getRawValue().equals("contributor")
-							&& prologContentCreater.getAuthor().equals(textContent)) {
-						foundContributor = true;
-						break;
-					}
-				}
-
-				// if wasn't found this contributor
-				if (!foundContributor) {
-					addXmlFragment(prologContentCreater.getAuthorContributorXmlFragment(), authorElements[length - 1],
-							AuthorConstants.POSITION_AFTER);
-				}
+				//add the contributor element.
+				addAuthorContributor(authorPrologElement);
 			}
 
-		} else {
-			// It's not found author elements
-			addXmlFragment(prologContentCreater.getAuthorXmlFragment(isNewDocument),
-					authorPrologElement.getStartOffset() + 1);
+	}
+	
+	/**
+	 * Add the author element with type = creator if it doesn't exits.
+	 * @param authorPrologElement Prolog element(element that has author child). 
+	 */
+	private void addAuthorCreator(AuthorElement authorPrologElement){
+		boolean foundCreator = false;
+
+		// get the elements with name author"
+		final AuthorElement[] authorElements = authorPrologElement.getElementsByLocalName(AUTHOR_TAG_LOCAL_NAME);
+		final int length = authorElements.length;
+		
+		// check if it's already set a creator
+		for (int i = 0; i < length; i++) {
+			AuthorElement authorElement = authorElements[i];
+			if (authorElement.getAttribute("type").getRawValue().equals("creator")) {
+				foundCreator = true;
+				break;
+			}
+		}
+		// if wasn't found a creator
+		if (!foundCreator) {
+			addXmlFragment(prologContentCreater.getAuthorCreatorXmlFragment(), authorPrologElement.getStartOffset() + 1);
 		}
 	}
 	
+	/**
+	 * Add the author element with type = contributor if it doesn't exits.
+	 * @param authorPrologElement Prolog element(element that has author child). 
+	 * @throws BadLocationException 
+	 */
+	private void addAuthorContributor(AuthorElement authorPrologElement) throws BadLocationException{
+		boolean foundContributor = false;
+		
+		// get the elements with name author"
+		final AuthorElement[] authorElements = authorPrologElement.getElementsByLocalName(AUTHOR_TAG_LOCAL_NAME);
+		final int length = authorElements.length;
+		// check it's already set this contributor
+		for (int i = 0; i < length; i++) {
+			AuthorElement authorElement = authorElements[i];
+			String textContent = "";
+
+			// get the text content of node
+			textContent = authorElement.getTextContent();
+			if (authorElement.getAttribute("type").getRawValue().equals("contributor")
+					&& prologContentCreater.getAuthor().equals(textContent)) {
+				foundContributor = true;
+				break;
+			}
+		}
+
+		// if wasn't found this contributor
+		if (!foundContributor) {
+			if(length != 0){
+				addXmlFragment(prologContentCreater.getAuthorContributorXmlFragment(), authorElements[length - 1],
+						AuthorConstants.POSITION_AFTER);
+			}else{
+				addXmlFragment(prologContentCreater.getAuthorContributorXmlFragment(),
+						authorPrologElement.getStartOffset() + 1);
+			}
+		}
+	}
 	
 	/**
 	 * Update the critdates element of prolog.
@@ -185,54 +213,59 @@ public class DitaTopicAuthorEditor implements DitaTopicEditor{
 				 }
 			}else {
 				// it's not a new document
-				AuthorElement[] reviDateElements = critdatesElements[0].getElementsByLocalName("revised");
-				int reviDateElementsLength = reviDateElements.length;
-
-				if (reviDateElementsLength == 0) {
-					addXmlFragment(prologContentCreater.getResivedModifiedXmlFragment(), critdatesElements[0].getEndOffset());
-				
-				} else {
-					boolean localDateWithAuthorExist = false;
-					// Iterate over revised elements
-					for (int i = 0; i < reviDateElementsLength; i++) {
-						AuthorElement curentRevisedElement = reviDateElements[i];
-
-						// check the modified value.
-						String currentModifiedDate = curentRevisedElement.getAttribute("modified").getRawValue();
-						if (prologContentCreater.getLocalDate().equals(currentModifiedDate)) {
-
-							// check the comment
-							int currentElemetStartOffSet = curentRevisedElement.getStartOffset();
-							AuthorNode anteriorNode;
-							anteriorNode = documentController.getNodeAtOffset(currentElemetStartOffSet - 1);
-
-							if (anteriorNode.getType() == AuthorNode.NODE_TYPE_COMMENT) {
-								if (prologContentCreater.getAuthor().equals(anteriorNode.getTextContent())) {
-									localDateWithAuthorExist = true;
-									break;
-								}
-							}
-
-						}
-					}
-					if (!localDateWithAuthorExist) {
-						addXmlFragment(prologContentCreater.getResivedModifiedXmlFragment(),
-								reviDateElements[reviDateElementsLength - 1], AuthorConstants.POSITION_AFTER);
-					}
-
-				}
+				//add revised element
+				addRevisedElement(critdatesElements[0]);
 			}
 			
 		}else{
 			//wasn't found critdates element
 			final String toAdd = "<critdates>\n" + prologContentCreater.getDateXmlFragment(isNewDocument) + "\n</critdates>";
-			final AuthorElement[] authorElements = authorPrologElement.getElementsByLocalName("author");
+			final AuthorElement[] authorElements = authorPrologElement.getElementsByLocalName(AUTHOR_TAG_LOCAL_NAME);
 			
 			addXmlFragment(toAdd, authorElements[authorElements.length-1], AuthorConstants.POSITION_AFTER);
 		}
 	}
 	
-	
+	/**
+	 * Add the revised element if it doesn't exits.
+	 * @param critdatesElement critdates element(element that has revised child). 
+	 */
+	private void addRevisedElement(AuthorElement critdatesElement) throws BadLocationException{
+		boolean localDateWithAuthorCommentExist = false;
+
+		// get revised elements
+		AuthorElement[] reviDateElements = critdatesElement.getElementsByLocalName("revised");
+		int reviDateElementsLength = reviDateElements.length;
+
+		// Iterate over revised elements
+		for (int i = 0; i < reviDateElementsLength; i++) {
+			AuthorElement curentRevisedElement = reviDateElements[i];
+
+			// check the modified value.
+			String currentModifiedDate = curentRevisedElement.getAttribute("modified").getRawValue();
+			if (prologContentCreater.getLocalDate().equals(currentModifiedDate)) {
+
+				// check the comment
+				int currentElemetStartOffSet = curentRevisedElement.getStartOffset();
+				AuthorNode anteriorNode;
+				anteriorNode = documentController.getNodeAtOffset(currentElemetStartOffSet - 1);
+
+				if (anteriorNode.getType() == AuthorNode.NODE_TYPE_COMMENT
+						&& prologContentCreater.getAuthor().equals(anteriorNode.getTextContent())) {
+					localDateWithAuthorCommentExist = true;
+					break;
+				}
+			}
+		}
+		if (!localDateWithAuthorCommentExist) {
+			if (reviDateElementsLength != 0) {
+				addXmlFragment(prologContentCreater.getResivedModifiedXmlFragment(),
+						reviDateElements[reviDateElementsLength - 1], AuthorConstants.POSITION_AFTER);
+			} else {
+				addXmlFragment(prologContentCreater.getResivedModifiedXmlFragment(), critdatesElement.getEndOffset());
+			}
+		}
+	}
 	
 	/**
 	 * Create a AWT thread and insert the given fragment at given offset.
@@ -255,6 +288,8 @@ public class DitaTopicAuthorEditor implements DitaTopicEditor{
 				logger.debug(e.getMessage(), e);
 			} catch (InterruptedException e) {
 				logger.debug(e.getMessage(), e);
+				// Restore interrupted state...
+		    Thread.currentThread().interrupt();
 			}
 	}
 	
@@ -287,6 +322,8 @@ public class DitaTopicAuthorEditor implements DitaTopicEditor{
 			logger.debug(e.getMessage(), e);
 		} catch (InterruptedException e) {
 			logger.debug(e.getMessage(), e);
+			// Restore interrupted state...
+	    Thread.currentThread().interrupt();
 		}
 	}
 
@@ -304,7 +341,7 @@ public class DitaTopicAuthorEditor implements DitaTopicEditor{
 
 		//Iterate over nodes
 		for (Iterator<AuthorNode> iterator = contentNodes.iterator(); iterator.hasNext();) {
-			AuthorNode authorNode = (AuthorNode) iterator.next();
+			AuthorNode authorNode = iterator.next();
 			if (authorNode.getType() == AuthorNode.NODE_TYPE_ELEMENT) {
 				AuthorElement authorElement = (AuthorElement) authorNode;
 				//get the value of attribute class.

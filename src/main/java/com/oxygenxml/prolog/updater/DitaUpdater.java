@@ -53,14 +53,6 @@ public class DitaUpdater {
 	 * @return The name of the author.
 	 */
 	protected String getAuthorName(){
-// ((WSAuthorEditorPage) currentPage).getAuthorAccess().getReviewController().getReviewerAuthorName();
-//		
-//	PluginWorkspace pluginWorkspace = PluginWorkspaceProvider.getPluginWorkspace();
-//	
-//	WSOptionsStorage optionsStorage = pluginWorkspace.getOptionsStorage();
-//	if (optionsStorage != null) {
-//		String nume = optionsStorage.getOption("change.tracking.author", authorName);
-//	}
 		return System.getProperty("user.name");
 	}
 }
