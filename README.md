@@ -1,4 +1,4 @@
-# Dita Prolog Updater
+#Oxygen Dita Prolog Updater
 Updates the author information, created and modified dates in the DITA prolog section for topics and maps.
 
 
@@ -11,5 +11,5 @@ https://raw.githubusercontent.com/oxygenxml/dita-prolog-updater/master/build/add
 
 then continue the installation process.
 
-## Quality Checks 
+### Quality Checks
 https://sonarcloud.io/dashboard?id=oxygen-prolog-updater%3Aoxygen-prolog-updater
