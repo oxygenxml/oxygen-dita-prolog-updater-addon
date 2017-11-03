@@ -1,4 +1,4 @@
-#Oxygen Dita Prolog Updater
+# Oxygen Dita Prolog Updater
 Updates the author information, created and modified dates in the DITA prolog section for topics and maps.
 
 
