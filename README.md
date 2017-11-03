@@ -10,3 +10,6 @@ You can install the add-on by using Oxygen's add-ons support. In Oxygen, go to H
 https://raw.githubusercontent.com/oxygenxml/dita-prolog-updater/master/build/addon.xml
 
 then continue the installation process.
+
+## Quality Checks 
+https://sonarcloud.io/dashboard?id=oxygen-prolog-updater%3Aoxygen-prolog-updater
