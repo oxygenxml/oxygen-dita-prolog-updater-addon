@@ -1,5 +1,10 @@
 language: java
 sudo: required
+addons: 
+ sonarcloud:
+    organization: "oxygenxml-github"
+    token:
+      secure: "6fdd56482633fd2793badebad811f0b9bf3a5fb0"
 jdk:
  - oraclejdk8
 matrix:
