@@ -7,6 +7,9 @@ addons:
       secure: "${SONAR_CLOUD_TOKEN}"
 jdk:
  - oraclejdk8
+cache:
+  directories:
+  - $HOME/.m2
 matrix:
   fast_finish: true
 install: true
