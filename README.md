@@ -12,4 +12,4 @@ https://raw.githubusercontent.com/oxygenxml/dita-prolog-updater/master/build/add
 then continue the installation process.
 
 ### Quality Checks
-https://sonarcloud.io/dashboard?id=oxygen-prolog-updater%3Aoxygen-prolog-updater
+https://sonarcloud.io/dashboard?id=oxygen-dita-prolog-updater%3Aoxygen-dita-prolog-updater
