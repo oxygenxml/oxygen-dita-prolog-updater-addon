@@ -4,7 +4,7 @@ addons:
  sonarcloud:
     organization: "oxygenxml-github"
     token:
-      secure: "6fdd56482633fd2793badebad811f0b9bf3a5fb0"
+      secure: "${SONAR_CLOUD_TOKEN}"
 jdk:
  - oraclejdk8
 matrix:
