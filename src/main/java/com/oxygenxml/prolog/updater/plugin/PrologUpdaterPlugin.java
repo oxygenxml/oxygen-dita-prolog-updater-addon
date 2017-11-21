@@ -5,7 +5,7 @@ import ro.sync.exml.plugin.PluginDescriptor;
 
 /**
  * Prolog updater class.
- * @author intern4
+ * @author cosmin_duna
  *
  */
 public class PrologUpdaterPlugin extends Plugin {

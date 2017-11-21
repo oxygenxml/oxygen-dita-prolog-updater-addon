@@ -2,8 +2,8 @@ package com.oxygenxml.prolog.updater.dita.editor;
 
 /**
  * Editor for DITA topic.
- * @author intern4
- *
+ * 
+ * @author cosmin_duna
  */
 public interface DitaTopicEditor {
 	

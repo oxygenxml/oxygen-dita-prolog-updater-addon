@@ -1,15 +1,15 @@
 package com.oxygenxml.prolog.updater.dita.editor;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.Iterator;
+import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.SwingUtilities;
 import javax.swing.text.BadLocationException;
 
 import org.apache.log4j.Logger;
 
 import com.oxygenxml.prolog.updater.PrologContentCreator;
+import com.oxygenxml.prolog.updater.utils.Constants;
+import com.oxygenxml.prolog.updater.utils.ThreadUtils;
 
 import ro.sync.ecss.extensions.api.AuthorConstants;
 import ro.sync.ecss.extensions.api.AuthorDocumentController;
@@ -21,20 +21,10 @@ import ro.sync.exml.workspace.api.editor.page.author.WSAuthorEditorPage;
 
 /**
  * Edit DITA topic in author mode.
- * @author intern4
- *
+ * 
+ * @author cosmin_duna
  */
 public class DitaTopicAuthorEditor implements DitaTopicEditor{
-
-	/**
-	 * Class's value of prolog anterior note.
-	 */
-	 private static final String FOLLOWING_NODE_CLASS_VALUE = "topic/body";
-	
-	 /**
-	  * Local name of author tag.
-	  */
-	 private static final String AUTHOR_TAG_LOCAL_NAME = "author";
 	 
 	/**
 	 * Contains all elements(tags) from prolog.
@@ -61,170 +51,164 @@ public class DitaTopicAuthorEditor implements DitaTopicEditor{
 		this.prologContentCreater = prologContentCreater;
 	}
 	
-	
-	
 	/**
 	 * Update the prolog in DITA topic document(author mode) according to given flag(isNewDocument)
 	 * @param isNewDocument <code>true</code> if document is new, <code>false</code> otherwise
 	 * 
 	 */
 	public void updateProlog(boolean isNewDocument) {
-
-		//get the root element
+		// Get the root element.
 		AuthorElement rootElement = documentController.getAuthorDocumentNode().getRootElement();
 		
-		//get the prolog element
-		AuthorElement[] prologElement = rootElement.getElementsByLocalName("prolog");
-		int prologElementSize = prologElement.length;
-
-		if (prologElementSize == 0) {
-			// prolog node doesn't exist
-			//get the anterior node of prolog
-			final AuthorElement bodyAuthorElement = getPrologAnteriorAuthorElement(rootElement);
-
-			if (bodyAuthorElement != null) {
-				// add the prolog node.
-				addXmlFragment(prologContentCreater.getPrologXMLFragment(isNewDocument), bodyAuthorElement.getStartOffset());
-			}
-
-		} else {
-			try {
-				// prolog node exists
-				// update the author node
-				updateAuthorElements(prologElement[0], isNewDocument);
-
-				// update the critdates node
-				updateCritdatesElements(prologElement[0], isNewDocument);
-				
-			} catch (BadLocationException e) {
-				logger.debug(e.getMessage(), e);
-			}
-		}
-
+		if (rootElement != null) {
+		  // Get the prolog element.
+		  AuthorElement prolog = getElementByClassName(rootElement, Constants.PROLOG_CLASS);
+		  if (prolog != null) {
+		    try {
+		      // Updates the creators and/or contributors of document
+          updateAuthorPrologElement(prolog, isNewDocument ? Constants.CREATOR_TYPE : Constants.CONTRIBUTOR_TYPE);
+          
+          // Update the critdates element .
+          updateCritdates(prolog, isNewDocument);
+		    } catch (BadLocationException e) {
+		      if (logger.isDebugEnabled()) {
+		        logger.debug(e.getMessage(), e);
+          }
+		    }
+      } else {
+        //The prolog element wasn't found.
+        // Add it
+        String prologXMLFragment = prologContentCreater.getPrologXMLFragment(isNewDocument);
+        AuthorElement bodyElement = getElementByClassName(rootElement, Constants.TOPIC_BODY_CLASS);
+        if(bodyElement == null) {
+          addXmlFragmentSchemaAware(prologXMLFragment, rootElement.getStartOffset() + 1);
+        }
+        else {
+          addXmlFragmentSchemaAware(prologXMLFragment, bodyElement.getStartOffset());
+        }
+      }
+    }
 	}
-	
-	
-	
+
 	/**
-	 * Update the author elements of prolog.
-	 * @param authorPrologElement The prolog element.
-	 * @param isNewDocument <code>true</code> if document is new, <code>false</code> otherwise
-	 * @throws BadLocationException 
+	 * Search and return first element identified by class value.
+	 * 
+	 * @param rootElement Document root element.
+	 * @return <code>null</code> or the identified element.
 	 */
-	private void updateAuthorElements(final AuthorElement authorPrologElement, final boolean isNewDocument) throws BadLocationException {
+  private AuthorElement getElementByClassName(AuthorElement rootElement, String classValue) {
+    AuthorElement toReturn = null;
+    List<AuthorNode> contentNodes = rootElement.getContentNodes();
+    if (contentNodes != null && contentNodes.size() > 0) {
+      for (AuthorNode authorNode : contentNodes) {
+        if (authorNode.getType() == AuthorElement.NODE_TYPE_ELEMENT) {
+          AuthorElement el = (AuthorElement) authorNode;
+          AttrValue clazz = el.getAttribute("class");
+          if (clazz != null) {
+            if (clazz.getValue() != null && clazz.getValue().contains(classValue)) {
+              toReturn = el;
+              break;
+            }            
+          }
+        }
+      }
+    }
+    return toReturn;
+  }
 
-			if (isNewDocument) {
-				// it's a new document
-				//add the creator element.
-				addAuthorCreator(authorPrologElement);
-			}else {
-				// it's not a new document
-				//add the contributor element.
-				addAuthorContributor(authorPrologElement);
-			}
-
-	}
-	
 	/**
-	 * Add the author element with type = creator if it doesn't exits.
-	 * @param authorPrologElement Prolog element(element that has author child). 
+	 * Update the document adding the names of the authors.
+	 * 
+	 * @param prolog The prolog element.
+	 * @param type The types of the authors: contributor or creator.
+	 * 
+	 * @throws BadLocationException
 	 */
-	private void addAuthorCreator(AuthorElement authorPrologElement){
-		boolean foundCreator = false;
+  private void updateAuthorPrologElement(AuthorElement prolog, String type ) throws BadLocationException {
+	  
+	  boolean creatorFound = false;
+	  boolean contributorFound = false;
 
-		// get the elements with name author"
-		final AuthorElement[] authorElements = authorPrologElement.getElementsByLocalName(AUTHOR_TAG_LOCAL_NAME);
-		final int length = authorElements.length;
-		
-		// check if it's already set a creator
-		for (int i = 0; i < length; i++) {
-			AuthorElement authorElement = authorElements[i];
-			if (authorElement.getAttribute("type").getRawValue().equals("creator")) {
-				foundCreator = true;
-				break;
-			}
-		}
-		// if wasn't found a creator
-		if (!foundCreator) {
-			addXmlFragment(prologContentCreater.getAuthorCreatorXmlFragment(), authorPrologElement.getStartOffset() + 1);
-		}
-	}
-	
-	/**
-	 * Add the author element with type = contributor if it doesn't exits.
-	 * @param authorPrologElement Prolog element(element that has author child). 
-	 * @throws BadLocationException 
-	 */
-	private void addAuthorContributor(AuthorElement authorPrologElement) throws BadLocationException{
-		boolean foundContributor = false;
-		
-		// get the elements with name author"
-		final AuthorElement[] authorElements = authorPrologElement.getElementsByLocalName(AUTHOR_TAG_LOCAL_NAME);
-		final int length = authorElements.length;
-		// check it's already set this contributor
-		for (int i = 0; i < length; i++) {
-			AuthorElement authorElement = authorElements[i];
-			String textContent = "";
+	  List<AuthorElement> authors = getElementsByClassName(prolog, Constants.PROLOG_AUTHOR_ELEMENT_CLASS);
+    final int length = authors.size();
+    
+    for (int i = 0; i < length && length > 0; i++) {
+      AuthorElement el = authors.get(i);
+      AttrValue typeAttr = el.getAttribute("type");
+      if (typeAttr != null) {
+        String typeAttrvalue = typeAttr.getValue();
+        if (type.equals(typeAttrvalue)) {
+          if (typeAttrvalue.equals(Constants.CONTRIBUTOR_TYPE)) {
+            String textContent = el.getTextContent();
+            if (prologContentCreater.getAuthor().equals(textContent)) {
+              contributorFound = true;
+              break;
+            }
+          } 
+          if (type.equals(Constants.CREATOR_TYPE)){
+            creatorFound = true;
+            break;
+          }
+        }
+      }
+    }
 
-			// get the text content of node
-			textContent = authorElement.getTextContent();
-			if (authorElement.getAttribute("type").getRawValue().equals("contributor")
-					&& prologContentCreater.getAuthor().equals(textContent)) {
-				foundContributor = true;
-				break;
-			}
-		}
+    if (!contributorFound && Constants.CONTRIBUTOR_TYPE.equals(type)) {
+      // if wasn't found this contributor
+      if(length != 0){
+        AuthorElement relativeTo = authors.get(length - 1);
+        addXmlFragment(prologContentCreater.getAuthorContributorFrag(), relativeTo, AuthorConstants.POSITION_AFTER);
+      }else{
+        addXmlFragmentSchemaAware(prologContentCreater.getAuthorContributorFrag(), prolog.getStartOffset() + 1);
+      }
+      
+    } else if (!creatorFound && Constants.CREATOR_TYPE.equals(type)) {
+      String frag = prologContentCreater.getAuthorCreatorFragment();
+      addXmlFragmentSchemaAware(frag, prolog.getStartOffset() + 1);
+    }
+	}
+  
 
-		// if wasn't found this contributor
-		if (!foundContributor) {
-			if(length != 0){
-				addXmlFragment(prologContentCreater.getAuthorContributorXmlFragment(), authorElements[length - 1],
-						AuthorConstants.POSITION_AFTER);
-			}else{
-				addXmlFragment(prologContentCreater.getAuthorContributorXmlFragment(),
-						authorPrologElement.getStartOffset() + 1);
-			}
-		}
-	}
-	
-	/**
-	 * Update the critdates element of prolog.
-	 * @param authorPrologElement The prolog element.
-	 * @param isNewDocument <code>true</code> if document is new, <code>false</code> otherwise
-	 * @throws BadLocationException 
-	 */
-	private void updateCritdatesElements(AuthorElement authorPrologElement, boolean isNewDocument) throws BadLocationException {
-		//get the critdates author elements
-		final AuthorElement[] critdatesElements = authorPrologElement.getElementsByLocalName("critdates");
-		int length = critdatesElements.length;
-		
-		if(length != 0){
-			//was found critdates element
-			if(isNewDocument){
-				//is a new document
-				//get the created elements
-				 AuthorElement[] creatDateElements = critdatesElements[0].getElementsByLocalName("created");
-		
-				 //if wasn't found a created element.
-				 if(creatDateElements.length == 0){
-					 //add a created element.
-					 addXmlFragment(prologContentCreater.getCreatedDateXmlFragment(), critdatesElements[0].getStartOffset() + 1);
-					 
-				 }
-			}else {
-				// it's not a new document
-				//add revised element
-				addRevisedElement(critdatesElements[0]);
-			}
-			
-		}else{
-			//wasn't found critdates element
-			final String toAdd = "<critdates>\n" + prologContentCreater.getDateXmlFragment(isNewDocument) + "\n</critdates>";
-			final AuthorElement[] authorElements = authorPrologElement.getElementsByLocalName(AUTHOR_TAG_LOCAL_NAME);
-			
-			addXmlFragment(toAdd, authorElements[authorElements.length-1], AuthorConstants.POSITION_AFTER);
-		}
-	}
+  /**
+   * Update the critdates element.
+   * 
+   * @param prolog The prolog author element.
+   * @param isNewDocument <code>true</code> if document is new, <code>false</code>otherwise.
+   * @throws BadLocationException
+   */
+  private void updateCritdates(AuthorElement prolog, boolean isNewDocument) throws BadLocationException {
+    
+    AuthorElement cridates = getElementByClassName(prolog, Constants.TOPIC_CRITDATES_CLASS);
+    if (cridates != null) {
+      if (isNewDocument) {
+        AuthorElement createdElement = getElementByClassName(cridates, Constants.CREATED_DATE_ELEMENT_CLASS);
+        // Was not added yet. 
+        if (createdElement == null) {
+          // Add it.
+          addXmlFragmentSchemaAware(prologContentCreater.getCreatedDateXmlFragment(), cridates.getStartOffset() + 1);
+        }
+        
+      } else {
+        // it's not a new document
+        // add revised element
+        addRevisedElement(cridates);
+      }
+    } else {
+      
+      List<AuthorElement> elementsByClassName = getElementsByClassName(prolog, Constants.PROLOG_AUTHOR_ELEMENT_CLASS);
+      
+      // Create an element here.
+      String fragment = PrologContentCreator.createDateTag(prologContentCreater.getDateFragment(isNewDocument));
+      if(!elementsByClassName.isEmpty()) {
+        AuthorElement lastAuthorElement = elementsByClassName.get(elementsByClassName.size()-1);
+        addXmlFragmentSchemaAware(fragment, lastAuthorElement.getEndOffset() + 1);
+      }else {
+        addXmlFragmentSchemaAware(fragment, prolog.getEndOffset());
+      }
+      
+    }
+    
+  }
 	
 	/**
 	 * Add the revised element if it doesn't exits.
@@ -234,17 +218,16 @@ public class DitaTopicAuthorEditor implements DitaTopicEditor{
 		boolean localDateWithAuthorCommentExist = false;
 
 		// get revised elements
-		AuthorElement[] reviDateElements = critdatesElement.getElementsByLocalName("revised");
-		int reviDateElementsLength = reviDateElements.length;
+		List<AuthorElement> revisedElements = getElementsByClassName(critdatesElement, Constants.REVISED_DATE_ELEMENT_CLASS);
+		int revisedElementSize = revisedElements.size();
 
 		// Iterate over revised elements
-		for (int i = 0; i < reviDateElementsLength; i++) {
-			AuthorElement curentRevisedElement = reviDateElements[i];
+		for (int i = 0; i < revisedElementSize; i++) {
+			AuthorElement curentRevisedElement = revisedElements.get(i);
 
 			// check the modified value.
-			String currentModifiedDate = curentRevisedElement.getAttribute("modified").getRawValue();
-			if (prologContentCreater.getLocalDate().equals(currentModifiedDate)) {
-
+			AttrValue currentModifiedDate = curentRevisedElement.getAttribute(Constants.MODIFIED_ATTRIBUTE);
+			if (currentModifiedDate != null && prologContentCreater.getLocalDate().equals(currentModifiedDate.getRawValue())) {
 				// check the comment
 				int currentElemetStartOffSet = curentRevisedElement.getStartOffset();
 				AuthorNode anteriorNode;
@@ -258,39 +241,31 @@ public class DitaTopicAuthorEditor implements DitaTopicEditor{
 			}
 		}
 		if (!localDateWithAuthorCommentExist) {
-			if (reviDateElementsLength != 0) {
-				addXmlFragment(prologContentCreater.getResivedModifiedXmlFragment(),
-						reviDateElements[reviDateElementsLength - 1], AuthorConstants.POSITION_AFTER);
+			if (revisedElementSize != 0) {
+				addXmlFragmentSchemaAware(prologContentCreater.getResivedModifiedXmlFragment(),
+						revisedElements.get(revisedElementSize -1 ).getEndOffset()+1);
 			} else {
-				addXmlFragment(prologContentCreater.getResivedModifiedXmlFragment(), critdatesElement.getEndOffset());
+				addXmlFragmentSchemaAware(prologContentCreater.getResivedModifiedXmlFragment(), critdatesElement.getEndOffset());
 			}
 		}
 	}
 	
 	/**
-	 * Create a AWT thread and insert the given fragment at given offset.
+	 * Inserts an element schema aware.
+	 * 
 	 * @param xmlFragment The xml fragment.
 	 * @param offset The offset.
 	 */
-	private void addXmlFragment(final String xmlFragment, final int offset){
-		 try {
-				SwingUtilities.invokeAndWait(new Runnable() {
-					public void run() {
-						try {
-							//insert create date .
-							documentController.insertXMLFragment(xmlFragment, offset );
-						} catch (AuthorOperationException e) {
-							logger.debug(e.getMessage(), e);
-						}
-					}
-				});
-			} catch (InvocationTargetException e) {
-				logger.debug(e.getMessage(), e);
-			} catch (InterruptedException e) {
-				logger.debug(e.getMessage(), e);
-				// Restore interrupted state...
-		    Thread.currentThread().interrupt();
-			}
+	private void addXmlFragmentSchemaAware(final String xmlFragment, final int offset){
+	    ThreadUtils.invokeSynchronously(new Runnable() {
+        public void run() {
+          try {
+            documentController.insertXMLFragmentSchemaAware(xmlFragment, offset);
+          } catch (AuthorOperationException e) {
+            logger.debug(e.getMessage(), e);
+          }
+        }
+      });
 	}
 	
 	/**
@@ -307,54 +282,41 @@ public class DitaTopicAuthorEditor implements DitaTopicEditor{
 	 *          {@link AuthorConstants#POSITION_INSIDE_LAST}.
 	 */
 	private void addXmlFragment(final String xmlFragment, final AuthorNode relativeTo, final String relativPosition){
-		try {
-			SwingUtilities.invokeAndWait(new Runnable() {
-				public void run() {
-					try {
-						//insert create date .
-						documentController.insertXMLFragment(xmlFragment, relativeTo, relativPosition);
-					} catch (AuthorOperationException e) {
-						logger.debug(e.getMessage(), e);
-					}
-				}
-			});
-		} catch (InvocationTargetException e) {
-			logger.debug(e.getMessage(), e);
-		} catch (InterruptedException e) {
-			logger.debug(e.getMessage(), e);
-			// Restore interrupted state...
-	    Thread.currentThread().interrupt();
-		}
+	  ThreadUtils.invokeSynchronously(new Runnable() {
+	    public void run() {
+	      try {
+	        //insert create date .
+	        documentController.insertXMLFragment(xmlFragment, relativeTo, relativPosition);
+	      } catch (AuthorOperationException e) {
+	        logger.debug(e.getMessage(), e);
+	      }
+	    }
+	  });
 	}
 
-
-	/**
-	 * Get the anterior node of prolog node.
-	 * 
-	 * @param rootElement The root element.
-	 * @return The anterior node of prolog node.
-	 */
-	private AuthorElement getPrologAnteriorAuthorElement(AuthorElement rootElement) {
-		AuthorElement toReturn = null;
-		//get all nodes
-		List<AuthorNode> contentNodes = rootElement.getContentNodes();
-
-		//Iterate over nodes
-		for (Iterator<AuthorNode> iterator = contentNodes.iterator(); iterator.hasNext();) {
-			AuthorNode authorNode = iterator.next();
-			if (authorNode.getType() == AuthorNode.NODE_TYPE_ELEMENT) {
-				AuthorElement authorElement = (AuthorElement) authorNode;
-				//get the value of attribute class.
-				AttrValue attribute = authorElement.getAttribute("class");
-				
-				//if value of attribute contains ANTERIOR_NODE_CLASS_VALUE
-				if (attribute.toString().contains(FOLLOWING_NODE_CLASS_VALUE)) {
-					// anterior node was found
-					toReturn = authorElement;
-					break;
-				}
-			}
-		}
-		return toReturn;
-	}
+  /**
+   * Search and return a list of elements with a specific class.
+   * 
+   * @param rootElement The node where the search should start.
+   * @return A list with elements with a specific class. If no element is found,
+   * the method returns an empty list.
+   */
+  private List<AuthorElement> getElementsByClassName(AuthorElement rootElement, String classValue) {
+    List<AuthorElement> toReturn = new ArrayList<AuthorElement>();
+    List<AuthorNode> contentNodes = rootElement.getContentNodes();
+    if (contentNodes != null && contentNodes.size() > 0) {
+      for (AuthorNode authorNode : contentNodes) {
+        if (authorNode.getType() == AuthorElement.NODE_TYPE_ELEMENT) {
+          AuthorElement el = (AuthorElement) authorNode;
+          AttrValue clazz = el.getAttribute("class");
+          if (clazz != null) {
+            if (clazz.getValue() != null && clazz.getValue().contains(classValue)) {
+              toReturn.add(el);
+            }            
+          }
+        }
+      }
+    }
+    return toReturn;
+  }
 }

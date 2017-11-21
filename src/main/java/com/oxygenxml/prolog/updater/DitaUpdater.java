@@ -12,47 +12,52 @@ import ro.sync.exml.workspace.api.editor.page.text.xml.WSXMLTextEditorPage;
 /**
  * Update the prolog in DITA topics.
  * 
- * @author intern4
- *
+ * @author cosmin_duna
  */
 public class DitaUpdater {
-	/**
-	 * Update the prolog of the current page from given wsEditor.
-	 * 
-	 * @param wsEditor
-	 *          Workspace editor.
-	 */
-	public void updateProlog(WSEditor wsEditor) {
+  
+  /**
+   * Unknown user name value.
+   */
+  private static final String UNKNOWN = "unknown";
+  /**
+   * System property of user name.
+   */
+  private static final String USER_NAME_PROPERTY = "user.name";
+  
+  /**
+   * Update the prolog of the current page from given wsEditor.
+   * 
+   * @param wsEditor Workspace editor.
+   */
+  public void updateProlog(WSEditor wsEditor) {
 
-		//get the currentPage
-		WSEditorPage currentPage = wsEditor.getCurrentPage();
+    //get the currentPage
+    WSEditorPage currentPage = wsEditor.getCurrentPage();
 
-		// get the reviewerAuthorName
-		String reviewerAuthorName = getAuthorName();
-		
-		//create a PrologContentCreator
-		PrologContentCreator prologContentCreater = new PrologContentCreator(reviewerAuthorName);
-		
-		DitaTopicEditor ditaEditor = null;
-		
-		if (currentPage instanceof WSAuthorEditorPage) {
-			ditaEditor = new DitaTopicAuthorEditor((WSAuthorEditorPage)currentPage, prologContentCreater);
+    //create a PrologContentCreator
+    PrologContentCreator prologContentCreater = new PrologContentCreator(getAuthorName());
 
-		} else if (currentPage instanceof WSXMLTextEditorPage) {
-			ditaEditor = new DitaTopicTextEditor((WSXMLTextEditorPage)currentPage, prologContentCreater);
-		}
+    DitaTopicEditor ditaEditor = null;
 
-		if(ditaEditor != null){
-			ditaEditor.updateProlog(wsEditor.isNewDocument());
-		}
-	}
+    if (currentPage instanceof WSAuthorEditorPage) {
+      ditaEditor = new DitaTopicAuthorEditor((WSAuthorEditorPage)currentPage, prologContentCreater);
 
-	
-	/**
-	 * Get the name of the author.
-	 * @return The name of the author.
-	 */
-	protected String getAuthorName(){
-		return System.getProperty("user.name");
-	}
+    } else if (currentPage instanceof WSXMLTextEditorPage) {
+      ditaEditor = new DitaTopicTextEditor((WSXMLTextEditorPage)currentPage, prologContentCreater);
+    }
+
+    if(ditaEditor != null){
+      ditaEditor.updateProlog(wsEditor.isNewDocument());
+    }
+  }
+
+
+  /**
+   * @return The author's name. Never <code>null</code>.
+   */
+  protected String getAuthorName(){
+    String name = System.getProperty(USER_NAME_PROPERTY);
+    return name != null ? name : UNKNOWN;
+  }
 }

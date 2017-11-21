@@ -13,15 +13,15 @@ import ro.sync.exml.workspace.api.standalone.StandalonePluginWorkspace;
 
 /**
  * Prolog updater plugin extension.
- * @author intern4
- *
+ * 
+ * @author cosmin_duna
  */
 public class PrologUpdaterExtension implements WorkspaceAccessPluginExtension{
 
-	/**
-	 * Main plugin method. Notified when the application is started. 
-	 *@param workspace StandalonePluginWorkspace
-	 */
+
+  /**
+   * @see ro.sync.exml.plugin.workspace.WorkspaceAccessPluginExtension#applicationStarted(ro.sync.exml.workspace.api.standalone.StandalonePluginWorkspace)
+   */
 	public void applicationStarted(final StandalonePluginWorkspace workspace) {
 
 		//create a XmlUpdater
@@ -32,28 +32,21 @@ public class PrologUpdaterExtension implements WorkspaceAccessPluginExtension{
 			@Override
 			public void editorOpened(URL editorLocation) {
 					final WSEditor editorAccess = workspace.getEditorAccess(editorLocation, PluginWorkspace.MAIN_EDITING_AREA);
-					
 					//add an WSEditorListener
 					editorAccess.addEditorListener(new WSEditorListener(){
-							
 						@Override
 						public boolean editorAboutToBeSavedVeto(int operationType) {
-							
 							xmlUpdater.updateProlog(editorAccess);
-							
-							return super.editorAboutToBeSavedVeto(operationType);
+							return true;
 						}
 					});
-					
-					super.editorOpened(editorLocation);
 			}
-			
 		}, PluginWorkspace.MAIN_EDITING_AREA);
 		
 	}
 
 	/**
-	 * Creates the udpater.
+	 * Creates the updater.
 	 * 
 	 * @return a new instance.
 	 */

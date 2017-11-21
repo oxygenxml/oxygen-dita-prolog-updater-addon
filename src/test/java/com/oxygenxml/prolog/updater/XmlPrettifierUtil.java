@@ -15,7 +15,7 @@ import org.xml.sax.InputSource;
 /**
  * XML prettifier used in JUnits
  * 
- * @author intern4
+ * @author cosmin_duna
  *
  */
 public class XmlPrettifierUtil {
@@ -37,7 +37,7 @@ public class XmlPrettifierUtil {
 			transformer = transformerFactory.newTransformer();
 
 			// set the output properties
-			transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+//			transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
 			transformer.setOutputProperty(OutputKeys.METHOD, "xml");
 			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 			transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");

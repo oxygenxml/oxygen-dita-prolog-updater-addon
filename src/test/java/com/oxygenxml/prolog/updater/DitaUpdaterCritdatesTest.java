@@ -32,38 +32,40 @@ public class DitaUpdaterCritdatesTest extends TestCase {
 	//Test document with critdates element that contains created .
 	//
 	//input document
-	String xmlWithCreated ="<?xml version=\"1.0\" encoding=\"utf-8\"?><topic xmlns:ditaarch=\"http://dita.oasis-open.org/architecture/2005/\" id=\"topic_pmy_4gd_sbb\" ditaarch:DITAArchVersion=\"1.3\" domains=\"(topic abbrev-d)                            a(props deliveryTarget)                            (topic equation-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic mathml-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic svg-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)   \" class=\"- topic/topic \">" + 
-			"    <title class=\"- topic/title \"> </title>" + 
-			"    <prolog class=\"- topic/prolog \">" + 
+	String xmlWithCreated ="<?xml version=\"1.0\" encoding=\"utf-8\"?>"+
+	    "<!DOCTYPE topic PUBLIC \"-//OASIS//DTD DITA Topic//EN\" \"topic.dtd\">"+
+	    "<topic id=\"topic_pmy_4gd_sbb\"  >" + 
+			"    <title> </title>" + 
+			"    <prolog>" + 
 			"        <critdates >" + 
 			"            <created date=\""+ localDate +"\" />  " + 
 			"        </critdates>" + 
 			"    </prolog>" + 
-			"    <body class=\"- topic/body \">" + 
-			"        <p class=\"- topic/p \"/>" + 
+			"    <body>" + 
+			"        <p/>" + 
 			"    </body>" + 
 			"</topic>" + 
 			"";
 	
 	//expected XML output for new input document
-	String expectedNewXMLWithCreated = "<?xml version=\"1.0\" encoding=\"utf-8\"?><topic xmlns:ditaarch=\"http://dita.oasis-open.org/architecture/2005/\" id=\"topic_pmy_4gd_sbb\" ditaarch:DITAArchVersion=\"1.3\" domains=\"(topic abbrev-d)                            a(props deliveryTarget)                            (topic equation-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic mathml-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic svg-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)   \" class=\"- topic/topic \">" + 
-			"    <title class=\"- topic/title \"> </title>" + 
-			"    <prolog class=\"- topic/prolog \">" + 
+	String expectedNewXMLWithCreated = "<?xml version=\"1.0\" encoding=\"utf-8\"?><topic id=\"topic_pmy_4gd_sbb\"  >" + 
+			"    <title> </title>" + 
+			"    <prolog>" + 
 			"        <author type=\"creator\" >"+DitaUpdateTestUtil.AUTHOR_NAME+"</author> " + 
 			"        <critdates >" + 
 			"            <created date=\""+ localDate +"\" />  " + 
 			"        </critdates>" + 
 			"    </prolog>" + 
-			"    <body class=\"- topic/body \">" + 
-			"        <p class=\"- topic/p \"/>" + 
+			"    <body>" + 
+			"        <p/>" + 
 			"    </body>" + 
 			"</topic>" + 
 			"";
 
 	//expected XML output for old input document
-	String expectedOldXmlWithCreated = "<?xml version=\"1.0\" encoding=\"utf-8\"?><topic xmlns:ditaarch=\"http://dita.oasis-open.org/architecture/2005/\" id=\"topic_pmy_4gd_sbb\" ditaarch:DITAArchVersion=\"1.3\" domains=\"(topic abbrev-d)                            a(props deliveryTarget)                            (topic equation-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic mathml-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic svg-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)   \" class=\"- topic/topic \">" + 
-			"    <title class=\"- topic/title \"> </title>" + 
-			"    <prolog class=\"- topic/prolog \">" + 
+	String expectedOldXmlWithCreated = "<?xml version=\"1.0\" encoding=\"utf-8\"?><topic id=\"topic_pmy_4gd_sbb\"  >" + 
+			"    <title> </title>" + 
+			"    <prolog>" + 
 			"        <author type=\"contributor\" >"+DitaUpdateTestUtil.AUTHOR_NAME+"</author> " + 
 			"        <critdates>" + 
 			"            <created date=\""+ localDate +"\" />  " + 
@@ -71,8 +73,8 @@ public class DitaUpdaterCritdatesTest extends TestCase {
 			"            <revised modified=\""+localDate+"\" />" + 
 			"        </critdates>" + 
 			"    </prolog>" + 
-			"    <body class=\"- topic/body \">" + 
-			"        <p class=\"- topic/p \"/>" + 
+			"    <body>" + 
+			"        <p/>" + 
 			"    </body>" + 
 			"</topic>" + 
 			" ";
@@ -89,24 +91,26 @@ public class DitaUpdaterCritdatesTest extends TestCase {
 	//Test document with critdates element that contains revised .
 	//
 	//input document
-	String xmlWithRevised ="<?xml version=\"1.0\" encoding=\"utf-8\"?><topic xmlns:ditaarch=\"http://dita.oasis-open.org/architecture/2005/\" id=\"topic_pmy_4gd_sbb\" ditaarch:DITAArchVersion=\"1.3\" domains=\"(topic abbrev-d)                            a(props deliveryTarget)                            (topic equation-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic mathml-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic svg-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)   \" class=\"- topic/topic \">" + 
-			"    <title class=\"- topic/title \"> </title>" + 
-			"    <prolog class=\"- topic/prolog \">" + 
+	String xmlWithRevised ="<?xml version=\"1.0\" encoding=\"utf-8\"?>"+
+	    "<!DOCTYPE topic PUBLIC \"-//OASIS//DTD DITA Topic//EN\" \"topic.dtd\">"+
+	    "<topic id=\"topic_pmy_4gd_sbb\"  >" + 
+			"    <title> </title>" + 
+			"    <prolog>" + 
 			"        <critdates >" + 
 			"           <!--"+DitaUpdateTestUtil.AUTHOR_NAME+"-->" + 
 			"            <revised modified=\""+ localDate +"\" />  " + 
 			"        </critdates>" + 
 			"    </prolog>" + 
-			"    <body class=\"- topic/body \">" + 
-			"        <p class=\"- topic/p \"/>" + 
+			"    <body>" + 
+			"        <p/>" + 
 			"    </body>" + 
 			"</topic>" + 
 			"";
 	
 	//expected XML output for new input document
-	String expectedNewXMLWithRevised = "<?xml version=\"1.0\" encoding=\"utf-8\"?><topic xmlns:ditaarch=\"http://dita.oasis-open.org/architecture/2005/\" id=\"topic_pmy_4gd_sbb\" ditaarch:DITAArchVersion=\"1.3\" domains=\"(topic abbrev-d)                            a(props deliveryTarget)                            (topic equation-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic mathml-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic svg-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)   \" class=\"- topic/topic \">" + 
-			"    <title class=\"- topic/title \"> </title>" + 
-			"    <prolog class=\"- topic/prolog \">" + 
+	String expectedNewXMLWithRevised = "<?xml version=\"1.0\" encoding=\"utf-8\"?><topic id=\"topic_pmy_4gd_sbb\"  >" + 
+			"    <title> </title>" + 
+			"    <prolog>" + 
 			"        <author type=\"creator\" >"+DitaUpdateTestUtil.AUTHOR_NAME+"</author> " + 
 			"        <critdates >" + 
 			"            <created date=\""+ localDate +"\" />  " + 
@@ -114,24 +118,24 @@ public class DitaUpdaterCritdatesTest extends TestCase {
 			"            <revised modified=\""+ localDate +"\" />  " + 
 			"        </critdates>" + 
 			"    </prolog>" + 
-			"    <body class=\"- topic/body \">" + 
-			"        <p class=\"- topic/p \"/>" + 
+			"    <body>" + 
+			"        <p/>" + 
 			"    </body>" + 
 			"</topic>" + 
 			"";
 
 	//expected XML output for old input document
-	String expectedOldXmlWithRevised = "<?xml version=\"1.0\" encoding=\"utf-8\"?><topic xmlns:ditaarch=\"http://dita.oasis-open.org/architecture/2005/\" id=\"topic_pmy_4gd_sbb\" ditaarch:DITAArchVersion=\"1.3\" domains=\"(topic abbrev-d)                            a(props deliveryTarget)                            (topic equation-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic mathml-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic svg-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)   \" class=\"- topic/topic \">" + 
-			"    <title class=\"- topic/title \"> </title>" + 
-			"    <prolog class=\"- topic/prolog \">" + 
+	String expectedOldXmlWithRevised = "<?xml version=\"1.0\" encoding=\"utf-8\"?><topic id=\"topic_pmy_4gd_sbb\"  >" + 
+			"    <title> </title>" + 
+			"    <prolog>" + 
 			"        <author type=\"contributor\" >"+DitaUpdateTestUtil.AUTHOR_NAME+"</author> " + 
 			"        <critdates>" + 
 			"           <!--"+DitaUpdateTestUtil.AUTHOR_NAME+"-->" + 
 			"            <revised modified=\""+ localDate +"\" />  " + 
 			"        </critdates>" + 
 			"    </prolog>" + 
-			"    <body class=\"- topic/body \">" + 
-			"        <p class=\"- topic/p \"/>" + 
+			"    <body>" + 
+			"        <p/>" + 
 			"    </body>" + 
 			"</topic>" + 
 			" ";
@@ -147,26 +151,28 @@ public class DitaUpdaterCritdatesTest extends TestCase {
 	//Test document with critdates element that contains revised with another modified date.
 	//
 	//input document
-	String xmlWithOldRevised ="<?xml version=\"1.0\" encoding=\"utf-8\"?><topic xmlns:ditaarch=\"http://dita.oasis-open.org/architecture/2005/\" id=\"topic_pmy_4gd_sbb\" ditaarch:DITAArchVersion=\"1.3\" domains=\"(topic abbrev-d)                            a(props deliveryTarget)                            (topic equation-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic mathml-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic svg-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)   \" class=\"- topic/topic \">" + 
-			"    <title class=\"- topic/title \"> </title>" + 
-			"    <prolog class=\"- topic/prolog \">" + 
+	String xmlWithOldRevised ="<?xml version=\"1.0\" encoding=\"utf-8\"?>"+
+	    "<!DOCTYPE topic PUBLIC \"-//OASIS//DTD DITA Topic//EN\" \"topic.dtd\">"+
+	    "<topic id=\"topic_pmy_4gd_sbb\"  >" + 
+			"    <title> </title>" + 
+			"    <prolog>" + 
 			"		<author type=\"contributor\" >"+DitaUpdateTestUtil.AUTHOR_NAME+"</author> "+
 			"        <critdates >" + 
 			"           <!--"+DitaUpdateTestUtil.AUTHOR_NAME+"-->" + 
 			"            <revised modified=\"10.10.2017\" />  " + 
 			"        </critdates>" + 
 			"    </prolog>" + 
-			"    <body class=\"- topic/body \">" + 
-			"        <p class=\"- topic/p \"/>" + 
+			"    <body>" + 
+			"        <p/>" + 
 			"    </body>" + 
 			"</topic>" + 
 			"";
 	
 
 	//expected XML output for old input document
-	String expectedWithOldRevised = "<?xml version=\"1.0\" encoding=\"utf-8\"?><topic xmlns:ditaarch=\"http://dita.oasis-open.org/architecture/2005/\" id=\"topic_pmy_4gd_sbb\" ditaarch:DITAArchVersion=\"1.3\" domains=\"(topic abbrev-d)                            a(props deliveryTarget)                            (topic equation-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic mathml-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic svg-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)   \" class=\"- topic/topic \">" + 
-			"    <title class=\"- topic/title \"> </title>" + 
-			"    <prolog class=\"- topic/prolog \">" + 
+	String expectedWithOldRevised = "<?xml version=\"1.0\" encoding=\"utf-8\"?><topic id=\"topic_pmy_4gd_sbb\"  >" + 
+			"    <title> </title>" + 
+			"    <prolog>" + 
 			"        <author type=\"contributor\" >"+DitaUpdateTestUtil.AUTHOR_NAME+"</author> " + 
 			"        <critdates>" + 
 			"           <!--"+DitaUpdateTestUtil.AUTHOR_NAME+"-->" + 
@@ -175,8 +181,8 @@ public class DitaUpdaterCritdatesTest extends TestCase {
 			"            <revised modified=\""+ localDate +"\" />  " + 
 			"        </critdates>" + 
 			"    </prolog>" + 
-			"    <body class=\"- topic/body \">" + 
-			"        <p class=\"- topic/p \"/>" + 
+			"    <body>" + 
+			"        <p/>" + 
 			"    </body>" + 
 			"</topic>" + 
 			" ";
@@ -190,26 +196,28 @@ public class DitaUpdaterCritdatesTest extends TestCase {
 	//Test document with critdates element that contains revised with another contributor comment.
 	//
 	//input document
-	String xmlWithContributorComment ="<?xml version=\"1.0\" encoding=\"utf-8\"?><topic xmlns:ditaarch=\"http://dita.oasis-open.org/architecture/2005/\" id=\"topic_pmy_4gd_sbb\" ditaarch:DITAArchVersion=\"1.3\" domains=\"(topic abbrev-d)                            a(props deliveryTarget)                            (topic equation-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic mathml-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic svg-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)   \" class=\"- topic/topic \">" + 
-			"    <title class=\"- topic/title \"> </title>" + 
-			"    <prolog class=\"- topic/prolog \">" + 
+	String xmlWithContributorComment ="<?xml version=\"1.0\" encoding=\"utf-8\"?>"+
+	    "<!DOCTYPE topic PUBLIC \"-//OASIS//DTD DITA Topic//EN\" \"topic.dtd\">"+
+	    "<topic id=\"topic_pmy_4gd_sbb\"  >" + 
+			"    <title> </title>" + 
+			"    <prolog>" + 
 			"				 <author type=\"contributor\" >anotherAuthor</author> "+
 			"        <critdates >" + 
 			"           <!--anotherAuthor-->" + 
 			"            <revised modified=\""+ localDate +"\" />  " + 
 			"        </critdates>" + 
 			"    </prolog>" + 
-			"    <body class=\"- topic/body \">" + 
-			"        <p class=\"- topic/p \"/>" + 
+			"    <body>" + 
+			"        <p/>" + 
 			"    </body>" + 
 			"</topic>" + 
 			"";
 	
 
 	//expected XML output for old input document
-	String expectedWithContributorComment= "<?xml version=\"1.0\" encoding=\"utf-8\"?><topic xmlns:ditaarch=\"http://dita.oasis-open.org/architecture/2005/\" id=\"topic_pmy_4gd_sbb\" ditaarch:DITAArchVersion=\"1.3\" domains=\"(topic abbrev-d)                            a(props deliveryTarget)                            (topic equation-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic mathml-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic svg-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)   \" class=\"- topic/topic \">" + 
-			"    <title class=\"- topic/title \"> </title>" + 
-			"    <prolog class=\"- topic/prolog \">" + 
+	String expectedWithContributorComment= "<?xml version=\"1.0\" encoding=\"utf-8\"?><topic id=\"topic_pmy_4gd_sbb\"  >" + 
+			"    <title> </title>" + 
+			"    <prolog>" + 
 			"        <author type=\"contributor\" >anotherAuthor</author> "+
 			"        <author type=\"contributor\" >"+DitaUpdateTestUtil.AUTHOR_NAME+"</author> " + 
 			"        <critdates>" + 
@@ -219,8 +227,8 @@ public class DitaUpdaterCritdatesTest extends TestCase {
 			"            <revised modified=\""+ localDate +"\" />  " + 
 			"        </critdates>" + 
 			"    </prolog>" + 
-			"    <body class=\"- topic/body \">" + 
-			"        <p class=\"- topic/p \"/>" + 
+			"    <body>" + 
+			"        <p/>" + 
 			"    </body>" + 
 			"</topic>" + 
 			" ";

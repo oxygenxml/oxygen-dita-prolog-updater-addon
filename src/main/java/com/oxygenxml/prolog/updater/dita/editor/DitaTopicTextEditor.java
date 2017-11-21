@@ -18,7 +18,7 @@ import ro.sync.exml.workspace.api.editor.page.text.xml.XPathException;
 /**
  * Edit DITA topic in text mode.
  * 
- * @author intern4
+ * @author cosmin_duna
  *
  */
 public class DitaTopicTextEditor implements DitaTopicEditor {
@@ -123,7 +123,7 @@ public class DitaTopicTextEditor implements DitaTopicEditor {
 			// the critdates doesn't exist
 			if (critdateElements.length == 0) {
 				// add the cridates xml fragment
-				String toAdd = "<critdates>\n" + prologContentCreater.getDateXmlFragment(isNewDocument) + "\n</critdates>";
+				String toAdd = "<critdates>\n" + prologContentCreater.getDateFragment(isNewDocument) + "\n</critdates>";
 				addXmlFragment(toAdd, PROLOG_XPATH+"/author[last()]",
 						RelativeInsertPosition.INSERT_LOCATION_AFTER);
 			
@@ -138,7 +138,7 @@ public class DitaTopicTextEditor implements DitaTopicEditor {
 					// created element doesn't exist
 					if (createdElements.length == 0) {
 						// add the created xml fragment
-						addXmlFragment(prologContentCreater.getAuthorXmlFragment(isNewDocument), CRITDATES_XPATH,
+						addXmlFragment(prologContentCreater.getPrologAuthorElement(isNewDocument), CRITDATES_XPATH,
 								RelativeInsertPosition.INSERT_LOCATION_AS_FIRST_CHILD);
 					} 
 				} else {
@@ -175,7 +175,7 @@ public class DitaTopicTextEditor implements DitaTopicEditor {
 		if (authorElementSize == 0) {
 			// if the author elements doesn't exist
 			// add author xml fragment
-			addXmlFragment(prologContentCreater.getAuthorXmlFragment(isNewDocument), PROLOG_XPATH,
+			addXmlFragment(prologContentCreater.getPrologAuthorElement(isNewDocument), PROLOG_XPATH,
 					RelativeInsertPosition.INSERT_LOCATION_AS_FIRST_CHILD);
 		}else {
 			// prolog contains author elements
@@ -190,7 +190,7 @@ public class DitaTopicTextEditor implements DitaTopicEditor {
 				if (creatorElementSize == 0) {
 					// there aren't creator author elements in prolog
 					// add the creator author xml fragment
-					addXmlFragment(prologContentCreater.getAuthorCreatorXmlFragment(), PROLOG_XPATH,
+					addXmlFragment(prologContentCreater.getAuthorCreatorFragment(), PROLOG_XPATH,
 							RelativeInsertPosition.INSERT_LOCATION_AS_FIRST_CHILD);
 				}
 
@@ -204,7 +204,7 @@ public class DitaTopicTextEditor implements DitaTopicEditor {
 				if (contributorElementSize == 0) {
 					// there aren't contributor author elements in prolog
 					// add the contributor author xml content
-					addXmlFragment(prologContentCreater.getAuthorContributorXmlFragment(),
+					addXmlFragment(prologContentCreater.getAuthorContributorFrag(),
 							PROLOG_XPATH + "/author[last()]", RelativeInsertPosition.INSERT_LOCATION_AFTER);
 				}
 			}
@@ -225,24 +225,14 @@ public class DitaTopicTextEditor implements DitaTopicEditor {
 	 *          {@link RelativeInsertPosition#INSERT_LOCATION_BEFORE}.
 	 */
 	public void addXmlFragment(final String xmlFragment, final String xPath, final RelativeInsertPosition position) {
-		try {
-			SwingUtilities.invokeAndWait(new Runnable() {
-
+			SwingUtilities.invokeLater(new Runnable() {
 				public void run() {
 					try {
 						documentController.insertXMLFragment(xmlFragment, xPath, position);
 					} catch (TextOperationException e) {
 						logger.debug(e.getMessage(), e);
 					}
-
 				}
 			});
-		} catch (InvocationTargetException e) {
-			logger.debug(e.getMessage(), e);
-		} catch (InterruptedException e) {
-			logger.debug(e.getMessage(), e);
-			// Restore interrupted state...
-	    Thread.currentThread().interrupt();
-		}
 	}
 }
