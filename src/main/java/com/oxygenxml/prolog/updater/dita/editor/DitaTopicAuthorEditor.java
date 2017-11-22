@@ -27,7 +27,7 @@ public class DitaTopicAuthorEditor implements DitaTopicEditor{
 	/**
 	 * Contains all elements(tags) from prolog.
 	 */
-	private PrologContentCreator prologContentCreater;
+	private PrologContentCreator prologCreator;
 	
 	/**
 	 * Author document controller
@@ -44,9 +44,9 @@ public class DitaTopicAuthorEditor implements DitaTopicEditor{
 	 * @param wsEditorPage workspace page editor.
 	 * @param prologContentCreater Contains all elements from prolog.
 	 */
-	public DitaTopicAuthorEditor(WSAuthorEditorPage wsEditorPage, PrologContentCreator prologContentCreater) {
+	public DitaTopicAuthorEditor(WSAuthorEditorPage wsEditorPage) {
 		this.documentController = wsEditorPage.getDocumentController();
-		this.prologContentCreater = prologContentCreater;
+		prologCreator = PrologContentCreator.getInstance();
 	}
 	
 	/**
@@ -77,7 +77,7 @@ public class DitaTopicAuthorEditor implements DitaTopicEditor{
       } else {
         //The prolog element wasn't found.
         // Add it
-        insertPrologElement(rootElement, prologContentCreater.getPrologXMLFragment(isNewDocument));
+        insertPrologElement(rootElement, prologCreator.getPrologXMLFragment(isNewDocument));
       }
     }
 	}
@@ -117,7 +117,7 @@ public class DitaTopicAuthorEditor implements DitaTopicEditor{
         if (createdElement == null) {
           // Add it.
           offset = cridates.getStartOffset() + 1;
-          fragment = prologContentCreater.getCreatedDateFragment();
+          fragment = prologCreator.getCreatedDateFragment();
         }
       } else {
         // it's not a new document
@@ -127,7 +127,7 @@ public class DitaTopicAuthorEditor implements DitaTopicEditor{
     } else {
       List<AuthorElement> authors = AuthorPageDocumentUtil.findElementsByClass(prolog, XmlElementsConstants.PROLOG_AUTHOR_ELEMENT_CLASS);
       // Create an element here.
-      fragment = XMLStringFragmentUtils.createDateTag(prologContentCreater.getDateFragment(isNewDocument));
+      fragment = XMLStringFragmentUtils.createDateTag(prologCreator.getDateFragment(isNewDocument));
       if(authors.isEmpty()) {
         offset = prolog.getEndOffset();
       } else {
@@ -154,12 +154,12 @@ public class DitaTopicAuthorEditor implements DitaTopicEditor{
 		for (AuthorElement current : revisedElements) {
 		  // check the modified value.
 		  AttrValue modifiedDate = current.getAttribute(XmlElementsConstants.MODIFIED_ATTRIBUTE);
-		  if (modifiedDate != null && prologContentCreater.getLocalDate().equals(modifiedDate.getRawValue())) {
+		  if (modifiedDate != null && prologCreator.getLocalDate().equals(modifiedDate.getRawValue())) {
 		    // Get the previous node
 		    AuthorNode previousSibling = documentController.getNodeAtOffset(current.getStartOffset() - 1);
 		    //and check if it's a comment.
 		    if (previousSibling.getType() == AuthorNode.NODE_TYPE_COMMENT
-		        && prologContentCreater.getAuthor().equals(previousSibling.getTextContent())) {
+		        && prologCreator.getAuthor().equals(previousSibling.getTextContent())) {
 		      localDateWithAuthorCommentExist = true;
 		      break;
 		    }
@@ -167,7 +167,7 @@ public class DitaTopicAuthorEditor implements DitaTopicEditor{
 		}
 		if (!localDateWithAuthorCommentExist) {
 		  int offset = critdatesElement.getEndOffset();
-		  String fragment = prologContentCreater.getRevisedDateFragment();
+		  String fragment = prologCreator.getRevisedDateFragment();
 			if (revisedElementSize != 0) {
         offset = revisedElements.get(revisedElementSize -1).getEndOffset()+1;
 			}
@@ -189,20 +189,20 @@ public class DitaTopicAuthorEditor implements DitaTopicEditor{
     final int length = authors.size();
     
     // Search for author with given type.
-    boolean hasAuthor = AuthorPageDocumentUtil.hasAuthor(authors, type, prologContentCreater.getAuthor());
+    boolean hasAuthor = AuthorPageDocumentUtil.hasAuthor(authors, type, prologCreator.getAuthor());
     
     String fragment = null;
     int offset = prolog.getStartOffset() + 1;
     
     if (!hasAuthor && XmlElementsConstants.CONTRIBUTOR_TYPE.equals(type)) {
       // if wasn't found this contributor
-      fragment = prologContentCreater.getContributorFragment();
+      fragment = prologCreator.getContributorFragment();
       if(length > 0){
         AuthorElement lastAuthor = authors.get(length - 1);
         offset = lastAuthor.getEndOffset() + 1;
       }
     } else if (!hasAuthor && XmlElementsConstants.CREATOR_TYPE.equals(type)) {
-      fragment = prologContentCreater.getCreatorFragment();
+      fragment = prologCreator.getCreatorFragment();
     }
     
     AuthorPageDocumentUtil.insertFragmentSchemaAware(documentController, fragment, offset);

@@ -15,7 +15,6 @@ import ro.sync.exml.workspace.api.editor.page.text.xml.WSXMLTextEditorPage;
  * @author cosmin_duna
  */
 public class DitaUpdater {
-  
   /**
    * Unknown user name value.
    */
@@ -31,20 +30,20 @@ public class DitaUpdater {
    * @param wsEditor Workspace editor.
    */
   public void updateProlog(WSEditor wsEditor) {
-
     //get the currentPage
     WSEditorPage currentPage = wsEditor.getCurrentPage();
 
     //create a PrologContentCreator
-    PrologContentCreator prologContentCreater = new PrologContentCreator(getAuthorName());
+    PrologContentCreator prologContentCreater = PrologContentCreator.getInstance();
+    prologContentCreater.setAuthor(getAuthorName());
 
     DitaTopicEditor ditaEditor = null;
 
     if (currentPage instanceof WSAuthorEditorPage) {
-      ditaEditor = new DitaTopicAuthorEditor((WSAuthorEditorPage)currentPage, prologContentCreater);
+      ditaEditor = new DitaTopicAuthorEditor((WSAuthorEditorPage)currentPage);
 
     } else if (currentPage instanceof WSXMLTextEditorPage) {
-      ditaEditor = new DitaTopicTextEditor((WSXMLTextEditorPage)currentPage, prologContentCreater);
+      ditaEditor = new DitaTopicTextEditor((WSXMLTextEditorPage)currentPage);
     }
 
     if(ditaEditor != null){
