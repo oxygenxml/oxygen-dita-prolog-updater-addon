@@ -60,7 +60,7 @@ public class PrologContentCreator {
 	/**
 	 * Constructor.
 	 */
-	private PrologContentCreator () {
+	private PrologContentCreator() {
 		// Generate current date in a specified format.
 		localDate = new SimpleDateFormat(XMLStringFragmentUtils.DATE_PATTERN).format(new Date());
 		// Generate the created date element.
