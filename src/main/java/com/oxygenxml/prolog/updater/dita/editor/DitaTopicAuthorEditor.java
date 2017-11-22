@@ -99,18 +99,16 @@ public class DitaTopicAuthorEditor implements DitaTopicEditor{
   private AuthorElement getElementByClassName(AuthorElement rootElement, String classValue) {
     AuthorElement toReturn = null;
     List<AuthorNode> contentNodes = rootElement.getContentNodes();
-    if (contentNodes != null && contentNodes.size() > 0) {
+    if (contentNodes != null && !contentNodes.isEmpty()) {
       for (AuthorNode authorNode : contentNodes) {
         if (authorNode.getType() == AuthorElement.NODE_TYPE_ELEMENT) {
           AuthorElement el = (AuthorElement) authorNode;
           AttrValue clazz = el.getAttribute("class");
-          if (clazz != null) {
-            if (clazz.getValue() != null && clazz.getValue().contains(classValue)) {
-              toReturn = el;
-              break;
-            }            
-          }
-        }
+					if (clazz != null && clazz.getValue() != null && clazz.getValue().contains(classValue)) {
+						toReturn = el;
+						break;
+					}
+				}
       }
     }
     return toReturn;
@@ -156,8 +154,8 @@ public class DitaTopicAuthorEditor implements DitaTopicEditor{
     if (!contributorFound && XmlElementsConstants.CONTRIBUTOR_TYPE.equals(type)) {
       // if wasn't found this contributor
       if(length != 0){
-        AuthorElement relativeTo = authors.get(length - 1);
-        addXmlFragment(prologContentCreater.getContributorFragment(), relativeTo, AuthorConstants.POSITION_AFTER);
+        AuthorElement lastAuthor = authors.get(length - 1);
+        addXmlFragmentSchemaAware(prologContentCreater.getContributorFragment(), lastAuthor.getEndOffset() + 1);
       }else{
         addXmlFragmentSchemaAware(prologContentCreater.getContributorFragment(), prolog.getStartOffset() + 1);
       }
@@ -302,16 +300,14 @@ public class DitaTopicAuthorEditor implements DitaTopicEditor{
   private List<AuthorElement> getElementsByClassName(AuthorElement rootElement, String classValue) {
     List<AuthorElement> toReturn = new ArrayList<AuthorElement>();
     List<AuthorNode> contentNodes = rootElement.getContentNodes();
-    if (contentNodes != null && contentNodes.size() > 0) {
+    if (contentNodes != null && !contentNodes.isEmpty()) {
       for (AuthorNode authorNode : contentNodes) {
         if (authorNode.getType() == AuthorElement.NODE_TYPE_ELEMENT) {
           AuthorElement el = (AuthorElement) authorNode;
           AttrValue clazz = el.getAttribute("class");
-          if (clazz != null) {
-            if (clazz.getValue() != null && clazz.getValue().contains(classValue)) {
-              toReturn.add(el);
-            }            
-          }
+					if (clazz != null && clazz.getValue() != null && clazz.getValue().contains(classValue)) {
+						toReturn.add(el);
+					}         
         }
       }
     }
