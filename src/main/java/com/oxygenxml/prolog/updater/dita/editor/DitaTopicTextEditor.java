@@ -1,10 +1,9 @@
 package com.oxygenxml.prolog.updater.dita.editor;
 
-import javax.swing.SwingUtilities;
-
 import org.apache.log4j.Logger;
 
 import com.oxygenxml.prolog.updater.PrologContentCreator;
+import com.oxygenxml.prolog.updater.utils.ThreadUtils;
 
 import ro.sync.exml.editor.xmleditor.operations.context.RelativeInsertPosition;
 import ro.sync.exml.workspace.api.editor.page.text.xml.TextDocumentController;
@@ -149,7 +148,7 @@ public class DitaTopicTextEditor implements DitaTopicEditor {
 					//if the element wasn't found
 					if (revisedElements.length == 0) {
 						//add revised xml fragament
-						addXmlFragment(prologContentCreater.getResivedModifiedFragment(),
+						addXmlFragment(prologContentCreater.getRevisedDateFragment(),
 								CRITDATES_XPATH, RelativeInsertPosition.INSERT_LOCATION_AS_LAST_CHILD);
 					}
 				}
@@ -222,7 +221,7 @@ public class DitaTopicTextEditor implements DitaTopicEditor {
 	 *          {@link RelativeInsertPosition#INSERT_LOCATION_BEFORE}.
 	 */
 	public void addXmlFragment(final String xmlFragment, final String xPath, final RelativeInsertPosition position) {
-			SwingUtilities.invokeLater(new Runnable() {
+			ThreadUtils.invokeSynchronously(new Runnable() {
 				public void run() {
 					try {
 						documentController.insertXMLFragment(xmlFragment, xPath, position);

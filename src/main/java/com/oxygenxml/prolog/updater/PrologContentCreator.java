@@ -1,5 +1,6 @@
 package com.oxygenxml.prolog.updater;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import com.oxygenxml.prolog.updater.utils.XMLStringFragmentUtils;
@@ -55,7 +56,7 @@ public class PrologContentCreator {
 		contributorXML = XMLStringFragmentUtils.createAuthorFragment(authorName, XmlElementsConstants.CONTRIBUTOR_TYPE);
 		
 		// Generate current date in a specified format.
-		localDate = XMLStringFragmentUtils.SIMPLE_DATE_FORMAT.format(new Date());
+		localDate = new SimpleDateFormat(XMLStringFragmentUtils.DATE_PATTERN).format(new Date());
 		
 		// Generate the created date element.
 		createdDateXML = XMLStringFragmentUtils.createGeneralXmlFragment("created", "date", localDate);
@@ -93,24 +94,36 @@ public class PrologContentCreator {
 	}
 	
 	/**
-	 * @return TODO
+	 * @return The XML fragment for contributor author element.
 	 */
 	public String getContributorFragment() {
 		return contributorXML.toString();
 	}
-
+	
+	/**
+   * @return The XML fragment for create date element.
+   */
 	public String getCreatedDateFragment() {
 		return createdDateXML.toString();
 	}
 
-	public String getResivedModifiedFragment() {
+	 /**
+   * @return The XML fragment for revised date element.
+   */
+	public String getRevisedDateFragment() {
 		return revisedDateFragment.toString();
 	}
 
+	/**
+	 * @return The name of author.
+	 */
 	public String getAuthor() {
 		return authorName;
 	}
-
+	
+	/**
+	 * @return The actual local date.
+	 */
 	public String getLocalDate() {
 		return localDate;
 	}

@@ -147,7 +147,6 @@ public class DitaTopicAuthorEditor implements DitaTopicEditor{
         addRevisedElement(cridates);
       }
     } else {
-      
       List<AuthorElement> elementsByClassName = getElementsByClassName(prolog, XmlElementsConstants.PROLOG_AUTHOR_ELEMENT_CLASS);
       
       // Create an element here.
@@ -195,10 +194,10 @@ public class DitaTopicAuthorEditor implements DitaTopicEditor{
 		}
 		if (!localDateWithAuthorCommentExist) {
 			if (revisedElementSize != 0) {
-				insertFragmentSchemaAware(prologContentCreater.getResivedModifiedFragment(),
+				insertFragmentSchemaAware(prologContentCreater.getRevisedDateFragment(),
 						revisedElements.get(revisedElementSize -1 ).getEndOffset()+1);
 			} else {
-				insertFragmentSchemaAware(prologContentCreater.getResivedModifiedFragment(), critdatesElement.getEndOffset());
+				insertFragmentSchemaAware(prologContentCreater.getRevisedDateFragment(), critdatesElement.getEndOffset());
 			}
 		}
 	}
@@ -287,25 +286,24 @@ public class DitaTopicAuthorEditor implements DitaTopicEditor{
     
     int length = authors.size();
     // Iterate over authors.
-    for (int i = 0; i < length && length > 0; i++) {
+    for (int i = 0; i < length ; i++) {
       AuthorElement el = authors.get(i);
       // Get the type's value,
       AttrValue typeAttr = el.getAttribute("type");
       if (typeAttr != null) {
         String typeAttrValue = typeAttr.getValue();
         if (type.equals(typeAttrValue)) {
+          // Was found a creator.
+          foundAuthor = typeAttrValue.equals(XmlElementsConstants.CREATOR_TYPE);
+          
           if (typeAttrValue.equals(XmlElementsConstants.CONTRIBUTOR_TYPE)) {
             // Check the content of contributor element.
             String textContent = el.getTextContent();
-            if (prologContentCreater.getAuthor().equals(textContent)) {
-              // Was found a valid contributor.
-              foundAuthor = true;
-              break;
-            }
+            // Was found a valid contributor.
+            foundAuthor = prologContentCreater.getAuthor().equals(textContent);
           } 
-          if (type.equals(XmlElementsConstants.CREATOR_TYPE)){
-            // Was found a creator.
-            foundAuthor = true;
+          
+          if (foundAuthor) {
             break;
           }
         }

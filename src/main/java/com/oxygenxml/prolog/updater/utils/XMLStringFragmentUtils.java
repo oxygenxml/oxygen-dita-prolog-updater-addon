@@ -1,7 +1,5 @@
 package com.oxygenxml.prolog.updater.utils;
 
-import java.text.SimpleDateFormat;
-
 /**
  * Utility class where xml elements fragments are generated.
  * @author adrian_sorop
@@ -11,11 +9,6 @@ public class XMLStringFragmentUtils {
    * Date pattern.
    */
   public static final String DATE_PATTERN = "yyyy/MM/dd";
-  
-  /**
-   * Simple date format.
-   */
-  public static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat(DATE_PATTERN);
   
   /**
    * Private constructor. Avoid instantiation.
