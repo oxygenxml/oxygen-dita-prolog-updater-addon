@@ -38,6 +38,7 @@ public class ThreadUtils {
       logger.error(ex.getCause(), ex.getCause());
     } catch (InterruptedException e) {
       logger.debug(e, e);
+      Thread.currentThread().interrupt();
     }
   }
 

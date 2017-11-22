@@ -1,9 +1,6 @@
 package com.oxygenxml.prolog.updater;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import org.mozilla.javascript.ast.XmlString;
 
 import com.oxygenxml.prolog.updater.utils.XMLStringFragmentUtils;
 import com.oxygenxml.prolog.updater.utils.XmlElementsConstants;
