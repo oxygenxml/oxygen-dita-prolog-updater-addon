@@ -3,18 +3,18 @@ package com.oxygenxml.prolog.updater;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.mozilla.javascript.ast.XmlString;
+
+import com.oxygenxml.prolog.updater.utils.XMLStringFragmentUtils;
+import com.oxygenxml.prolog.updater.utils.XmlElementsConstants;
+
 /**
  * Creates and contains all content from prolog. 
  * @author cosmin_duna
  *
  */
 public class PrologContentCreator {
-  
-  /**
-   * Date pattern.
-   */
-	private static final String DATE_PATTERN = "yyyy/MM/dd";
-	
+
   /**
 	 * XML fragment for author that has type creator.
 	 */
@@ -23,12 +23,12 @@ public class PrologContentCreator {
 	/**
 	 * XML fragment for author that has type contributor.
 	 */
-	private StringBuilder contributorFragment;
+	private StringBuilder contributorXML;
 	
 	/**
 	 * XML fragment for create tag
 	 */
-	private  StringBuilder createdDateFragment;
+	private  StringBuilder createdDateXML;
 	
 	/**
 	 * XML fragment for revised tag.
@@ -40,37 +40,34 @@ public class PrologContentCreator {
 	 */
 	private  String localDate;
 	/**
-	 * The author
+	 * The name of the author
 	 */
-	private String author;
+	private String authorName;
 	
 	/**
 	 * Constructor.
 	 * 
-	 * @param author The name of author
+	 * @param authorName The name of author
 	 */
-	public PrologContentCreator (String author) {
-		this.author = author;
+	public PrologContentCreator (String authorName) {
+		this.authorName = authorName;
 		
 		// Creator
-		creatorFragment = new StringBuilder();
-		creatorFragment.append("<author type=\"creator\">").append(author).append("</author>");
+		creatorFragment = XMLStringFragmentUtils.createAuthorFragment(authorName, XmlElementsConstants.CREATOR_TYPE);
 		// Contributor
-		contributorFragment = new StringBuilder();
-		contributorFragment.append("<author type=\"contributor\">").append(author).append("</author>");
+		contributorXML = XMLStringFragmentUtils.createAuthorFragment(authorName, XmlElementsConstants.CONTRIBUTOR_TYPE);
 		
 		// Generate current date in a specified format.
-		localDate = new SimpleDateFormat(DATE_PATTERN).format(new Date());
+		localDate = XMLStringFragmentUtils.SIMPLE_DATE_FORMAT.format(new Date());
 		
 		// Generate the created date element.
-		createdDateFragment = new StringBuilder();
-		createdDateFragment.append("<created date=\"").append(localDate).append("\"/>");
+		createdDateXML = XMLStringFragmentUtils.createGeneralXmlFragment("created", "date", localDate);
 		
 		// Generate the revised date element.
-		revisedDateFragment = new StringBuilder();
 		// Add the author name as comment.
-		revisedDateFragment.append("<!--").append(author).append("-->");
-		revisedDateFragment.append("<revised modified=\"").append(localDate).append("\"/>");
+		revisedDateFragment = XMLStringFragmentUtils.createGeneralXmlFragment(null, null, authorName);
+		StringBuilder revised = XMLStringFragmentUtils.createGeneralXmlFragment("revised", "modified", localDate);
+		revisedDateFragment = (revisedDateFragment == null) ? revised : revisedDateFragment.append(revised);
 	}
 
 	/**
@@ -80,57 +77,41 @@ public class PrologContentCreator {
 	 */
 	public String getPrologXMLFragment( boolean isNewDocument) { 
 	  StringBuilder fragment = new StringBuilder();
-	  
 	  fragment.append("<prolog>");
 	  if (isNewDocument) {
       fragment.append(creatorFragment);
-      fragment.append(createDateTag(createdDateFragment.toString()));
+      fragment.append(XMLStringFragmentUtils.createDateTag(createdDateXML.toString()));
     } else {
-      fragment.append(contributorFragment);
-      fragment.append(createDateTag(revisedDateFragment.toString()));
+      fragment.append(contributorXML);
+      fragment.append(XMLStringFragmentUtils.createDateTag(revisedDateFragment.toString()));
     }
 	  fragment.append("</prolog>");
 	  
 		return fragment.toString();
 	}
 	
-	/**
-	 * Constructs an element with the date.
-	 * 
-	 * @param date The formatted date as string.
-	 * @return The critdates element with the date.
-	 */
-  public static String createDateTag(String date) {
-    StringBuilder sb = new StringBuilder();
-    sb.append("<critdates>");
-    sb.append(date);
-    sb.append("</critdates>");
-    return sb.toString();
-  }
-
-	
 	//Gettters
-	public String getAuthorCreatorFragment() {
+	public String getCreatorFragment() {
 		return creatorFragment.toString();
 	}
 	
 	/**
 	 * @return TODO
 	 */
-	public String getAuthorContributorFrag() {
-		return contributorFragment.toString();
+	public String getContributorFragment() {
+		return contributorXML.toString();
 	}
 
-	public String getCreatedDateXmlFragment() {
-		return createdDateFragment.toString();
+	public String getCreatedDateFragment() {
+		return createdDateXML.toString();
 	}
 
-	public String getResivedModifiedXmlFragment() {
+	public String getResivedModifiedFragment() {
 		return revisedDateFragment.toString();
 	}
 
 	public String getAuthor() {
-		return author;
+		return authorName;
 	}
 
 	public String getLocalDate() {
@@ -139,20 +120,22 @@ public class PrologContentCreator {
 	
 	/**
 	 * Get the XML fragment of author tag, according to given state of document.
+	 * 
 	 * @param isNewDocument <code>true</code> if document is new, <code>false</code> otherwise.
 	 * @return the XML fragment in String format
 	 */
 	public String getPrologAuthorElement(boolean isNewDocument){
-		return (isNewDocument)? creatorFragment.toString() : contributorFragment.toString();
+		return isNewDocument ? creatorFragment.toString() : contributorXML.toString();
 	}
 	
 	/**
 	 * Get the XML fragment of date element, according to given state of document.
+	 * 
 	 * @param isNewDocument <code>true</code> if document is new, <code>false</code> otherwise.
 	 * @return the XML fragment in String format
 	 */
 	public String getDateFragment(boolean isNewDocument){
-		return isNewDocument ? createdDateFragment.toString() : revisedDateFragment.toString();
+		return isNewDocument ? createdDateXML.toString() : revisedDateFragment.toString();
 	}
 	
 }

@@ -8,8 +8,9 @@ import javax.swing.text.BadLocationException;
 import org.apache.log4j.Logger;
 
 import com.oxygenxml.prolog.updater.PrologContentCreator;
-import com.oxygenxml.prolog.updater.utils.Constants;
+import com.oxygenxml.prolog.updater.utils.XmlElementsConstants;
 import com.oxygenxml.prolog.updater.utils.ThreadUtils;
+import com.oxygenxml.prolog.updater.utils.XMLStringFragmentUtils;
 
 import ro.sync.ecss.extensions.api.AuthorConstants;
 import ro.sync.ecss.extensions.api.AuthorDocumentController;
@@ -62,11 +63,11 @@ public class DitaTopicAuthorEditor implements DitaTopicEditor{
 		
 		if (rootElement != null) {
 		  // Get the prolog element.
-		  AuthorElement prolog = getElementByClassName(rootElement, Constants.PROLOG_CLASS);
+		  AuthorElement prolog = getElementByClassName(rootElement, XmlElementsConstants.PROLOG_CLASS);
 		  if (prolog != null) {
 		    try {
 		      // Updates the creators and/or contributors of document
-          updateAuthorPrologElement(prolog, isNewDocument ? Constants.CREATOR_TYPE : Constants.CONTRIBUTOR_TYPE);
+          updateAuthorPrologElement(prolog, isNewDocument ? XmlElementsConstants.CREATOR_TYPE : XmlElementsConstants.CONTRIBUTOR_TYPE);
           
           // Update the critdates element .
           updateCritdates(prolog, isNewDocument);
@@ -79,11 +80,10 @@ public class DitaTopicAuthorEditor implements DitaTopicEditor{
         //The prolog element wasn't found.
         // Add it
         String prologXMLFragment = prologContentCreater.getPrologXMLFragment(isNewDocument);
-        AuthorElement bodyElement = getElementByClassName(rootElement, Constants.TOPIC_BODY_CLASS);
+        AuthorElement bodyElement = getElementByClassName(rootElement, XmlElementsConstants.TOPIC_BODY_CLASS);
         if(bodyElement == null) {
           addXmlFragmentSchemaAware(prologXMLFragment, rootElement.getStartOffset() + 1);
-        }
-        else {
+        }else {
           addXmlFragmentSchemaAware(prologXMLFragment, bodyElement.getStartOffset());
         }
       }
@@ -129,7 +129,7 @@ public class DitaTopicAuthorEditor implements DitaTopicEditor{
 	  boolean creatorFound = false;
 	  boolean contributorFound = false;
 
-	  List<AuthorElement> authors = getElementsByClassName(prolog, Constants.PROLOG_AUTHOR_ELEMENT_CLASS);
+	  List<AuthorElement> authors = getElementsByClassName(prolog, XmlElementsConstants.PROLOG_AUTHOR_ELEMENT_CLASS);
     final int length = authors.size();
     
     for (int i = 0; i < length && length > 0; i++) {
@@ -138,14 +138,14 @@ public class DitaTopicAuthorEditor implements DitaTopicEditor{
       if (typeAttr != null) {
         String typeAttrvalue = typeAttr.getValue();
         if (type.equals(typeAttrvalue)) {
-          if (typeAttrvalue.equals(Constants.CONTRIBUTOR_TYPE)) {
+          if (typeAttrvalue.equals(XmlElementsConstants.CONTRIBUTOR_TYPE)) {
             String textContent = el.getTextContent();
             if (prologContentCreater.getAuthor().equals(textContent)) {
               contributorFound = true;
               break;
             }
           } 
-          if (type.equals(Constants.CREATOR_TYPE)){
+          if (type.equals(XmlElementsConstants.CREATOR_TYPE)){
             creatorFound = true;
             break;
           }
@@ -153,17 +153,16 @@ public class DitaTopicAuthorEditor implements DitaTopicEditor{
       }
     }
 
-    if (!contributorFound && Constants.CONTRIBUTOR_TYPE.equals(type)) {
+    if (!contributorFound && XmlElementsConstants.CONTRIBUTOR_TYPE.equals(type)) {
       // if wasn't found this contributor
       if(length != 0){
         AuthorElement relativeTo = authors.get(length - 1);
-        addXmlFragment(prologContentCreater.getAuthorContributorFrag(), relativeTo, AuthorConstants.POSITION_AFTER);
+        addXmlFragment(prologContentCreater.getContributorFragment(), relativeTo, AuthorConstants.POSITION_AFTER);
       }else{
-        addXmlFragmentSchemaAware(prologContentCreater.getAuthorContributorFrag(), prolog.getStartOffset() + 1);
+        addXmlFragmentSchemaAware(prologContentCreater.getContributorFragment(), prolog.getStartOffset() + 1);
       }
-      
-    } else if (!creatorFound && Constants.CREATOR_TYPE.equals(type)) {
-      String frag = prologContentCreater.getAuthorCreatorFragment();
+    } else if (!creatorFound && XmlElementsConstants.CREATOR_TYPE.equals(type)) {
+      String frag = prologContentCreater.getCreatorFragment();
       addXmlFragmentSchemaAware(frag, prolog.getStartOffset() + 1);
     }
 	}
@@ -178,16 +177,15 @@ public class DitaTopicAuthorEditor implements DitaTopicEditor{
    */
   private void updateCritdates(AuthorElement prolog, boolean isNewDocument) throws BadLocationException {
     
-    AuthorElement cridates = getElementByClassName(prolog, Constants.TOPIC_CRITDATES_CLASS);
+    AuthorElement cridates = getElementByClassName(prolog, XmlElementsConstants.TOPIC_CRITDATES_CLASS);
     if (cridates != null) {
       if (isNewDocument) {
-        AuthorElement createdElement = getElementByClassName(cridates, Constants.CREATED_DATE_ELEMENT_CLASS);
+        AuthorElement createdElement = getElementByClassName(cridates, XmlElementsConstants.CREATED_DATE_ELEMENT_CLASS);
         // Was not added yet. 
         if (createdElement == null) {
           // Add it.
-          addXmlFragmentSchemaAware(prologContentCreater.getCreatedDateXmlFragment(), cridates.getStartOffset() + 1);
+          addXmlFragmentSchemaAware(prologContentCreater.getCreatedDateFragment(), cridates.getStartOffset() + 1);
         }
-        
       } else {
         // it's not a new document
         // add revised element
@@ -195,10 +193,10 @@ public class DitaTopicAuthorEditor implements DitaTopicEditor{
       }
     } else {
       
-      List<AuthorElement> elementsByClassName = getElementsByClassName(prolog, Constants.PROLOG_AUTHOR_ELEMENT_CLASS);
+      List<AuthorElement> elementsByClassName = getElementsByClassName(prolog, XmlElementsConstants.PROLOG_AUTHOR_ELEMENT_CLASS);
       
       // Create an element here.
-      String fragment = PrologContentCreator.createDateTag(prologContentCreater.getDateFragment(isNewDocument));
+      String fragment = XMLStringFragmentUtils.createDateTag(prologContentCreater.getDateFragment(isNewDocument));
       if(!elementsByClassName.isEmpty()) {
         AuthorElement lastAuthorElement = elementsByClassName.get(elementsByClassName.size()-1);
         addXmlFragmentSchemaAware(fragment, lastAuthorElement.getEndOffset() + 1);
@@ -218,7 +216,7 @@ public class DitaTopicAuthorEditor implements DitaTopicEditor{
 		boolean localDateWithAuthorCommentExist = false;
 
 		// get revised elements
-		List<AuthorElement> revisedElements = getElementsByClassName(critdatesElement, Constants.REVISED_DATE_ELEMENT_CLASS);
+		List<AuthorElement> revisedElements = getElementsByClassName(critdatesElement, XmlElementsConstants.REVISED_DATE_ELEMENT_CLASS);
 		int revisedElementSize = revisedElements.size();
 
 		// Iterate over revised elements
@@ -226,7 +224,7 @@ public class DitaTopicAuthorEditor implements DitaTopicEditor{
 			AuthorElement curentRevisedElement = revisedElements.get(i);
 
 			// check the modified value.
-			AttrValue currentModifiedDate = curentRevisedElement.getAttribute(Constants.MODIFIED_ATTRIBUTE);
+			AttrValue currentModifiedDate = curentRevisedElement.getAttribute(XmlElementsConstants.MODIFIED_ATTRIBUTE);
 			if (currentModifiedDate != null && prologContentCreater.getLocalDate().equals(currentModifiedDate.getRawValue())) {
 				// check the comment
 				int currentElemetStartOffSet = curentRevisedElement.getStartOffset();
@@ -242,10 +240,10 @@ public class DitaTopicAuthorEditor implements DitaTopicEditor{
 		}
 		if (!localDateWithAuthorCommentExist) {
 			if (revisedElementSize != 0) {
-				addXmlFragmentSchemaAware(prologContentCreater.getResivedModifiedXmlFragment(),
+				addXmlFragmentSchemaAware(prologContentCreater.getResivedModifiedFragment(),
 						revisedElements.get(revisedElementSize -1 ).getEndOffset()+1);
 			} else {
-				addXmlFragmentSchemaAware(prologContentCreater.getResivedModifiedXmlFragment(), critdatesElement.getEndOffset());
+				addXmlFragmentSchemaAware(prologContentCreater.getResivedModifiedFragment(), critdatesElement.getEndOffset());
 			}
 		}
 	}

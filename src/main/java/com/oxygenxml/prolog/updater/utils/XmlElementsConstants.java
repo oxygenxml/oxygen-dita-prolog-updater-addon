@@ -1,6 +1,8 @@
 package com.oxygenxml.prolog.updater.utils;
-
-public class Constants {
+/**
+ * Constant class where classes and attributes of XML elements are defined.
+ */
+public class XmlElementsConstants {
   /**
    * Class's value of prolog element.
    */
@@ -48,7 +50,7 @@ public class Constants {
   /**
    * public constructor.
    */
-  private Constants() {
+  private XmlElementsConstants() {
     // Avoid instantiation.
   }
 }
