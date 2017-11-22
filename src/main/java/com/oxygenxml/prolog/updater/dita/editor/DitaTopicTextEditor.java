@@ -220,7 +220,7 @@ public class DitaTopicTextEditor implements DitaTopicEditor {
 	 *          {@link RelativeInsertPosition#INSERT_LOCATION_AS_LAST_CHILD} or
 	 *          {@link RelativeInsertPosition#INSERT_LOCATION_BEFORE}.
 	 */
-	public void addXmlFragment(final String xmlFragment, final String xPath, final RelativeInsertPosition position) {
+	private void addXmlFragment(final String xmlFragment, final String xPath, final RelativeInsertPosition position) {
 			ThreadUtils.invokeSynchronously(new Runnable() {
 				public void run() {
 					try {

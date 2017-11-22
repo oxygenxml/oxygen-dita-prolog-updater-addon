@@ -52,7 +52,6 @@ public class DitaUpdater {
     }
   }
 
-
   /**
    * @return The author's name. Never <code>null</code>.
    */
