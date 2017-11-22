@@ -1,7 +1,5 @@
 package com.oxygenxml.prolog.updater.dita.editor;
 
-import java.lang.reflect.InvocationTargetException;
-
 import javax.swing.SwingUtilities;
 
 import org.apache.log4j.Logger;
