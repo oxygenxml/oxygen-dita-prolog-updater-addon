@@ -4,7 +4,7 @@ package com.oxygenxml.prolog.updater.utils;
  * Utility class where xml elements fragments are generated.
  * @author adrian_sorop
  */
-public class XMLStringFragmentUtils {
+public class XMLFragmentUtils {
   /**
    * Date pattern.
    */
@@ -13,7 +13,7 @@ public class XMLStringFragmentUtils {
   /**
    * Private constructor. Avoid instantiation.
    */
-  private XMLStringFragmentUtils() {
+  private XMLFragmentUtils() {
   }
   /**
    * Constructs an element with the date.
@@ -43,6 +43,15 @@ public class XMLStringFragmentUtils {
     return toReturn;
   }
   
+  /**
+   * Creates a XML element: elementName attributeName="attributeValue". 
+   * If the name of the element is null it will generate a comment with the attribute value.
+   * 
+   * @param elementName   Name of the element. If <code>null</code> a comment with the attribute value is generated.
+   * @param attributeName Name of the attribute.
+   * @param attributeValue Value of the attribute.
+   * @return
+   */
   public static StringBuilder createGeneralXmlFragment(String elementName, String attributeName, String attributeValue){
     StringBuilder toReturn = new StringBuilder();
     if (elementName != null) {

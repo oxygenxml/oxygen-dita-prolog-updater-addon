@@ -8,7 +8,7 @@ import org.apache.log4j.Logger;
 
 import com.oxygenxml.prolog.updater.PrologContentCreator;
 import com.oxygenxml.prolog.updater.utils.AuthorPageDocumentUtil;
-import com.oxygenxml.prolog.updater.utils.XMLStringFragmentUtils;
+import com.oxygenxml.prolog.updater.utils.XMLFragmentUtils;
 import com.oxygenxml.prolog.updater.utils.XmlElementsConstants;
 
 import ro.sync.ecss.extensions.api.AuthorDocumentController;
@@ -77,7 +77,7 @@ public class DitaTopicAuthorEditor implements DitaTopicEditor{
       } else {
         //The prolog element wasn't found.
         // Add it
-        insertPrologElement(rootElement, prologCreator.getPrologXMLFragment(isNewDocument));
+        insertPrologElement(rootElement, prologCreator.getPrologFragment(isNewDocument));
       }
     }
 	}
@@ -127,7 +127,7 @@ public class DitaTopicAuthorEditor implements DitaTopicEditor{
     } else {
       List<AuthorElement> authors = AuthorPageDocumentUtil.findElementsByClass(prolog, XmlElementsConstants.PROLOG_AUTHOR_ELEMENT_CLASS);
       // Create an element here.
-      fragment = XMLStringFragmentUtils.createDateTag(prologCreator.getDateFragment(isNewDocument));
+      fragment = XMLFragmentUtils.createDateTag(prologCreator.getDateFragment(isNewDocument));
       if(authors.isEmpty()) {
         offset = prolog.getEndOffset();
       } else {

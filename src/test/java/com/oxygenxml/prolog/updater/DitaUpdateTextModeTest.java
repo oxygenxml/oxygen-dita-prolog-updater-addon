@@ -53,7 +53,7 @@ public class DitaUpdateTextModeTest {
 		
 		ditaTopicTextEditor.updateProlog(true);
 		
-		Mockito.verify(textDocumentController, Mockito.times(1)).insertXMLFragment(Mockito.eq(prologContentCreater.getPrologXMLFragment(true)), Mockito.anyString(), Mockito.any(RelativeInsertPosition.class));
+		Mockito.verify(textDocumentController, Mockito.times(1)).insertXMLFragment(Mockito.eq(prologContentCreater.getPrologFragment(true)), Mockito.anyString(), Mockito.any(RelativeInsertPosition.class));
 		Mockito.reset(textDocumentController);
 		
 		
