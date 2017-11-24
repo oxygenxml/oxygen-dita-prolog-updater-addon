@@ -10,7 +10,7 @@ public class XPathConstants {
   /**
    * XPath for topic body.
    */
-  public static final String TOPIC_BODY = "//*[contains(@class,'topic/body')]";
+  public static final String TOPIC_BODY = "//*[contains(@class,' topic/body ')]";
 
   /**
    * XPath expression for Prolog element.
@@ -41,6 +41,15 @@ public class XPathConstants {
    * Returns a "created" element.
    */
   public static final String PROLOG_CREATED_ELEMENT = PROLOG_CRITDATES + "/created";
+  
+  /**
+   * 
+   */
+  public static final String FIRST_BODY_IN_ROOT_TOPIC = "/*[1][contains(@class, ' topic/topic ')]/*[contains(@class, ' topic/body ')]";
+  
+  public static final String ROOT_TOPIC = "/*[1][contains(@class, ' topic/topic ')]";
+  
+  public static final String ROOT_TOPIC_CHILD = ROOT_TOPIC + "/*";
   
   /**
    * Private constructor. Avoid instantiation.

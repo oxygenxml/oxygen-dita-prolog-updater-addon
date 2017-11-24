@@ -10,6 +10,8 @@ import javax.swing.text.BadLocationException;
 import org.xml.sax.SAXException;
 
 import junit.framework.TestCase;
+import ro.sync.exml.workspace.api.PluginWorkspace;
+import ro.sync.exml.workspace.api.PluginWorkspaceProvider;
 
 public class DitaUpdaterAuthorTest extends TestCase{
 
@@ -188,4 +190,41 @@ public class DitaUpdaterAuthorTest extends TestCase{
 	
 	}
 
+	/**
+   * <p><b>Description:</b> Test if the content isn't modified after save.</p>
+   * @throws Exception
+   */
+  public void testSaveTwice() throws Exception {
+    //Get the local date
+    DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+    Date date = new Date();
+    
+    final String localDate = dateFormat.format(date);
+    
+  //expected XML output for new input document
+    String fragment = "<?xml version=\"1.0\" encoding=\"utf-8\"?>"+
+        "<!DOCTYPE topic PUBLIC \"-//OASIS//DTD DITA Topic//EN\" \"topic.dtd\">"+
+        "<topic id=\"topic_pmy_4gd_sb\">" + 
+        "    <title> </title>" + 
+        "    <prolog>" + 
+        "        <author type=\"creator\" >"+DitaUpdateTestUtil.AUTHOR_NAME+"</author> " + 
+        "        <critdates >" + 
+        "            <created date=\""+ localDate +"\" />  " + 
+        "        </critdates>" + 
+        "    </prolog>" + 
+        "    <body >" + 
+        "        <p/>" + 
+        "    </body>" + 
+        "</topic>" + 
+        "";
+    
+    
+    
+    
+    // test when document is new
+    DitaUpdateTestUtil.testInAuthorMode(fragment, true,  fragment);
+    
+  }
+
+	
 }

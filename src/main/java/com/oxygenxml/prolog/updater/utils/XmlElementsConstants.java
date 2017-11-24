@@ -9,6 +9,11 @@ public class XmlElementsConstants {
   public static final String PROLOG_CLASS = " topic/prolog ";
 
   /**
+   * Name of prolog element.
+   */
+  public static final String PROLOG_NAME = "prolog";
+
+  /**
    * Class's value of body element.
    */
   public static final String TOPIC_BODY_CLASS = " topic/body ";
