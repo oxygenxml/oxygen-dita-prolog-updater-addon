@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<translation>
+	<languageList>
+		<language description="English" lang="en_US" />
+		<language description="German" lang="de_DE" />
+		<language description="French" lang="fr_FR" />
+		<language description="Japanese" lang="ja_JP" />
+		<language description="Dutch" lang="nl_NL" />
+	</languageList>
+	<key value="prolog.updater.author.name">
+		<comment>Author name.</comment>
+		<val lang="en_US">Author</val>
+		<val lang="de_DE">Author</val>
+		<val lang="fr_FR">Author</val>
+		<val lang="ja_JP">Author</val>
+		<val lang="nl_NL">Author</val>
+	</key>
+	
+	<key value="prolog.updater.dita.topic">
+		<comment>The label for the dita topic section.</comment>
+		<val lang="en_US">DITA Topic</val>
+		<val lang="de_DE">DITA Topic</val>
+		<val lang="fr_FR">DITA Topic</val>
+		<val lang="ja_JP">DITA Topic</val>
+		<val lang="nl_NL">DITA Topic</val>
+	</key>
+
+	<key value="prolog.updater.dita.map">
+		<comment>The label for the dita map section.</comment>
+		<val lang="en_US">DITA Map</val>
+		<val lang="de_DE">DITA Map</val>
+		<val lang="fr_FR">DITA Map</val>
+		<val lang="ja_JP">DITA Map</val>
+		<val lang="nl_NL">DITA Map</val>
+	</key>
+
+	<key value="prolog.updater.enable.on.save">
+		<comment>The text from check box which enable the prolog update</comment>
+		<val lang="en_US">Enable automatic prolog update on save</val>
+		<val lang="de_DE">Enable automatic prolog update on save</val>
+		<val lang="fr_FR">Enable automatic prolog update on save</val>
+		<val lang="ja_JP">Enable automatic prolog update on save</val>
+		<val lang="nl_NL">Enable automatic prolog update on save</val>
+	</key>
+	<key value="prolog.updater.set.creator">
+		<comment>The text from the check box which set the creator</comment>
+		<val lang="en_US">Set the creator name</val>
+		<val lang="de_DE">Set the creator name</val>
+		<val lang="fr_FR">Set the creator name</val>
+		<val lang="ja_JP">Set the creator name</val>
+		<val lang="nl_NL">Set the creator name</val>
+	</key>
+	<key value="prolog.updater.set.created.date">
+		<comment>The text from the check box which set the created date</comment>
+		<val lang="en_US">Set the created date</val>
+		<val lang="de_DE">Set the created date</val>
+		<val lang="fr_FR">Set the created date</val>
+		<val lang="ja_JP">Set the created date</val>
+		<val lang="nl_NL">Set the created date</val>
+	</key>
+	<key value="prolog.updater.update.contributor">
+		<comment>The text from the check box which set the contributor</comment>
+		<val lang="en_US">Update the contributor names</val>
+		<val lang="de_DE">Update the contributor names</val>
+		<val lang="fr_FR">Update the contributor names</val>
+		<val lang="ja_JP">Update the contributor names</val>
+		<val lang="nl_NL">Update the contributor names</val>
+	</key>
+	<key value="prolog.updater.update.revised.dates">
+		<comment>The text from the check box which set the revised date</comment>
+		<val lang="en_US">Update the revised dates</val>
+		<val lang="de_DE">Update the revised dates</val>
+		<val lang="fr_FR">Update the revised dates</val>
+		<val lang="ja_JP">Update the revised dates</val>
+		<val lang="nl_NL">Update the revised dates</val>
+	</key>
+</translation>

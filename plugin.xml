@@ -4,7 +4,7 @@
 
 <plugin
  id="com.oxygenxml.prolog.updater"
- name="OxygenDitaPrologUpdater"
+ name="Oxygen Dita Prolog Updater"
  description="Oxygen XML plugin which updates the author information, created and modified dates in the DITA prolog section for topics and maps."
  version="${project.version}"
  vendor="oXygen XML"
@@ -20,4 +20,6 @@
  <extension type="WorkspaceAccess" 
    class="com.oxygenxml.prolog.updater.plugin.PrologUpdaterExtension"/>
  
+ <extension type="OptionPage" 
+ 	class="com.oxygenxml.prolog.updater.plugin.PrologUpdaterExtension"/>
 </plugin>
