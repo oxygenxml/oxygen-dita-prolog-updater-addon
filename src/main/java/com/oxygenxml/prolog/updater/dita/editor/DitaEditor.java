@@ -5,7 +5,7 @@ package com.oxygenxml.prolog.updater.dita.editor;
  * 
  * @author cosmin_duna
  */
-public interface DitaTopicEditor {
+public interface DitaEditor {
 	
 	/**
 	 * Update the prolog in DITA topic document according to given flag(isNewDocument)

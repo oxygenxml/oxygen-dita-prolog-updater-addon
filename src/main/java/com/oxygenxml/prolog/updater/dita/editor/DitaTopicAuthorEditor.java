@@ -6,7 +6,7 @@ import javax.swing.text.BadLocationException;
 
 import org.apache.log4j.Logger;
 
-import com.oxygenxml.prolog.updater.PrologContentCreator;
+import com.oxygenxml.prolog.updater.prolog.content.PrologContentCreator;
 import com.oxygenxml.prolog.updater.utils.AuthorPageDocumentUtil;
 import com.oxygenxml.prolog.updater.utils.XMLFragmentUtils;
 import com.oxygenxml.prolog.updater.utils.XmlElementsConstants;
@@ -22,7 +22,7 @@ import ro.sync.exml.workspace.api.editor.page.author.WSAuthorEditorPage;
  * 
  * @author cosmin_duna
  */
-public class DitaTopicAuthorEditor implements DitaTopicEditor{
+public class DitaTopicAuthorEditor implements DitaEditor{
 	 
 	/**
 	 * Contains all elements(tags) from prolog.
@@ -35,6 +35,11 @@ public class DitaTopicAuthorEditor implements DitaTopicEditor{
 	private AuthorDocumentController documentController;
 
 	/**
+	 * <code>true</code> for DITA topic, <code>false</code> for DITA map.
+	 */
+	private boolean isTopic = true;
+	
+	/**
 	 * Logger
 	 */
 	 private static final Logger logger = Logger.getLogger(DitaTopicAuthorEditor.class);
@@ -46,6 +51,15 @@ public class DitaTopicAuthorEditor implements DitaTopicEditor{
 	 */
 	public DitaTopicAuthorEditor(WSAuthorEditorPage wsEditorPage) {
 		this.documentController = wsEditorPage.getDocumentController();
+		
+		AuthorElement rootElement = documentController.getAuthorDocumentNode().getRootElement();
+		AttrValue classValue = rootElement.getAttribute(XmlElementsConstants.CLASS);
+		if(classValue != null) {
+		  if(classValue.getValue().contains(" map/map ")) {
+		    isTopic = false;
+		  }
+		}
+		
 		prologCreator = PrologContentCreator.getInstance();
 	}
 	
@@ -61,7 +75,7 @@ public class DitaTopicAuthorEditor implements DitaTopicEditor{
 		
 		if (rootElement != null) {
 		  // Get the prolog element.
-		  AuthorElement prolog = AuthorPageDocumentUtil.findElementByClass(rootElement, XmlElementsConstants.PROLOG_CLASS);
+		  AuthorElement prolog = AuthorPageDocumentUtil.findElementByClass(rootElement, XmlElementsConstants.getPrologClass(isTopic));
 		  if (prolog != null) {
 		    try {
 		      // Updates the creators and/or contributors of document
@@ -77,7 +91,7 @@ public class DitaTopicAuthorEditor implements DitaTopicEditor{
       } else {
         //The prolog element wasn't found.
         // Add it
-        insertPrologElement(rootElement, prologCreator.getPrologFragment(isNewDocument));
+        insertPrologElement(rootElement, prologCreator.getPrologFragment(isNewDocument, isTopic));
       }
     }
 	}

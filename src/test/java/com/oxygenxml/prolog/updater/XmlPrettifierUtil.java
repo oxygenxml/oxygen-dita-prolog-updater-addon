@@ -9,10 +9,8 @@ import javax.xml.parsers.SAXParserFactory;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
@@ -40,7 +38,6 @@ public class XmlPrettifierUtil {
 		Transformer transformer;
 
 		// get the input source
-		System.err.println("PRETTYFI " + xmlContent);
 		InputSource inputSource = new InputSource(new StringReader(xmlContent));
 
 		StringWriter sw = new StringWriter();

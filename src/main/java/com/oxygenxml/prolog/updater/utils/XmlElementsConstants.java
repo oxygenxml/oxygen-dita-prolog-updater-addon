@@ -4,15 +4,31 @@ package com.oxygenxml.prolog.updater.utils;
  */
 public class XmlElementsConstants {
   /**
+   * The class attribute.
+   */
+  public static final String CLASS = "class";
+  
+  /**
    * Class's value of prolog element.
    */
   public static final String PROLOG_CLASS = " topic/prolog ";
 
   /**
+   * Class's value of topicMeta element(prolog element from map).
+   */
+  public static final String TOPICMETA_CLASS = " map/topicmeta ";
+  
+  /**
    * Name of prolog element.
    */
   public static final String PROLOG_NAME = "prolog";
 
+  /**
+   * Name of topicMeta element.
+   */
+  public static final String TOPICMETA_NAME = "topicmeta";
+
+  
   /**
    * Class's value of body element.
    */
@@ -51,6 +67,21 @@ public class XmlElementsConstants {
    */
   public static final String PROLOG_AUTHOR_ELEMENT_CLASS = " topic/author ";
 
+  public static String getPrologClass(boolean isTopic) {
+    if(isTopic) {
+      return PROLOG_CLASS;
+    }else {
+      return TOPICMETA_CLASS;
+    }
+  }
+  
+  public static String getPrologName(boolean isTopic) {
+    if(isTopic) {
+      return PROLOG_NAME;
+    }else {
+      return TOPICMETA_NAME;
+    }
+  }
   
   /**
    * public constructor.

@@ -1,4 +1,4 @@
-package com.oxygenxml.prolog.updater;
+package com.oxygenxml.prolog.updater.prolog.content;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -93,9 +93,9 @@ public class PrologContentCreator {
 	 * @param isNewDocument <code>true</code> if document is new, <code>false</code> otherwise.
 	 * @return the XML fragment in String format
 	 */
-	public String getPrologFragment( boolean isNewDocument) { 
+	public String getPrologFragment( boolean isNewDocument, boolean isTopic) { 
 	  StringBuilder fragment = new StringBuilder();
-	  fragment.append("<prolog>");
+	  fragment.append(ElementGetter.getPrologStartElement(isTopic));
 	  if (isNewDocument) {
       fragment.append(creatorFragment);
       fragment.append(XMLFragmentUtils.createDateTag(createdDateXML.toString()));
@@ -103,7 +103,7 @@ public class PrologContentCreator {
       fragment.append(contributorXML);
       fragment.append(XMLFragmentUtils.createDateTag(revisedDateFragment.toString()));
     }
-	  fragment.append("</prolog>");
+	  fragment.append(ElementGetter.getPrologEndElement(isTopic));
 	  
 		return fragment.toString();
 	}

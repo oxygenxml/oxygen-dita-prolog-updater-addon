@@ -10,13 +10,11 @@ import javax.swing.text.BadLocationException;
 import org.xml.sax.SAXException;
 
 import junit.framework.TestCase;
-import ro.sync.exml.workspace.api.PluginWorkspace;
-import ro.sync.exml.workspace.api.PluginWorkspaceProvider;
 
-public class DitaUpdaterAuthorTest extends TestCase{
+public class DitaTopicUpdaterAuthorTest extends TestCase{
 
 	/**
-	 * Test if the author tag is correct modified after save operation.
+	 * Test if the author tag is correct modified after save operation in DITA Topic.
 	 * @throws IOException
 	 * @throws SAXException
 	 * @throws BadLocationException
