@@ -1,9 +1,17 @@
 package com.oxygenxml.prolog.updater.tags;
 
+/**
+ * Tags used for translation.
+ * @author cosmin_duna
+ *
+ */
 public class Tags {
   
+	/**
+	 * Private constructor.
+	 */
   private Tags() {
-  // Do nothing 
+  	throw new IllegalStateException("Utility class");
   }
   
   /**

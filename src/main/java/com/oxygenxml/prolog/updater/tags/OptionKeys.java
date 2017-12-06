@@ -5,6 +5,14 @@ package com.oxygenxml.prolog.updater.tags;
  *
  */
 public class OptionKeys {
+	
+	/**
+	 * Private constructor.
+	 */
+  private OptionKeys() {
+    throw new IllegalStateException("Utility class");
+  }
+	
   /**
    * Option for the author name in prolog updater.
    */

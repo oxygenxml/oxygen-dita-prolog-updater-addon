@@ -125,7 +125,7 @@ public class PrologOptionPage extends JPanel {
     constr.gridx ++;
     constr.weightx = 1;
     constr.fill = GridBagConstraints.HORIZONTAL;
-    constr.insets.left = 2 * LEFT_INDENT;
+    constr.insets.left =  LEFT_INDENT;
     // Author field
     add(authorTextField, constr);
 

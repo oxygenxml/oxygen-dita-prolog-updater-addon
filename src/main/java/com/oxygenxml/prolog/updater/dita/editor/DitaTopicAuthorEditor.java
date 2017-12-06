@@ -54,10 +54,8 @@ public class DitaTopicAuthorEditor implements DitaEditor{
 		
 		AuthorElement rootElement = documentController.getAuthorDocumentNode().getRootElement();
 		AttrValue classValue = rootElement.getAttribute(XmlElementsConstants.CLASS);
-		if(classValue != null) {
-		  if(classValue.getValue().contains(" map/map ")) {
-		    isTopic = false;
-		  }
+		if (classValue != null && classValue.getValue().contains(" map/map ")) {
+			isTopic = false;
 		}
 		
 		prologCreator = PrologContentCreator.getInstance();
