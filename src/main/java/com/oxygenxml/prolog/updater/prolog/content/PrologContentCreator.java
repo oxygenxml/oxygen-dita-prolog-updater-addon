@@ -95,7 +95,9 @@ public class PrologContentCreator {
 	 */
 	public String getPrologFragment( boolean isNewDocument, boolean isTopic) { 
 	  StringBuilder fragment = new StringBuilder();
-	  fragment.append(ElementGetter.getPrologStartElement(isTopic));
+	  fragment.append('<');
+	  fragment.append(XmlElementsConstants.getPrologName(isTopic));
+	  fragment.append('>');
 	  if (isNewDocument) {
       fragment.append(creatorFragment);
       fragment.append(XMLFragmentUtils.createDateTag(createdDateXML.toString()));
@@ -103,7 +105,9 @@ public class PrologContentCreator {
       fragment.append(contributorXML);
       fragment.append(XMLFragmentUtils.createDateTag(revisedDateFragment.toString()));
     }
-	  fragment.append(ElementGetter.getPrologEndElement(isTopic));
+	  fragment.append("</");
+	  fragment.append(XmlElementsConstants.getPrologName(isTopic));
+	  fragment.append('>');
 	  
 		return fragment.toString();
 	}

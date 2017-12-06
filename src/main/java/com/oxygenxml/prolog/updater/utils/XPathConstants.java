@@ -92,6 +92,11 @@ public class XPathConstants {
    */
   public static final String ROOT_MAP_CHILD = ROOT_MAP_XPATH + "/*";
   
+  /**
+   * Get the XPath of prolog element.
+   * @param isTopic <code>true</code> if it's topic, <code>false</code> if it's a map.
+   * @return The XPath of prolog element
+   */
   public static String getPrologXpath(boolean isTopic) {
     if(isTopic) {
       return PROLOG_XPATH;
@@ -100,6 +105,11 @@ public class XPathConstants {
     }
   }
   
+  /**
+   * Get the XPath of the root element.
+   * @param isTopic <code>true</code> if it's topic, <code>false</code> if it's a map.
+   * @return The XPath of the root element.
+   */
   public static String getRootXpath(boolean isTopic) {
     if(isTopic) {
       return ROOT_TOPIC_XPATH;
@@ -108,6 +118,11 @@ public class XPathConstants {
     }
   }
   
+  /**
+   * Get the XPath of the child of the root element.
+   * @param isTopic <code>true</code> if it's topic, <code>false</code> if it's a map.
+   * @return The XPath of the child of the root element.
+   */
   public static String getRootChildXpath(boolean isTopic) {
     if(isTopic) {
       return ROOT_TOPIC_CHILD;
@@ -116,6 +131,11 @@ public class XPathConstants {
     }
   }
   
+  /**
+   * Get the XPath of the author element.
+   * @param isTopic <code>true</code> if it's topic, <code>false</code> if it's a map.
+   * @return The XPath of the author element.
+   */
   public static String getAuthorXpath(boolean isTopic) {
     if(isTopic) {
       return PROLOG_AUTHORS;
@@ -125,6 +145,11 @@ public class XPathConstants {
     }
   }
   
+  /**
+   * Get the XPath of the last author element.
+   * @param isTopic <code>true</code> if it's topic, <code>false</code> if it's a map.
+   * @return The XPath of last the author element.
+   */
   public static String getLastAuthorXpath(boolean isTopic) {
     if(isTopic) {
       return LAST_PROLOG_AUTHOR;
@@ -134,6 +159,11 @@ public class XPathConstants {
     }
   }
   
+  /**
+   * Get the XPath of the creator element.
+   * @param isTopic <code>true</code> if it's topic, <code>false</code> if it's a map.
+   * @return The XPath of last the creator element.
+   */
   public static String getAuthorCreatorXpath(boolean isTopic) {
     if(isTopic) {
       return PROLOG_AUTHORS_CREATOR;
@@ -143,6 +173,12 @@ public class XPathConstants {
     }
   }
   
+  /**
+   * Get the XPath of the critdates element.
+   * @param isTopic <code>true</code> if it's topic, <code>false</code> if it's a map.
+   * @return The XPath of last the critdates element.
+   */
+
   public static String getCritdatesXpath(boolean isTopic) {
     if(isTopic) {
       return PROLOG_CRITDATES;
@@ -152,6 +188,12 @@ public class XPathConstants {
     }
   }
   
+  /**
+   * Get the XPath of the created element.
+   * @param isTopic <code>true</code> if it's topic, <code>false</code> if it's a map.
+   * @return The XPath of last the created element.
+   */
+
   public static String getCreatedXpath(boolean isTopic) {
     if(isTopic) {
       return PROLOG_CREATED_ELEMENT;
