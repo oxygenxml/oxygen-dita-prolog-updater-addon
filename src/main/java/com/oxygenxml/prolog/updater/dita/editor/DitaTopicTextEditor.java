@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 
 import com.oxygenxml.prolog.updater.prolog.content.PrologContentCreator;
 import com.oxygenxml.prolog.updater.utils.ThreadUtils;
+import com.oxygenxml.prolog.updater.utils.XMLFragmentUtils;
 import com.oxygenxml.prolog.updater.utils.XPathConstants;
 import com.oxygenxml.prolog.updater.utils.XmlElementsConstants;
 
@@ -62,7 +63,7 @@ public class DitaTopicTextEditor implements DitaEditor {
 	 * @param wsEditorPage workspace page editor.
 	 * @param prologCreator Content of prolog.
 	 */
-	public DitaTopicTextEditor(WSXMLTextEditorPage wsEditorPage) {
+	public DitaTopicTextEditor(WSXMLTextEditorPage wsEditorPage, PrologContentCreator prologCreator) {
 		this.wsTextEditorPage = wsEditorPage;
 		this.documentController = wsTextEditorPage.getDocumentController();
 		
@@ -75,7 +76,7 @@ public class DitaTopicTextEditor implements DitaEditor {
       logger.debug(e, e.getCause());
     }
 		
-		prologCreator = PrologContentCreator.getInstance();
+		this.prologCreator = prologCreator;
 	}
 	
 	/**
@@ -121,7 +122,8 @@ public class DitaTopicTextEditor implements DitaEditor {
 	  // the critdates doesn't exist
 	  if (critdateElements.length == 0) {
 	    // add the cridates xml fragment
-	    String toAdd = "<critdates>\n" + prologCreator.getDateFragment(isNewDocument) + "\n</critdates>";
+	    String dateFragment = prologCreator.getDateFragment(isNewDocument, isTopic);
+	    String toAdd = XMLFragmentUtils.createCritdateTag(dateFragment);
 	    insertXmlFragment(toAdd, XPathConstants.getLastAuthorXpath(isTopic),
 	        RelativeInsertPosition.INSERT_LOCATION_AFTER);
 
@@ -136,7 +138,7 @@ public class DitaTopicTextEditor implements DitaEditor {
 	      // created element doesn't exist
 	      if (createdElements.length == 0) {
 	        // add the created xml fragment
-	        insertXmlFragment(prologCreator.getPrologAuthorElement(isNewDocument), XPathConstants.getCritdatesXpath(isTopic),
+	        insertXmlFragment(prologCreator.getPrologAuthorElement(isNewDocument, isTopic), XPathConstants.getCritdatesXpath(isTopic),
 	            RelativeInsertPosition.INSERT_LOCATION_AS_FIRST_CHILD);
 	      } 
 	    } else {
@@ -150,7 +152,7 @@ public class DitaTopicTextEditor implements DitaEditor {
 	      //if the element wasn't found
 	      if (revisedElements.length == 0) {
 	        //add revised xml fragament
-	        insertXmlFragment(prologCreator.getRevisedDateFragment(),
+	        insertXmlFragment(prologCreator.getRevisedDateFragment(isTopic),
 	            XPathConstants.getCritdatesXpath(isTopic), RelativeInsertPosition.INSERT_LOCATION_AS_LAST_CHILD);
 	      }
 	    }
@@ -170,7 +172,7 @@ public class DitaTopicTextEditor implements DitaEditor {
 	  if (authorElementSize == 0) {
 	    // if the author elements doesn't exist
 	    // add author xml fragment
-	    insertXmlFragment(prologCreator.getPrologAuthorElement(isNewDocument), XPathConstants.getPrologXpath(isTopic), RelativeInsertPosition.INSERT_LOCATION_AS_FIRST_CHILD);
+	    insertXmlFragment(prologCreator.getPrologAuthorElement(isNewDocument, isTopic), XPathConstants.getPrologXpath(isTopic), RelativeInsertPosition.INSERT_LOCATION_AS_FIRST_CHILD);
 	  }else {
 	    // prolog contains author elements
 	    if (isNewDocument) {
@@ -183,7 +185,7 @@ public class DitaTopicTextEditor implements DitaEditor {
 	      if (creatorElementSize == 0) {
 	        // there aren't creator author elements in prolog
 	        // add the creator author xml fragment
-	        insertXmlFragment(prologCreator.getCreatorFragment(), XPathConstants.getPrologXpath(isTopic), RelativeInsertPosition.INSERT_LOCATION_AS_FIRST_CHILD);
+	        insertXmlFragment(prologCreator.getCreatorFragment(isTopic), XPathConstants.getPrologXpath(isTopic), RelativeInsertPosition.INSERT_LOCATION_AS_FIRST_CHILD);
 	      }
 
 	    } else {
@@ -195,7 +197,7 @@ public class DitaTopicTextEditor implements DitaEditor {
 	      if (contributorElementSize == 0) {
 	        // there aren't contributor author elements in prolog
 	        // add the contributor author xml content
-	        insertXmlFragment(prologCreator.getContributorFragment(), XPathConstants.getLastAuthorXpath(isTopic), RelativeInsertPosition.INSERT_LOCATION_AFTER);
+	        insertXmlFragment(prologCreator.getContributorFragment(isTopic), XPathConstants.getLastAuthorXpath(isTopic), RelativeInsertPosition.INSERT_LOCATION_AFTER);
 	      }
 	    }
 	  }

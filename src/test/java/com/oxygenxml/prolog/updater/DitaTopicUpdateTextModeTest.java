@@ -41,11 +41,10 @@ public class DitaTopicUpdateTextModeTest extends TestCase{
     Mockito.when(wsTextEditorPage.getDocumentController()).thenReturn(textDocumentController);
 
     //Create prolog content creator
-    prologContentCreater = PrologContentCreator.getInstance();
-    prologContentCreater.setAuthor(AUTHOR_NAME);
+    prologContentCreater = new PrologContentCreator(AUTHOR_NAME);
 
     //Create ditaTopicTextEditor
-    ditaTopicTextEditor = new DitaTopicTextEditor(wsTextEditorPage);
+    ditaTopicTextEditor = new DitaTopicTextEditor(wsTextEditorPage, prologContentCreater);
   }
 	
 	

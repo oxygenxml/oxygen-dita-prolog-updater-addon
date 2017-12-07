@@ -49,7 +49,7 @@ public class DitaTopicAuthorEditor implements DitaEditor{
 	 * @param wsEditorPage workspace page editor.
 	 * @param prologContentCreater Contains all elements from prolog.
 	 */
-	public DitaTopicAuthorEditor(WSAuthorEditorPage wsEditorPage) {
+	public DitaTopicAuthorEditor(WSAuthorEditorPage wsEditorPage, PrologContentCreator prologContentCreator) {
 		this.documentController = wsEditorPage.getDocumentController();
 		
 		AuthorElement rootElement = documentController.getAuthorDocumentNode().getRootElement();
@@ -58,7 +58,7 @@ public class DitaTopicAuthorEditor implements DitaEditor{
 			isTopic = false;
 		}
 		
-		prologCreator = PrologContentCreator.getInstance();
+		prologCreator = prologContentCreator;
 	}
 	
 	/**
@@ -129,7 +129,7 @@ public class DitaTopicAuthorEditor implements DitaEditor{
         if (createdElement == null) {
           // Add it.
           offset = cridates.getStartOffset() + 1;
-          fragment = prologCreator.getCreatedDateFragment();
+          fragment = prologCreator.getCreatedDateFragment(isTopic);
         }
       } else {
         // it's not a new document
@@ -139,7 +139,7 @@ public class DitaTopicAuthorEditor implements DitaEditor{
     } else {
       List<AuthorElement> authors = AuthorPageDocumentUtil.findElementsByClass(prolog, XmlElementsConstants.PROLOG_AUTHOR_ELEMENT_CLASS);
       // Create an element here.
-      fragment = XMLFragmentUtils.createDateTag(prologCreator.getDateFragment(isNewDocument));
+      fragment = XMLFragmentUtils.createCritdateTag(prologCreator.getDateFragment(isNewDocument, isTopic));
       if(authors.isEmpty()) {
         offset = prolog.getEndOffset();
       } else {
@@ -179,7 +179,7 @@ public class DitaTopicAuthorEditor implements DitaEditor{
 		}
 		if (!localDateWithAuthorCommentExist) {
 		  int offset = critdatesElement.getEndOffset();
-		  String fragment = prologCreator.getRevisedDateFragment();
+		  String fragment = prologCreator.getRevisedDateFragment(isTopic);
 			if (revisedElementSize != 0) {
         offset = revisedElements.get(revisedElementSize -1).getEndOffset()+1;
 			}
@@ -208,13 +208,13 @@ public class DitaTopicAuthorEditor implements DitaEditor{
     
     if (!hasAuthor && XmlElementsConstants.CONTRIBUTOR_TYPE.equals(type)) {
       // if wasn't found this contributor
-      fragment = prologCreator.getContributorFragment();
+      fragment = prologCreator.getContributorFragment(isTopic);
       if(length > 0){
         AuthorElement lastAuthor = authors.get(length - 1);
         offset = lastAuthor.getEndOffset() + 1;
       }
     } else if (!hasAuthor && XmlElementsConstants.CREATOR_TYPE.equals(type)) {
-      fragment = prologCreator.getCreatorFragment();
+      fragment = prologCreator.getCreatorFragment(isTopic);
     }
     
     AuthorPageDocumentUtil.insertFragmentSchemaAware(documentController, fragment, offset);

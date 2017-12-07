@@ -21,12 +21,16 @@ public class XMLFragmentUtils {
    * @param date The formatted date as string.
    * @return The critdates element with the date.
    */
-  public static String createDateTag(String date) {
-    StringBuilder sb = new StringBuilder();
-    sb.append("<critdates>");
-    sb.append(date);
-    sb.append("</critdates>");
-    return sb.toString();
+  public static String createCritdateTag(String date) {
+    if(date == null) {
+      return null;
+    }else {
+      StringBuilder sb = new StringBuilder();
+      sb.append("<critdates>");
+      sb.append(date);
+      sb.append("</critdates>");
+      return sb.toString();
+    }
   }
   
   /**

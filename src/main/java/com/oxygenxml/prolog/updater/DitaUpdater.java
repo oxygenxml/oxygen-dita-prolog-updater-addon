@@ -39,16 +39,15 @@ public class DitaUpdater {
     WSEditorPage currentPage = wsEditor.getCurrentPage();
 
     //create a PrologContentCreator
-    PrologContentCreator prologContentCreater = PrologContentCreator.getInstance();
-    prologContentCreater.setAuthor(getAuthorName());
+    PrologContentCreator prologContentCreater = new PrologContentCreator(getAuthorName());
 
     DitaEditor ditaEditor = null;
     
     if (currentPage instanceof WSAuthorEditorPage) {
-      ditaEditor = new DitaTopicAuthorEditor((WSAuthorEditorPage)currentPage);
+      ditaEditor = new DitaTopicAuthorEditor((WSAuthorEditorPage)currentPage, prologContentCreater);
 
     } else if (currentPage instanceof WSXMLTextEditorPage) {
-      ditaEditor = new DitaTopicTextEditor((WSXMLTextEditorPage)currentPage);
+      ditaEditor = new DitaTopicTextEditor((WSXMLTextEditorPage)currentPage, prologContentCreater);
     }
 
     if(ditaEditor != null){

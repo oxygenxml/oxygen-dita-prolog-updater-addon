@@ -85,7 +85,7 @@ public class XmlPrettifierUtil {
 		prettifiedContent = sw.toString();
 
 		sw.close();
-		System.err.println("RET " + sw.toString());
+	//	System.err.println("RET " + sw.toString());
 		return prettifiedContent;
 	}
 	
