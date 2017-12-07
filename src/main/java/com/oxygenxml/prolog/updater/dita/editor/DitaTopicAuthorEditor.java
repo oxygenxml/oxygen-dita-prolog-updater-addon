@@ -35,9 +35,9 @@ public class DitaTopicAuthorEditor implements DitaEditor{
 	private AuthorDocumentController documentController;
 
 	/**
-	 * <code>true</code> for DITA topic, <code>false</code> for DITA map.
+	 *The document type( {@link DocumentType#TOPIC}, {@link DocumentType#MAP} or {@link DocumentType#BOOKMAP}  ).
 	 */
-	private boolean isTopic = true;
+	private DocumentType documentType = DocumentType.TOPIC;
 	
 	/**
 	 * Logger
@@ -55,7 +55,10 @@ public class DitaTopicAuthorEditor implements DitaEditor{
 		AuthorElement rootElement = documentController.getAuthorDocumentNode().getRootElement();
 		AttrValue classValue = rootElement.getAttribute(XmlElementsConstants.CLASS);
 		if (classValue != null && classValue.getValue().contains(" map/map ")) {
-			isTopic = false;
+			documentType = DocumentType.MAP;
+		}
+		if (classValue != null && classValue.getValue().contains(" bookmap/bookmap ")) {
+			documentType = DocumentType.BOOKMAP;
 		}
 		
 		prologCreator = prologContentCreator;
@@ -73,7 +76,7 @@ public class DitaTopicAuthorEditor implements DitaEditor{
 		
 		if (rootElement != null) {
 		  // Get the prolog element.
-		  AuthorElement prolog = AuthorPageDocumentUtil.findElementByClass(rootElement, XmlElementsConstants.getPrologClass(isTopic));
+		  AuthorElement prolog = AuthorPageDocumentUtil.findElementByClass(rootElement, XmlElementsConstants.getPrologClass(documentType));
 		  if (prolog != null) {
 		    try {
 		      // Updates the creators and/or contributors of document
@@ -89,7 +92,7 @@ public class DitaTopicAuthorEditor implements DitaEditor{
       } else {
         //The prolog element wasn't found.
         // Add it
-        insertPrologElement(rootElement, prologCreator.getPrologFragment(isNewDocument, isTopic));
+        insertPrologElement(rootElement, prologCreator.getPrologFragment(isNewDocument, documentType));
       }
     }
 	}
@@ -129,7 +132,7 @@ public class DitaTopicAuthorEditor implements DitaEditor{
         if (createdElement == null) {
           // Add it.
           offset = cridates.getStartOffset() + 1;
-          fragment = prologCreator.getCreatedDateFragment(isTopic);
+          fragment = prologCreator.getCreatedDateFragment(documentType);
         }
       } else {
         // it's not a new document
@@ -139,7 +142,7 @@ public class DitaTopicAuthorEditor implements DitaEditor{
     } else {
       List<AuthorElement> authors = AuthorPageDocumentUtil.findElementsByClass(prolog, XmlElementsConstants.PROLOG_AUTHOR_ELEMENT_CLASS);
       // Create an element here.
-      fragment = XMLFragmentUtils.createCritdateTag(prologCreator.getDateFragment(isNewDocument, isTopic));
+      fragment = XMLFragmentUtils.createCritdateTag(prologCreator.getDateFragment(isNewDocument, documentType));
       if(authors.isEmpty()) {
         offset = prolog.getEndOffset();
       } else {
@@ -179,7 +182,7 @@ public class DitaTopicAuthorEditor implements DitaEditor{
 		}
 		if (!localDateWithAuthorCommentExist) {
 		  int offset = critdatesElement.getEndOffset();
-		  String fragment = prologCreator.getRevisedDateFragment(isTopic);
+		  String fragment = prologCreator.getRevisedDateFragment(documentType);
 			if (revisedElementSize != 0) {
         offset = revisedElements.get(revisedElementSize -1).getEndOffset()+1;
 			}
@@ -208,13 +211,13 @@ public class DitaTopicAuthorEditor implements DitaEditor{
     
     if (!hasAuthor && XmlElementsConstants.CONTRIBUTOR_TYPE.equals(type)) {
       // if wasn't found this contributor
-      fragment = prologCreator.getContributorFragment(isTopic);
+      fragment = prologCreator.getContributorFragment(documentType);
       if(length > 0){
         AuthorElement lastAuthor = authors.get(length - 1);
         offset = lastAuthor.getEndOffset() + 1;
       }
     } else if (!hasAuthor && XmlElementsConstants.CREATOR_TYPE.equals(type)) {
-      fragment = prologCreator.getCreatorFragment(isTopic);
+      fragment = prologCreator.getCreatorFragment(documentType);
     }
     
     AuthorPageDocumentUtil.insertFragmentSchemaAware(documentController, fragment, offset);

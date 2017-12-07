@@ -24,7 +24,7 @@ import ro.sync.exml.workspace.api.editor.page.text.xml.XPathException;
 /**
  * Test the topicMeta update from Text mode in DITA map. 
  */
-public class DitaMapUpdateTextModeTest extends TestCase{
+public class DitaBookmapUpdateTextModeTest extends TestCase{
 
 	static final String AUTHOR_NAME = "test";
   private WSXMLTextEditorPage wsTextEditorPage;
@@ -40,7 +40,7 @@ public class DitaMapUpdateTextModeTest extends TestCase{
     Mockito.when(wsTextEditorPage.findElementsByXPath(XPathConstants.ROOT_MAP_XPATH))
     .thenReturn(new WSXMLTextNodeRange[1]);
     Mockito.when(wsTextEditorPage.findElementsByXPath(XPathConstants.ROOT_BOOKMAP_XPATH))
-    .thenReturn(new WSXMLTextNodeRange[0]);
+    .thenReturn(new WSXMLTextNodeRange[1]);
     
     //Mock the TextDocumentController
     textDocumentController = Mockito.mock(TextDocumentController.class);

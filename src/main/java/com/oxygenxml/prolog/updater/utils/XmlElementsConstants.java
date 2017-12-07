@@ -1,4 +1,7 @@
 package com.oxygenxml.prolog.updater.utils;
+
+import com.oxygenxml.prolog.updater.dita.editor.DocumentType;
+
 /**
  * Constant class where classes and attributes of XML elements are defined.
  */
@@ -28,6 +31,10 @@ public class XmlElementsConstants {
    */
   public static final String TOPICMETA_NAME = "topicmeta";
 
+  /**
+   * Name of bookmeta element.
+   */
+  public static final String BOOKMETA_NAME = "bookmeta";
   
   /**
    * Class's value of body element.
@@ -70,11 +77,11 @@ public class XmlElementsConstants {
   
   /**
    * Get the class's value of prolog element.( topic/prolog or map/topicmeta)
-   * @param isTopic <code>true</code> if it's topic, <code>false</code> if it's a map.
+   * @param documentType The document type( {@link DocumentType#TOPIC}, {@link DocumentType#MAP} or {@link DocumentType#BOOKMAP}  ).
    * @return The class's value of prolog element
    */
-  public static String getPrologClass(boolean isTopic) {
-    if(isTopic) {
+  public static String getPrologClass(DocumentType documentType) {
+    if(documentType.equals(DocumentType.TOPIC)) {
       return PROLOG_CLASS;
     }else {
       return TOPICMETA_CLASS;
@@ -82,15 +89,17 @@ public class XmlElementsConstants {
   }
   
   /**
-   * Get the name of prolog element. (prolog or topicmeta)
-   * @param isTopic <code>true</code> if it's topic, <code>false</code> if it's a map.
+   * Get the name of prolog element. (prolog, topicmeta or bookmeta).
+   * @param documentType The document type( {@link DocumentType#TOPIC}, {@link DocumentType#MAP} or {@link DocumentType#BOOKMAP}  ).
    * @return The name of prolog element
    */
-  public static String getPrologName(boolean isTopic) {
-    if(isTopic) {
+  public static String getPrologName(DocumentType documentType) {
+    if(documentType.equals(DocumentType.TOPIC)) {
       return PROLOG_NAME;
-    }else {
+    }else if(documentType.equals(DocumentType.MAP)) {
       return TOPICMETA_NAME;
+    }else{
+    	return BOOKMETA_NAME;
     }
   }
   

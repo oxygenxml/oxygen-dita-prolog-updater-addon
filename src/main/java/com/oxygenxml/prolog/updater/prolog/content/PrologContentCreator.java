@@ -3,6 +3,7 @@ package com.oxygenxml.prolog.updater.prolog.content;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.oxygenxml.prolog.updater.dita.editor.DocumentType;
 import com.oxygenxml.prolog.updater.tags.OptionKeys;
 import com.oxygenxml.prolog.updater.utils.XMLFragmentUtils;
 import com.oxygenxml.prolog.updater.utils.XmlElementsConstants;
@@ -100,33 +101,33 @@ public class PrologContentCreator {
 	/**
 	 * Get all XML fragment for prolog tag, according to given state of document.
 	 * @param isNewDocument <code>true</code> if document is new, <code>false</code> otherwise.
-	 * @param isTopic <code>true</code> if the document is a DITA Topic, <code>false</code> if it's a DITA Map.
+	 * @param documentType The document type( {@link DocumentType#TOPIC}, {@link DocumentType#MAP}, {@link DocumentType#BOOKMAP}  ).
 	 * @return the XML fragment in String format
 	 */
-	public String getPrologFragment( boolean isNewDocument, boolean isTopic) { 
+	public String getPrologFragment( boolean isNewDocument, DocumentType documentType) { 
 	  StringBuilder fragment = new StringBuilder();
 	  
-    if ((updateTopicProlog && isTopic) || (updateMapProlog && !isTopic)) {
+if ((updateTopicProlog && documentType.equals(DocumentType.TOPIC)) || (updateMapProlog && !documentType.equals(DocumentType.TOPIC))) {
       fragment.append('<');
-      fragment.append(XmlElementsConstants.getPrologName(isTopic));
+      fragment.append(XmlElementsConstants.getPrologName(documentType));
       fragment.append('>');
       if (isNewDocument) {
-        if ((updateTopicCreator && isTopic) || (updateMapCreator && !isTopic)) {
+        if ((updateTopicCreator && documentType.equals(DocumentType.TOPIC)) || (updateMapCreator && !documentType.equals(DocumentType.TOPIC))) {
         fragment.append(creatorFragment);
         }
-        if ((updateTopicCreated && isTopic) || (updateMapCreated && !isTopic)) {
+        if ((updateTopicCreated && documentType.equals(DocumentType.TOPIC)) || (updateMapCreated && !documentType.equals(DocumentType.TOPIC))) {
           fragment.append(XMLFragmentUtils.createCritdateTag(createdDateXML.toString()));
         }
       } else { 
-        if ((updateTopicContributor && isTopic) || (updateMapContributor && !isTopic)) {
+        if ((updateTopicContributor && documentType.equals(DocumentType.TOPIC)) || (updateMapContributor && !documentType.equals(DocumentType.TOPIC))) {
           fragment.append(contributorXML);
         }
-        if ((updateTopicRevised && isTopic) || (updateMapRevised && !isTopic)) {
+        if ((updateTopicRevised && documentType.equals(DocumentType.TOPIC)) || (updateMapRevised && !documentType.equals(DocumentType.TOPIC))) {
           fragment.append(XMLFragmentUtils.createCritdateTag(revisedDateFragment.toString()));
         }
       }
       fragment.append("</");
-      fragment.append(XmlElementsConstants.getPrologName(isTopic));
+      fragment.append(XmlElementsConstants.getPrologName(documentType));
       fragment.append('>');
     }
     String toReturn = fragment.toString();
@@ -135,11 +136,11 @@ public class PrologContentCreator {
 	
 	//Gettters
 	/**
-   * @param isTopic <code>true</code> if the document is a DITA Topic, <code>false</code> if it's a DITA Map.
+  * @param documentType The document type( {@link DocumentType#TOPIC}, {@link DocumentType#MAP}, {@link DocumentType#BOOKMAP}  )
    * @return The XML fragment for creator author element or <code>null</code> if the settings doesn't accept this element.
    */
-	public String getCreatorFragment(boolean isTopic) {
-	  if ((updateTopicCreator && isTopic) || (updateMapCreator && !isTopic)) {
+	public String getCreatorFragment(DocumentType documentType) {
+	  if ((updateTopicCreator && documentType.equals(DocumentType.TOPIC)) || (updateMapCreator && !documentType.equals(DocumentType.TOPIC))) {
 	    return creatorFragment.toString();
 	  }else {
 	    return null; 
@@ -147,11 +148,11 @@ public class PrologContentCreator {
 	}
 	
 	/**
-	 * @param isTopic <code>true</code> if the document is a DITA Topic, <code>false</code> if it's a DITA Map.
+	* @param documentType The document type( {@link DocumentType#TOPIC}, {@link DocumentType#MAP}, {@link DocumentType#BOOKMAP}  )
 	 * @return The XML fragment for contributor author element or <code>null</code> if the settings doesn't accept this element.
 	 */
-	public String getContributorFragment(boolean isTopic) {
-		if ((updateTopicContributor && isTopic) || (updateMapContributor && !isTopic)) {
+	public String getContributorFragment(DocumentType documentType) {
+		if ((updateTopicContributor && documentType.equals(DocumentType.TOPIC)) || (updateMapContributor && !documentType.equals(DocumentType.TOPIC))) {
 		  return contributorXML.toString();
 		}else {
 		  return null;
@@ -159,11 +160,11 @@ public class PrologContentCreator {
 	}
 	
 	/**
-	 * @param isTopic <code>true</code> if the document is a DITA Topic, <code>false</code> if it's a DITA Map.
+	* @param documentType The document type( {@link DocumentType#TOPIC}, {@link DocumentType#MAP}, {@link DocumentType#BOOKMAP}  )
    * @return The XML fragment for create date element or <code>null</code> if the settings doesn't accept this element.
    */
-	public String getCreatedDateFragment(boolean isTopic) {
-	  if ((updateTopicCreated && isTopic) || (updateMapCreated && !isTopic)) {
+	public String getCreatedDateFragment(DocumentType documentType) {
+	  if ((updateTopicCreated && documentType.equals(DocumentType.TOPIC)) || (updateMapCreated && !documentType.equals(DocumentType.TOPIC))) {
 	    return createdDateXML.toString();
 	  }else {
 	    return null;
@@ -171,11 +172,11 @@ public class PrologContentCreator {
 	}
 
 	 /**
-	 * @param isTopic <code>true</code> if the document is a DITA Topic, <code>false</code> if it's a DITA Map.
+	* @param documentType The document type( {@link DocumentType#TOPIC}, {@link DocumentType#MAP}, {@link DocumentType#BOOKMAP}  )
    * @return The XML fragment for revised date element or <code>null</code> if the settings doesn't accept this element.
    */
-	public String getRevisedDateFragment(boolean isTopic) {
-    if ((updateTopicRevised && isTopic) || (updateMapRevised && !isTopic)) {
+	public String getRevisedDateFragment(DocumentType documentType) {
+    if ((updateTopicRevised && documentType.equals(DocumentType.TOPIC)) || (updateMapRevised && !documentType.equals(DocumentType.TOPIC))) {
       return revisedDateFragment.toString();
     }else {
       return null;
@@ -200,22 +201,22 @@ public class PrologContentCreator {
 	 * Get the XML fragment of author tag, according to given state of document.
 	 * 
 	 * @param isNewDocument <code>true</code> if document is new, <code>false</code> otherwise.
-	 * @param isTopic <code>true</code> if the document is a DITA Topic, <code>false</code> if it's a DITA Map.
+	* @param documentType The document type( {@link DocumentType#TOPIC}, {@link DocumentType#MAP}, {@link DocumentType#BOOKMAP}  )
 	 * @return the XML fragment in String format or <code>null</code> if the settings doesn't accept this element
 	 */
-	public String getPrologAuthorElement(boolean isNewDocument , boolean isTopic){
-		return isNewDocument ? getCreatorFragment(isTopic) : getContributorFragment(isTopic);
+	public String getPrologAuthorElement(boolean isNewDocument , DocumentType documentType){
+		return isNewDocument ? getCreatorFragment(documentType) : getContributorFragment(documentType);
 	}
 	
 	/**
 	 * Get the XML fragment of date element, according to given state of document.
 	 * 
 	 * @param isNewDocument <code>true</code> if document is new, <code>false</code> otherwise.
-   * @param isTopic <code>true</code> if the document is a DITA Topic, <code>false</code> if it's a DITA Map.
+  * @param documentType The document type( {@link DocumentType#TOPIC}, {@link DocumentType#MAP}, {@link DocumentType#BOOKMAP}  )
 	 * @return the XML fragment in String format or <code>null</code> if the settings doesn't accept this element
 	 */
-	public String getDateFragment(boolean isNewDocument, boolean isTopic){
-		return isNewDocument ? getCreatedDateFragment(isTopic) : getRevisedDateFragment(isTopic);
+	public String getDateFragment(boolean isNewDocument, DocumentType documentType){
+		return isNewDocument ? getCreatedDateFragment(documentType) : getRevisedDateFragment(documentType);
 	}
 	
 	/**

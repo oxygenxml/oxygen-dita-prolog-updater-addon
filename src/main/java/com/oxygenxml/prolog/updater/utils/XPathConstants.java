@@ -1,5 +1,7 @@
 package com.oxygenxml.prolog.updater.utils;
 
+import com.oxygenxml.prolog.updater.dita.editor.DocumentType;
+
 /**
  * XPath constants
  * 
@@ -78,6 +80,11 @@ public class XPathConstants {
   public static final String ROOT_MAP_XPATH = "/*[1][contains(@class,' map/map ')]";
   
   /**
+   * XPath for bookmap root.
+   */
+  public static final String ROOT_BOOKMAP_XPATH = "/*[1][contains(@class,' bookmap/bookmap ')]";
+  
+  /**
    * XPath for topic root.
    */
   public static final String ROOT_TOPIC_XPATH = "/*[1][contains(@class, ' topic/topic ')]";
@@ -94,11 +101,11 @@ public class XPathConstants {
   
   /**
    * Get the XPath of prolog element.
-   * @param isTopic <code>true</code> if it's topic, <code>false</code> if it's a map.
+   * @param documentType The document type( {@link DocumentType#TOPIC}, {@link DocumentType#MAP} or  {@link DocumentType#BOOKMAP}  ).
    * @return The XPath of prolog element
    */
-  public static String getPrologXpath(boolean isTopic) {
-    if(isTopic) {
+  public static String getPrologXpath(DocumentType documentType) {
+    if(documentType.equals(DocumentType.TOPIC)) {
       return PROLOG_XPATH;
     }else {
       return TOPICMETA_XPATH;
@@ -107,11 +114,11 @@ public class XPathConstants {
   
   /**
    * Get the XPath of the root element.
-   * @param isTopic <code>true</code> if it's topic, <code>false</code> if it's a map.
+   * @param documentType The document type( {@link DocumentType#TOPIC}, {@link DocumentType#MAP} or  {@link DocumentType#BOOKMAP}  ).
    * @return The XPath of the root element.
    */
-  public static String getRootXpath(boolean isTopic) {
-    if(isTopic) {
+  public static String getRootXpath(DocumentType documentType) {
+    if(documentType.equals(DocumentType.TOPIC)) {
       return ROOT_TOPIC_XPATH;
     }else {
       return ROOT_MAP_XPATH;
@@ -120,11 +127,11 @@ public class XPathConstants {
   
   /**
    * Get the XPath of the child of the root element.
-   * @param isTopic <code>true</code> if it's topic, <code>false</code> if it's a map.
+   * @param documentType The document type( {@link DocumentType#TOPIC}, {@link DocumentType#MAP} or  {@link DocumentType#BOOKMAP}  ).
    * @return The XPath of the child of the root element.
    */
-  public static String getRootChildXpath(boolean isTopic) {
-    if(isTopic) {
+  public static String getRootChildXpath(DocumentType documentType) {
+    if(documentType.equals(DocumentType.TOPIC)) {
       return ROOT_TOPIC_CHILD;
     }else {
       return ROOT_MAP_CHILD;
@@ -133,11 +140,11 @@ public class XPathConstants {
   
   /**
    * Get the XPath of the author element.
-   * @param isTopic <code>true</code> if it's topic, <code>false</code> if it's a map.
+   * @param documentType The document type( {@link DocumentType#TOPIC}, {@link DocumentType#MAP} or  {@link DocumentType#BOOKMAP}  ).
    * @return The XPath of the author element.
    */
-  public static String getAuthorXpath(boolean isTopic) {
-    if(isTopic) {
+  public static String getAuthorXpath(DocumentType documentType) {
+    if(documentType.equals(DocumentType.TOPIC)) {
       return PROLOG_AUTHORS;
     }
     else {
@@ -147,11 +154,11 @@ public class XPathConstants {
   
   /**
    * Get the XPath of the last author element.
-   * @param isTopic <code>true</code> if it's topic, <code>false</code> if it's a map.
+   * @param documentType The document type( {@link DocumentType#TOPIC}, {@link DocumentType#MAP} or  {@link DocumentType#BOOKMAP}  ).
    * @return The XPath of last the author element.
    */
-  public static String getLastAuthorXpath(boolean isTopic) {
-    if(isTopic) {
+  public static String getLastAuthorXpath(DocumentType documentType) {
+    if(documentType.equals(DocumentType.TOPIC)) {
       return LAST_PROLOG_AUTHOR;
     }
     else {
@@ -161,11 +168,11 @@ public class XPathConstants {
   
   /**
    * Get the XPath of the creator element.
-   * @param isTopic <code>true</code> if it's topic, <code>false</code> if it's a map.
+   * @param documentType The document type( {@link DocumentType#TOPIC}, {@link DocumentType#MAP} or  {@link DocumentType#BOOKMAP}  ).
    * @return The XPath of last the creator element.
    */
-  public static String getAuthorCreatorXpath(boolean isTopic) {
-    if(isTopic) {
+  public static String getAuthorCreatorXpath(DocumentType documentType) {
+    if(documentType.equals(DocumentType.TOPIC)) {
       return PROLOG_AUTHORS_CREATOR;
     }
     else {
@@ -175,12 +182,12 @@ public class XPathConstants {
   
   /**
    * Get the XPath of the critdates element.
-   * @param isTopic <code>true</code> if it's topic, <code>false</code> if it's a map.
+   * @param documentType The document type( {@link DocumentType#TOPIC}, {@link DocumentType#MAP} or  {@link DocumentType#BOOKMAP}  ).
    * @return The XPath of last the critdates element.
    */
 
-  public static String getCritdatesXpath(boolean isTopic) {
-    if(isTopic) {
+  public static String getCritdatesXpath(DocumentType documentType) {
+    if(documentType.equals(DocumentType.TOPIC)) {
       return PROLOG_CRITDATES;
     }
     else {
@@ -190,12 +197,12 @@ public class XPathConstants {
   
   /**
    * Get the XPath of the created element.
-   * @param isTopic <code>true</code> if it's topic, <code>false</code> if it's a map.
+   * @param documentType The document type( {@link DocumentType#TOPIC}, {@link DocumentType#MAP} or  {@link DocumentType#BOOKMAP}  ).
    * @return The XPath of last the created element.
    */
 
-  public static String getCreatedXpath(boolean isTopic) {
-    if(isTopic) {
+  public static String getCreatedXpath(DocumentType documentType) {
+    if(documentType.equals(DocumentType.TOPIC)) {
       return PROLOG_CREATED_ELEMENT;
     }
     else {
