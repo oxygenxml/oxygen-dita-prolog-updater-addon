@@ -7,7 +7,6 @@ import java.io.StringReader;
 import javax.swing.text.BadLocationException;
 import javax.xml.transform.stream.StreamSource;
 
-import org.junit.Test;
 import org.mockito.Mockito;
 import org.w3c.css.sac.InputSource;
 import org.xml.sax.SAXException;
@@ -66,7 +65,6 @@ public class DitaUpdateTestUtil extends TestCase{
 	 * @throws SAXException
 	 * @throws BadLocationException
 	 */
-  @Test
 	public static void testInAuthorMode(String inputXML, boolean isNewDocument, String expectedXML) throws IOException, SAXException, BadLocationException{
 	  // I would say the init must be call only once.
 	  initializeCatalogs();
@@ -127,4 +125,9 @@ public class DitaUpdateTestUtil extends TestCase{
     
     assertEquals(expected, actual);
 	}
+	
+  public void testNothing() throws Exception {
+    assertTrue(true);
+  }
+
 }

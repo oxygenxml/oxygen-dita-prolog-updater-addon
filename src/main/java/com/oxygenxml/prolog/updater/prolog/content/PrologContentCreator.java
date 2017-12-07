@@ -48,7 +48,7 @@ public class PrologContentCreator {
 	 */
 	private String authorName;
 
-  private boolean updateTopicCreator = true;
+  private boolean setTopicCreator = true;
 
   private boolean updateMapCreator = true;
 
@@ -60,13 +60,13 @@ public class PrologContentCreator {
 
   private boolean updateMapProlog = true;
 
-  private boolean updateTopicCreated = true;
+  private boolean setTopicCreatedDate = true;
 
-  private boolean updateMapCreated = true;
+  private boolean setMapCreatedDate = true;
 
-  private boolean updateTopicRevised = true;
+  private boolean updateTopicRevisedDate = true;
 
-  private boolean updateMapRevised = true;
+  private boolean updateMapRevisedDate = true;
 	
 
 	/**
@@ -82,7 +82,7 @@ public class PrologContentCreator {
       contributorXML = XMLFragmentUtils.createAuthorFragment(authorName, XmlElementsConstants.CONTRIBUTOR_TYPE);
 
       // Generate current date in a specified format.
-      localDate = new SimpleDateFormat(XMLFragmentUtils.DATE_PATTERN).format(new Date());
+      localDate = createLocalDate();
       // Generate the created date element.
       createdDateXML = XMLFragmentUtils.createGeneralXmlFragment("created", "date", localDate);
 
@@ -106,45 +106,82 @@ public class PrologContentCreator {
 	 */
 	public String getPrologFragment( boolean isNewDocument, DocumentType documentType) { 
 	  StringBuilder fragment = new StringBuilder();
+	  StringBuilder aux = new StringBuilder();
 	  
-if ((updateTopicProlog && documentType.equals(DocumentType.TOPIC)) || (updateMapProlog && !documentType.equals(DocumentType.TOPIC))) {
-      fragment.append('<');
-      fragment.append(XmlElementsConstants.getPrologName(documentType));
-      fragment.append('>');
-      if (isNewDocument) {
-        if ((updateTopicCreator && documentType.equals(DocumentType.TOPIC)) || (updateMapCreator && !documentType.equals(DocumentType.TOPIC))) {
-        fragment.append(creatorFragment);
+	  if ((updateTopicProlog && documentType.equals(DocumentType.TOPIC)) || (updateMapProlog && !documentType.equals(DocumentType.TOPIC))) {
+	    fragment.append('<');
+	    fragment.append(XmlElementsConstants.getPrologName(documentType));
+	    fragment.append('>');
+	    
+	    // Poate, poate facem o metoda cu id-else-ul asta.
+	    if (isNewDocument) {
+	      // 
+	      String creator = getCreatorFragment(documentType);
+	      String createdDate = getCreatedDateFragment(documentType);
+
+	      if(creator != null){
+	        aux.append(creator);
+	      }
+	      if (createdDate != null) {
+          aux.append(XMLFragmentUtils.createCritdateTag(createdDate));
         }
-        if ((updateTopicCreated && documentType.equals(DocumentType.TOPIC)) || (updateMapCreated && !documentType.equals(DocumentType.TOPIC))) {
-          fragment.append(XMLFragmentUtils.createCritdateTag(createdDateXML.toString()));
+	    } else {
+	      String contributor = getContributorFragment(documentType);
+	      String revisedDate = getRevisedDateFragment(documentType);
+	      
+	      if (contributor != null) {
+	        aux.append(contributor);
         }
-      } else { 
-        if ((updateTopicContributor && documentType.equals(DocumentType.TOPIC)) || (updateMapContributor && !documentType.equals(DocumentType.TOPIC))) {
-          fragment.append(contributorXML);
+	      if (revisedDate != null) {
+	        aux.append(XMLFragmentUtils.createCritdateTag(revisedDate));
         }
-        if ((updateTopicRevised && documentType.equals(DocumentType.TOPIC)) || (updateMapRevised && !documentType.equals(DocumentType.TOPIC))) {
-          fragment.append(XMLFragmentUtils.createCritdateTag(revisedDateFragment.toString()));
-        }
-      }
-      fragment.append("</");
-      fragment.append(XmlElementsConstants.getPrologName(documentType));
-      fragment.append('>');
-    }
-    String toReturn = fragment.toString();
-    return toReturn.isEmpty() ? null : toReturn;
+	    }
+	    
+	    // Avoid adding empty prolog element
+	    if(aux.toString().isEmpty()) {
+	      return null;
+	    }
+	    
+	    fragment.append(aux);
+	    fragment.append("</");
+	    fragment.append(XmlElementsConstants.getPrologName(documentType));
+	    fragment.append('>');
+	  }
+	  
+	  // The generated fragment to be added
+	  return fragment.toString().isEmpty() ? null : fragment.toString();
 	}
+
+  private boolean shouldUpdateRevisedDate(DocumentType documentType) {
+    return (updateTopicRevisedDate && documentType.equals(DocumentType.TOPIC)) || 
+        (updateMapRevisedDate && !documentType.equals(DocumentType.TOPIC));
+  }
+
+  private boolean shouldUpdateContributors(DocumentType documentType) {
+    return (updateTopicContributor && documentType.equals(DocumentType.TOPIC)) || 
+        (updateMapContributor && !documentType.equals(DocumentType.TOPIC));
+  }
+
+  private boolean shouldSetCreatedDates(DocumentType documentType) {
+    return (setTopicCreatedDate && documentType.equals(DocumentType.TOPIC)) || 
+        (setMapCreatedDate && !documentType.equals(DocumentType.TOPIC));
+  }
+
+  private boolean shouldSetCreator(DocumentType documentType) {
+    return (setTopicCreator && documentType.equals(DocumentType.TOPIC)) || 
+        (updateMapCreator && !documentType.equals(DocumentType.TOPIC));
+  }
 	
-	//Gettters
-	/**
-  * @param documentType The document type( {@link DocumentType#TOPIC}, {@link DocumentType#MAP}, {@link DocumentType#BOOKMAP}  )
+  /**
+   * @param documentType The document type( {@link DocumentType#TOPIC}, {@link DocumentType#MAP}, {@link DocumentType#BOOKMAP}  )
    * @return The XML fragment for creator author element or <code>null</code> if the settings doesn't accept this element.
    */
 	public String getCreatorFragment(DocumentType documentType) {
-	  if ((updateTopicCreator && documentType.equals(DocumentType.TOPIC)) || (updateMapCreator && !documentType.equals(DocumentType.TOPIC))) {
-	    return creatorFragment.toString();
-	  }else {
-	    return null; 
+	  String fragment = null;
+	  if (shouldSetCreator(documentType)) {
+	    fragment =  creatorFragment.toString();
 	  }
+	  return fragment; 
 	}
 	
 	/**
@@ -152,11 +189,11 @@ if ((updateTopicProlog && documentType.equals(DocumentType.TOPIC)) || (updateMap
 	 * @return The XML fragment for contributor author element or <code>null</code> if the settings doesn't accept this element.
 	 */
 	public String getContributorFragment(DocumentType documentType) {
-		if ((updateTopicContributor && documentType.equals(DocumentType.TOPIC)) || (updateMapContributor && !documentType.equals(DocumentType.TOPIC))) {
-		  return contributorXML.toString();
-		}else {
-		  return null;
+	  String fragment = null;
+		if (shouldUpdateContributors(documentType)) {
+		  fragment = contributorXML.toString();
 		}
+		return fragment;
 	}
 	
 	/**
@@ -164,11 +201,11 @@ if ((updateTopicProlog && documentType.equals(DocumentType.TOPIC)) || (updateMap
    * @return The XML fragment for create date element or <code>null</code> if the settings doesn't accept this element.
    */
 	public String getCreatedDateFragment(DocumentType documentType) {
-	  if ((updateTopicCreated && documentType.equals(DocumentType.TOPIC)) || (updateMapCreated && !documentType.equals(DocumentType.TOPIC))) {
-	    return createdDateXML.toString();
-	  }else {
-	    return null;
+	  String fragment = null;
+	  if (shouldSetCreatedDates(documentType)) {
+	    fragment =  createdDateXML.toString();
 	  }
+	  return fragment;
 	}
 
 	 /**
@@ -176,11 +213,11 @@ if ((updateTopicProlog && documentType.equals(DocumentType.TOPIC)) || (updateMap
    * @return The XML fragment for revised date element or <code>null</code> if the settings doesn't accept this element.
    */
 	public String getRevisedDateFragment(DocumentType documentType) {
-    if ((updateTopicRevised && documentType.equals(DocumentType.TOPIC)) || (updateMapRevised && !documentType.equals(DocumentType.TOPIC))) {
-      return revisedDateFragment.toString();
-    }else {
-      return null;
+	  String fragment = null;
+    if (shouldUpdateRevisedDate(documentType)) {
+      fragment = revisedDateFragment.toString();
     }
+    return fragment;
 	}
 
 	/**
@@ -220,6 +257,14 @@ if ((updateTopicProlog && documentType.equals(DocumentType.TOPIC)) || (updateMap
 	}
 	
 	/**
+	 * Create the local date.
+	 * @return The local date in String format.
+	 */
+	protected String createLocalDate() {
+	  return new SimpleDateFormat(XMLFragmentUtils.DATE_PATTERN).format(new Date());
+	}
+	
+	/**
 	 * Get the options from WSOptionsStorage.
 	 */
 	private void loadOptions() {
@@ -233,7 +278,7 @@ if ((updateTopicProlog && documentType.equals(DocumentType.TOPIC)) || (updateMap
 	    updateMapProlog = Boolean.parseBoolean(value);
 	    
 	    value = optionsStorage.getOption(OptionKeys.TOPIC_SET_CREATOR, String.valueOf(true));
-	    updateTopicCreator = Boolean.parseBoolean(value);
+	    setTopicCreator = Boolean.parseBoolean(value);
 	    value = optionsStorage.getOption(OptionKeys.MAP_SET_CREATOR, String.valueOf(true));
 	    updateMapCreator = Boolean.parseBoolean(value);
 	    value = optionsStorage.getOption(OptionKeys.TOPIC_UPDATE_CONTRIBUTOR, String.valueOf(true));
@@ -242,13 +287,13 @@ if ((updateTopicProlog && documentType.equals(DocumentType.TOPIC)) || (updateMap
 	    updateMapContributor = Boolean.parseBoolean(value);
 	    
 	    value = optionsStorage.getOption(OptionKeys.TOPIC_SET_CREATED_DATE, String.valueOf(true));
-	    updateTopicCreated = Boolean.parseBoolean(value);
+	    setTopicCreatedDate = Boolean.parseBoolean(value);
 	    value = optionsStorage.getOption(OptionKeys.MAP_SET_CREATED_DATE, String.valueOf(true));
-	    updateMapCreated = Boolean.parseBoolean(value);
+	    setMapCreatedDate = Boolean.parseBoolean(value);
 	    value = optionsStorage.getOption(OptionKeys.TOPIC_UPDATE_REVISED_DATES, String.valueOf(true));
-	    updateTopicRevised = Boolean.parseBoolean(value);
+	    updateTopicRevisedDate = Boolean.parseBoolean(value);
 	    value = optionsStorage.getOption(OptionKeys.MAP_UPDATE_REVISED_DATES, String.valueOf(true));
-	    updateMapRevised = Boolean.parseBoolean(value);
+	    updateMapRevisedDate = Boolean.parseBoolean(value);
 	  }
 	}
 }

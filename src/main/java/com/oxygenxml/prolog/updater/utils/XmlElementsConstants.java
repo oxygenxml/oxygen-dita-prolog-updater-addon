@@ -73,7 +73,6 @@ public class XmlElementsConstants {
    * Class's value of author element.
    */
   public static final String PROLOG_AUTHOR_ELEMENT_CLASS = " topic/author ";
-
   
   /**
    * Get the class's value of prolog element.( topic/prolog or map/topicmeta)
@@ -81,6 +80,7 @@ public class XmlElementsConstants {
    * @return The class's value of prolog element
    */
   public static String getPrologClass(DocumentType documentType) {
+    // 1 return 
     if(documentType.equals(DocumentType.TOPIC)) {
       return PROLOG_CLASS;
     }else {
@@ -94,6 +94,7 @@ public class XmlElementsConstants {
    * @return The name of prolog element
    */
   public static String getPrologName(DocumentType documentType) {
+    // TODO UN SINGUR PUNCT DE RETURN
     if(documentType.equals(DocumentType.TOPIC)) {
       return PROLOG_NAME;
     }else if(documentType.equals(DocumentType.MAP)) {
