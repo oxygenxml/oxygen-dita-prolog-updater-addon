@@ -35,9 +35,9 @@ public class DitaTopicAuthorEditor implements DitaEditor{
 	private AuthorDocumentController documentController;
 
 	/**
-	 * <code>true</code> for DITA topic, <code>false</code> for DITA map.
+	 *The document type( {@link DocumentType#TOPIC}, {@link DocumentType#MAP} or {@link DocumentType#BOOKMAP}  ).
 	 */
-	private boolean isTopic = true;
+	private DocumentType documentType = DocumentType.TOPIC;
 	
 	/**
 	 * Logger
@@ -55,7 +55,10 @@ public class DitaTopicAuthorEditor implements DitaEditor{
 		AuthorElement rootElement = documentController.getAuthorDocumentNode().getRootElement();
 		AttrValue classValue = rootElement.getAttribute(XmlElementsConstants.CLASS);
 		if (classValue != null && classValue.getValue().contains(" map/map ")) {
-			isTopic = false;
+			documentType = DocumentType.MAP;
+		}
+		if (classValue != null && classValue.getValue().contains(" bookmap/bookmap ")) {
+			documentType = DocumentType.BOOKMAP;
 		}
 		
 		prologCreator = PrologContentCreator.getInstance();
@@ -73,7 +76,7 @@ public class DitaTopicAuthorEditor implements DitaEditor{
 		
 		if (rootElement != null) {
 		  // Get the prolog element.
-		  AuthorElement prolog = AuthorPageDocumentUtil.findElementByClass(rootElement, XmlElementsConstants.getPrologClass(isTopic));
+		  AuthorElement prolog = AuthorPageDocumentUtil.findElementByClass(rootElement, XmlElementsConstants.getPrologClass(documentType));
 		  if (prolog != null) {
 		    try {
 		      // Updates the creators and/or contributors of document
@@ -89,7 +92,7 @@ public class DitaTopicAuthorEditor implements DitaEditor{
       } else {
         //The prolog element wasn't found.
         // Add it
-        insertPrologElement(rootElement, prologCreator.getPrologFragment(isNewDocument, isTopic));
+        insertPrologElement(rootElement, prologCreator.getPrologFragment(isNewDocument, documentType));
       }
     }
 	}

@@ -9,6 +9,7 @@ import org.mockito.Mockito;
 import org.xml.sax.SAXException;
 
 import com.oxygenxml.prolog.updater.dita.editor.DitaTopicTextEditor;
+import com.oxygenxml.prolog.updater.dita.editor.DocumentType;
 import com.oxygenxml.prolog.updater.prolog.content.PrologContentCreator;
 import com.oxygenxml.prolog.updater.utils.XPathConstants;
 
@@ -38,6 +39,8 @@ public class DitaMapUpdateTextModeTest extends TestCase{
 
     Mockito.when(wsTextEditorPage.findElementsByXPath(XPathConstants.ROOT_MAP_XPATH))
     .thenReturn(new WSXMLTextNodeRange[1]);
+    Mockito.when(wsTextEditorPage.findElementsByXPath(XPathConstants.ROOT_BOOKMAP_XPATH))
+    .thenReturn(new WSXMLTextNodeRange[0]);
     
     //Mock the TextDocumentController
     textDocumentController = Mockito.mock(TextDocumentController.class);
@@ -124,7 +127,10 @@ public class DitaMapUpdateTextModeTest extends TestCase{
     Mockito.when(wsTextEditorPage.findElementsByXPath(XPathConstants.TOPICMETA_CRITDATES))
         .thenReturn(new WSXMLTextNodeRange[1]);
     
-    Mockito.when(wsTextEditorPage.evaluateXPath(XPathConstants.getCreatedXpath(false)))
+    Mockito.when(wsTextEditorPage.findElementsByXPath(XPathConstants.TOPICMETA_CRITDATES))
+    .thenReturn(new WSXMLTextNodeRange[1]);
+    
+    Mockito.when(wsTextEditorPage.evaluateXPath(XPathConstants.getCreatedXpath(DocumentType.MAP)))
     .thenReturn(new WSXMLTextNodeRange[1]);
 
     ditaTopicTextEditor.updateProlog(true);
