@@ -104,7 +104,7 @@ public class DitaUpdateTestUtil extends TestCase{
 		//
 		//Call the updateProlog method
 		//
-		ditaUpdater.updateProlog(wsEditor);
+		ditaUpdater.updateProlog(wsEditor, isNewDocument);
 		
 		//
 		// Check result:

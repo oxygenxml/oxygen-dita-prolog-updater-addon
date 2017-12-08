@@ -21,7 +21,7 @@ import ro.sync.exml.workspace.api.standalone.StandalonePluginWorkspace;
  * @author cosmin_duna
  */
 public class PrologUpdaterExtension extends OptionPagePluginExtension implements WorkspaceAccessPluginExtension{
-
+  
   private PrologOptionPage prologOptionPage = null;
 
   /**
@@ -38,12 +38,26 @@ public class PrologUpdaterExtension extends OptionPagePluginExtension implements
 					final WSEditor editorAccess = workspace.getEditorAccess(editorLocation, PluginWorkspace.MAIN_EDITING_AREA);
 					//add an WSEditorListener
 					editorAccess.addEditorListener(new WSEditorListener(){
-						@Override
+            private boolean wasNew = false;
+            private boolean wasSave = false;
+            @Override
 						public boolean editorAboutToBeSavedVeto(int operationType) {
-							xmlUpdater.updateProlog(editorAccess);
+              wasNew  = editorAccess.isNewDocument();
 							return true;
 						}
+						@Override
+						public void editorSaved(int operationType) {
+						  if(!wasSave) {
+						    wasSave = true;
+						    xmlUpdater.updateProlog(editorAccess, wasNew);
+                editorAccess.save();                    
+						    wasSave = false;
+						  }
+						  super.editorSaved(operationType);
+						}
+						 
 					});
+					
 			}
 		}, PluginWorkspace.MAIN_EDITING_AREA);
 		
@@ -54,10 +68,22 @@ public class PrologUpdaterExtension extends OptionPagePluginExtension implements
         final WSEditor editorAccess = workspace.getEditorAccess(editorLocation, PluginWorkspace.DITA_MAPS_EDITING_AREA);
         // add an WSEditorListener
         editorAccess.addEditorListener(new WSEditorListener() {
+          private boolean wasNew = false;
+          private boolean wasSave = false;
           @Override
           public boolean editorAboutToBeSavedVeto(int operationType) {
-            xmlUpdater.updateProlog(editorAccess);
+            wasNew  = editorAccess.isNewDocument();
             return true;
+          }
+          @Override
+          public void editorSaved(int operationType) {
+            if(!wasSave) {
+              wasSave = true;
+              xmlUpdater.updateProlog(editorAccess, wasNew);
+              editorAccess.save();
+              wasSave = false;
+            }
+            super.editorSaved(operationType);
           }
         });
       }

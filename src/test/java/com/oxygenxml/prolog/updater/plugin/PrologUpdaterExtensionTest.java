@@ -33,7 +33,7 @@ public class PrologUpdaterExtensionTest extends TestCase {
 				doUpdateProlog[0] = true;
 				return null;
 			}
-		}).when(ditaUpdater).updateProlog((WSEditor) Mockito.anyObject());
+		}).when(ditaUpdater).updateProlog((WSEditor) Mockito.anyObject(), Mockito.anyBoolean());
 
 
 		//
@@ -86,6 +86,7 @@ public class PrologUpdaterExtensionTest extends TestCase {
 
 		assertFalse(doUpdateProlog[0]);
 		editorListeners[0].editorAboutToBeSavedVeto(0);
+		editorListeners[0].editorSaved(0);
 		assertTrue(doUpdateProlog[0]);
 		
 	}

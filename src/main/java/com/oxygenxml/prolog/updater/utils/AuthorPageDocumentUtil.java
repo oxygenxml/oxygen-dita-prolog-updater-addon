@@ -205,8 +205,6 @@ public static String findPrologXPath(AuthorDocumentController controller, Docume
     }
   } catch (BadLocationException e) {
     logger.warn(e, e.getCause());
-  } catch (XPathException e) {
-    logger.warn(e, e.getCause());
   }
   return toReturn;
 }
@@ -220,7 +218,7 @@ public static String findPrologXPath(AuthorDocumentController controller, Docume
    * @throws BadLocationException 
    * @throws ro.sync.exml.workspace.api.editor.page.text.xml.XPathException 
    */
-private static WhatElementsCanGoHereContext findPrologContext(AuthorDocumentController controller, DocumentType documentType) throws BadLocationException, XPathException {
+private static WhatElementsCanGoHereContext findPrologContext(AuthorDocumentController controller, DocumentType documentType) throws BadLocationException {
     WhatElementsCanGoHereContext toReturn = null;
 
     // Get the AuthorSchemaManager.

@@ -34,7 +34,7 @@ public class DitaUpdater {
    * 
    * @param wsEditor Workspace editor.
    */
-  public void updateProlog(WSEditor wsEditor) {
+  public void updateProlog(WSEditor wsEditor , boolean isNewDocument) {
     //((StandalonePluginWorkspace)PluginWorkspaceProvider.getPluginWorkspace()).getUtilAccess().
     //get the currentPage
     WSEditorPage currentPage = wsEditor.getCurrentPage();
@@ -57,7 +57,7 @@ public class DitaUpdater {
     }
     
     if(ditaEditor != null){
-      ditaEditor.updateProlog(wsEditor.isNewDocument());
+      ditaEditor.updateProlog(isNewDocument);
     }
   }
 
