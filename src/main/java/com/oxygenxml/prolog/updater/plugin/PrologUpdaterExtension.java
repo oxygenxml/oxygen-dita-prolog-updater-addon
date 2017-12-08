@@ -28,7 +28,6 @@ public class PrologUpdaterExtension extends OptionPagePluginExtension implements
    * @see ro.sync.exml.plugin.workspace.WorkspaceAccessPluginExtension#applicationStarted(ro.sync.exml.workspace.api.standalone.StandalonePluginWorkspace)
    */
 	public void applicationStarted(final StandalonePluginWorkspace workspace) {
-
 		//create a XmlUpdater
 		final DitaUpdater xmlUpdater = createDitaUpdater();
 		
@@ -48,7 +47,22 @@ public class PrologUpdaterExtension extends OptionPagePluginExtension implements
 			}
 		}, PluginWorkspace.MAIN_EDITING_AREA);
 		
-	}
+    workspace.addEditorChangeListener(new WSEditorChangeListener() {
+
+      @Override
+      public void editorOpened(URL editorLocation) {
+        final WSEditor editorAccess = workspace.getEditorAccess(editorLocation, PluginWorkspace.DITA_MAPS_EDITING_AREA);
+        // add an WSEditorListener
+        editorAccess.addEditorListener(new WSEditorListener() {
+          @Override
+          public boolean editorAboutToBeSavedVeto(int operationType) {
+            xmlUpdater.updateProlog(editorAccess);
+            return true;
+          }
+        });
+      }
+    }, PluginWorkspace.DITA_MAPS_EDITING_AREA);
+  }
 
 	/**
 	 * Creates the updater.

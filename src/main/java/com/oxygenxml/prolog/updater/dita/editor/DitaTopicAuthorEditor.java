@@ -15,7 +15,6 @@ import ro.sync.ecss.extensions.api.AuthorDocumentController;
 import ro.sync.ecss.extensions.api.node.AttrValue;
 import ro.sync.ecss.extensions.api.node.AuthorElement;
 import ro.sync.ecss.extensions.api.node.AuthorNode;
-import ro.sync.exml.workspace.api.editor.page.author.WSAuthorEditorPage;
 
 /**
  * Edit DITA topic in author mode.
@@ -46,11 +45,11 @@ public class DitaTopicAuthorEditor implements DitaEditor{
 	
 	/**
 	 * Constructor
-	 * @param wsEditorPage workspace page editor.
+	 * @param documentController The document controller.
 	 * @param prologContentCreater Contains all elements from prolog.
 	 */
-	public DitaTopicAuthorEditor(WSAuthorEditorPage wsEditorPage, PrologContentCreator prologContentCreator) {
-		this.documentController = wsEditorPage.getDocumentController();
+	public DitaTopicAuthorEditor(AuthorDocumentController documentController, PrologContentCreator prologContentCreator) {
+		this.documentController = documentController;
 		
 		AuthorElement rootElement = documentController.getAuthorDocumentNode().getRootElement();
 		AttrValue classValue = rootElement.getAttribute(XmlElementsConstants.CLASS);

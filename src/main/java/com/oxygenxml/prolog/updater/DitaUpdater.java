@@ -10,6 +10,7 @@ import ro.sync.exml.workspace.api.PluginWorkspaceProvider;
 import ro.sync.exml.workspace.api.editor.WSEditor;
 import ro.sync.exml.workspace.api.editor.page.WSEditorPage;
 import ro.sync.exml.workspace.api.editor.page.author.WSAuthorEditorPage;
+import ro.sync.exml.workspace.api.editor.page.ditamap.WSDITAMapEditorPage;
 import ro.sync.exml.workspace.api.editor.page.text.xml.WSXMLTextEditorPage;
 import ro.sync.exml.workspace.api.options.WSOptionsStorage;
 
@@ -40,16 +41,17 @@ public class DitaUpdater {
 
     //create a PrologContentCreator
     PrologContentCreator prologContentCreater = new PrologContentCreator(getAuthorName());
-
-    DitaEditor ditaEditor = null;
     
+    DitaEditor ditaEditor = null;
     if (currentPage instanceof WSAuthorEditorPage) {
-      ditaEditor = new DitaTopicAuthorEditor((WSAuthorEditorPage)currentPage, prologContentCreater);
-
+      WSAuthorEditorPage authorPage = (WSAuthorEditorPage)currentPage;
+      ditaEditor = new DitaTopicAuthorEditor(authorPage.getDocumentController(), prologContentCreater);
     } else if (currentPage instanceof WSXMLTextEditorPage) {
       ditaEditor = new DitaTopicTextEditor((WSXMLTextEditorPage)currentPage, prologContentCreater);
+    } else if (currentPage instanceof WSDITAMapEditorPage) {
+      // Update prolog in DMM
     }
-
+    
     if(ditaEditor != null){
       ditaEditor.updateProlog(wsEditor.isNewDocument());
     }

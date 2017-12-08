@@ -80,12 +80,11 @@ public class XmlElementsConstants {
    * @return The class's value of prolog element
    */
   public static String getPrologClass(DocumentType documentType) {
-    // 1 return 
-    if(documentType.equals(DocumentType.TOPIC)) {
-      return PROLOG_CLASS;
-    }else {
-      return TOPICMETA_CLASS;
+    String prologClass = TOPICMETA_CLASS;
+    if (documentType.equals(DocumentType.TOPIC)) {
+      prologClass = PROLOG_CLASS;
     }
+    return prologClass;
   }
   
   /**
@@ -94,14 +93,13 @@ public class XmlElementsConstants {
    * @return The name of prolog element
    */
   public static String getPrologName(DocumentType documentType) {
-    // TODO UN SINGUR PUNCT DE RETURN
-    if(documentType.equals(DocumentType.TOPIC)) {
-      return PROLOG_NAME;
-    }else if(documentType.equals(DocumentType.MAP)) {
-      return TOPICMETA_NAME;
-    }else{
-    	return BOOKMETA_NAME;
+    String name = PROLOG_NAME;
+    if(documentType.equals(DocumentType.MAP)) {
+      name = TOPICMETA_NAME;
+    }else if (documentType.equals(DocumentType.BOOKMAP)){
+      name = BOOKMETA_NAME;
     }
+    return name;
   }
   
   /**
