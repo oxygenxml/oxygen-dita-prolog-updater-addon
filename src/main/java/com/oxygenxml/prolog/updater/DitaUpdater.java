@@ -44,12 +44,16 @@ public class DitaUpdater {
     
     DitaEditor ditaEditor = null;
     if (currentPage instanceof WSAuthorEditorPage) {
+      //Author page
       WSAuthorEditorPage authorPage = (WSAuthorEditorPage)currentPage;
       ditaEditor = new DitaTopicAuthorEditor(authorPage.getDocumentController(), prologContentCreater);
     } else if (currentPage instanceof WSXMLTextEditorPage) {
+      //Text page
       ditaEditor = new DitaTopicTextEditor((WSXMLTextEditorPage)currentPage, prologContentCreater);
     } else if (currentPage instanceof WSDITAMapEditorPage) {
-      // Update prolog in DMM
+      //DMM
+      WSDITAMapEditorPage mapEditorPage = (WSDITAMapEditorPage)currentPage;
+      ditaEditor = new DitaTopicAuthorEditor(mapEditorPage.getDocumentController(), prologContentCreater);
     }
     
     if(ditaEditor != null){

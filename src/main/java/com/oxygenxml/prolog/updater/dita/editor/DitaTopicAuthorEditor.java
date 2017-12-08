@@ -11,6 +11,7 @@ import com.oxygenxml.prolog.updater.utils.AuthorPageDocumentUtil;
 import com.oxygenxml.prolog.updater.utils.XMLFragmentUtils;
 import com.oxygenxml.prolog.updater.utils.XmlElementsConstants;
 
+import ro.sync.ecss.extensions.api.AuthorConstants;
 import ro.sync.ecss.extensions.api.AuthorDocumentController;
 import ro.sync.ecss.extensions.api.node.AttrValue;
 import ro.sync.ecss.extensions.api.node.AuthorElement;
@@ -89,28 +90,16 @@ public class DitaTopicAuthorEditor implements DitaEditor{
           }
 		    }
       } else {
-        //The prolog element wasn't found.
-        // Add it
-        insertPrologElement(rootElement, prologCreator.getPrologFragment(isNewDocument, documentType));
+        String prologFragment = prologCreator.getPrologFragment(isNewDocument, documentType);
+
+        String prologXpath = AuthorPageDocumentUtil.findPrologXPath(documentController, documentType);
+        
+        if(prologXpath != null) {
+          AuthorPageDocumentUtil.insertFragmentSchemaAware(documentController, prologFragment, prologXpath, AuthorConstants.POSITION_AFTER);
+        }
       }
     }
 	}
-
-	/**
-	 * Generates and inserts a prolog element.
-	 * 
-	 * @param rootElement The root of the document.
-	 * @param prologXML The prolog element fragment to be inserted.
-	 */
-  private void insertPrologElement(AuthorElement rootElement, String prologXML) {
-    AuthorElement bodyElement = AuthorPageDocumentUtil.findElementByClass(rootElement, XmlElementsConstants.TOPIC_BODY_CLASS);
-    int offset = rootElement.getStartOffset() + 1;
-    if (bodyElement != null) {
-      offset = bodyElement.getStartOffset();
-    }
-    // Insert Fragment
-    AuthorPageDocumentUtil.insertFragmentSchemaAware(documentController, prologXML, offset);
-  }
 
   /**
    * Update the critdates element.

@@ -7,14 +7,19 @@ import javax.swing.text.BadLocationException;
 
 import org.apache.log4j.Logger;
 
+import com.oxygenxml.prolog.updater.dita.editor.DocumentType;
+
+import ro.sync.contentcompletion.xml.CIElement;
+import ro.sync.contentcompletion.xml.ContextElement;
+import ro.sync.contentcompletion.xml.WhatElementsCanGoHereContext;
+import ro.sync.ecss.extensions.api.AuthorConstants;
 import ro.sync.ecss.extensions.api.AuthorDocumentController;
 import ro.sync.ecss.extensions.api.AuthorOperationException;
 import ro.sync.ecss.extensions.api.AuthorSchemaManager;
 import ro.sync.ecss.extensions.api.node.AttrValue;
 import ro.sync.ecss.extensions.api.node.AuthorElement;
 import ro.sync.ecss.extensions.api.node.AuthorNode;
-import ro.sync.ecss.extensions.api.schemaaware.SchemaAwareHandlerResult;
-import ro.sync.ecss.extensions.api.schemaaware.SchemaAwareHandlerResultInsertConstants;
+import ro.sync.exml.workspace.api.editor.page.text.xml.XPathException;
 
 /**
  * A collection of utility methods to be used in the author page.
@@ -143,4 +148,113 @@ public class AuthorPageDocumentUtil {
     }
   }
   
+  /**
+   * Create a AWT thread and inserts the given fragment schema aware.
+   * 
+   * @param documentController The author document controller.
+   * @param xmlFragment
+   *          The XML fragment.
+   * @param xPath
+   *          The xPath to insert fragment relative to.
+   * @param position The position relative to the node identified by the XPath location. 
+   * Can be one of the constants: {@link AuthorConstants#POSITION_BEFORE}, {@link AuthorConstants#POSITION_AFTER}, 
+   * {@link AuthorConstants#POSITION_INSIDE_FIRST} or {@link AuthorConstants#POSITION_INSIDE_LAST}.
+   */
+  public static void insertFragmentSchemaAware(final AuthorDocumentController documentController,  final String xmlFragment, final String xPath, final String position) {
+    if (xmlFragment != null && xPath != null && position != null) {
+      ThreadUtils.invokeSynchronously(new Runnable() {
+        public void run() {
+          try {
+            documentController.insertXMLFragmentSchemaAware(xmlFragment, xPath, position);
+          } catch (AuthorOperationException e) {
+            logger.debug(e, e.getCause());
+          }
+        }
+
+      });
+    }
+  }
+  
+  
+  /**
+   * Find a possible xPath where prolog element can be inserted.
+   *  
+   * @param page WSXMLTextEditorPage.
+   * @param documentType The type of the document ( {@link DocumentType#TOPIC}, {@link DocumentType#MAP} or  {@link DocumentType#BOOKMAP}  ).
+   * @return A xPath where to insert the prolog node or <code>null</code>.
+   * 
+   * @throws BadLocationException
+   * @throws XPathException
+   */
+public static String findPrologXPath(AuthorDocumentController controller, DocumentType documentType) {
+  String toReturn = null;
+  ContextElement nodeToInsertAfter = null;
+  
+  // Find the context where prolog element can be inserted.
+  WhatElementsCanGoHereContext context;
+  try {
+    context = findPrologContext(controller, documentType);
+    if (context != null) {
+      List<ContextElement> previous = context.getPreviousSiblingElements();
+      if (previous != null && !previous.isEmpty()) {
+        // Get the previous sibling.
+        nodeToInsertAfter = previous.get(previous.size() - 1);
+        // Generate the XPath.
+        toReturn = XPathConstants.getRootXpath(documentType) + "/" + nodeToInsertAfter.getQName();
+      }
+    }
+  } catch (BadLocationException e) {
+    logger.warn(e, e.getCause());
+  } catch (XPathException e) {
+    logger.warn(e, e.getCause());
+  }
+  return toReturn;
+}
+  
+  /**
+   * Find a possible context where prolog element can be inserted.
+   * 
+   * @param controller AuthorDocumentController.
+   * @param documentType The type of the document ( {@link DocumentType#TOPIC}, {@link DocumentType#MAP} or  {@link DocumentType#BOOKMAP}  ).
+   * @return A context where prolog element can go or <code>null</code>.
+   * @throws BadLocationException 
+   * @throws ro.sync.exml.workspace.api.editor.page.text.xml.XPathException 
+   */
+private static WhatElementsCanGoHereContext findPrologContext(AuthorDocumentController controller, DocumentType documentType) throws BadLocationException, XPathException {
+    WhatElementsCanGoHereContext toReturn = null;
+
+    // Get the AuthorSchemaManager.
+    AuthorSchemaManager schemaManager = controller.getAuthorSchemaManager();
+    if (schemaManager != null) {
+      AuthorElement rootElement = controller.getAuthorDocumentNode().getRootElement();
+
+      int startOffset = rootElement.getStartOffset();
+      int endOffset = rootElement.getEndOffset();
+
+      loop: for (int i = startOffset; i <= endOffset; i++) {
+        WhatElementsCanGoHereContext currentContext = schemaManager.createWhatElementsCanGoHereContext(i);
+        if (currentContext != null) {
+          // Analyze if current context can contain the prolog element.
+          List<CIElement> possible = schemaManager.whatElementsCanGoHere(currentContext);
+          if (possible != null) {
+            // Iterate over possible elements.
+            int size = possible.size();
+            for (int j = 0; j < size; j++) {
+              CIElement ciElement = possible.get(j);
+              if (ciElement.getName().equals(XmlElementsConstants.getPrologName(documentType))) {
+                toReturn = currentContext;
+                if (j == 0) {
+                  // if prolog element is first in possible elements list. STOP.
+                  break loop;
+                }
+              }
+            }
+          }
+        }
+      }
+
+    }
+    return toReturn;
+  }
+
 }
