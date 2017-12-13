@@ -96,7 +96,7 @@ public class AuthorPageDocumentUtil {
    * @param type The searched author type ( {@link XmlElementsConstants#CREATOR_TYPE} or {@link XmlElementsConstants#CONTRIBUTOR_TYPE})
    * @param authorName The name of the author.
    * 
-   * @return <code>true</code> if was found a author with given type, <code>false</code> otherwise.
+   * @return <code>true</code> if was found an author with given type.
    * @throws BadLocationException
    */
   public static boolean hasAuthor(List<AuthorElement>authors, String type, String authorName) throws BadLocationException {

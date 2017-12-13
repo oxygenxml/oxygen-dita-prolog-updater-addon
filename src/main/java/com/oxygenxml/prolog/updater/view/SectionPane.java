@@ -44,6 +44,5 @@ public class SectionPane extends JPanel{
     c.weightx = 1;
     c.insets = new Insets(20, 0, 5, 0);
     add(new JSeparator(), c);
-    
   }
 }

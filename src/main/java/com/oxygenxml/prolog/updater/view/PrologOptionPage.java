@@ -188,13 +188,13 @@ public class PrologOptionPage extends JPanel {
     
     topicEnableUpdate.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        toggleTopicChecks();
+        toggleTopicChecks(topicEnableUpdate.isSelected());
       }
     });
     
     mapEnableUpdate.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        toggleMapChecks();
+        toggleMapChecks(mapEnableUpdate.isSelected());
       }
     });
     
@@ -205,22 +205,25 @@ public class PrologOptionPage extends JPanel {
   
   /**
    * Enables or disables all topic related check boxes. 
+   * @param enabled <code>true</code> to enable all topic related check boxes. 
    */
-  private void toggleTopicChecks() {
-    topicSetCreator.setEnabled(topicEnableUpdate.isSelected());
-    topicSetCreated.setEnabled(topicEnableUpdate.isSelected());
-    topicUpdateContributor.setEnabled(topicEnableUpdate.isSelected());
-    topicUpdateRevised.setEnabled(topicEnableUpdate.isSelected());
+  private void toggleTopicChecks(boolean enabled) {
+    topicSetCreator.setEnabled(enabled);
+    topicSetCreated.setEnabled(enabled);
+    topicUpdateContributor.setEnabled(enabled);
+    topicUpdateRevised.setEnabled(enabled);
   }
   
   /**
    * Enables or disables all map related check boxes. 
+   * 
+   * @param enabled <code>true</code> if map should accept updates from plugin.
    */
-  private void toggleMapChecks() {
-    mapSetCreator.setEnabled(mapEnableUpdate.isSelected());
-    mapSetCreated.setEnabled(mapEnableUpdate.isSelected());
-    mapUpdateContributor.setEnabled(mapEnableUpdate.isSelected());
-    mapUpdateRevised.setEnabled(mapEnableUpdate.isSelected());
+  private void toggleMapChecks(boolean enabled) {
+    mapSetCreator.setEnabled(enabled);
+    mapSetCreated.setEnabled(enabled);
+    mapUpdateContributor.setEnabled(enabled);
+    mapUpdateRevised.setEnabled(enabled);
   }
   
   /**
@@ -272,7 +275,7 @@ public class PrologOptionPage extends JPanel {
       // Load DITA topic state
       value = optionsStorage.getOption(OptionKeys.TOPIC_ENABLE_UPDATE_ON_SAVE, CHECK_SELECTED_DEFAULT);
       topicEnableUpdate.setSelected(Boolean.valueOf(value));
-      toggleTopicChecks();
+      toggleTopicChecks(Boolean.valueOf(value));
       
       value = optionsStorage.getOption(OptionKeys.TOPIC_SET_CREATOR, CHECK_SELECTED_DEFAULT);
       topicSetCreator.setSelected(Boolean.valueOf(value));
@@ -289,7 +292,7 @@ public class PrologOptionPage extends JPanel {
       // Load DITA map state
       value = optionsStorage.getOption(OptionKeys.MAP_ENABLE_UPDATE_ON_SAVE, CHECK_SELECTED_DEFAULT);
       mapEnableUpdate.setSelected(Boolean.valueOf(value));
-      toggleMapChecks();
+      toggleMapChecks(Boolean.valueOf(value));
       
       value = optionsStorage.getOption(OptionKeys.MAP_SET_CREATOR, CHECK_SELECTED_DEFAULT);
       mapSetCreator.setSelected(Boolean.valueOf(value));
@@ -314,26 +317,20 @@ public class PrologOptionPage extends JPanel {
     
     // Restore the DITA topic check boxes.
     topicEnableUpdate.setSelected(CHECK_SELECTED_DEFAULT_BOOLEAN);
-    toggleTopicChecks();
+    toggleTopicChecks(CHECK_SELECTED_DEFAULT_BOOLEAN);
     
     topicSetCreator.setSelected(CHECK_SELECTED_DEFAULT_BOOLEAN);
-    
     topicSetCreated.setSelected(CHECK_SELECTED_DEFAULT_BOOLEAN);
-    
     topicUpdateContributor.setSelected(CHECK_SELECTED_DEFAULT_BOOLEAN);
-    
     topicUpdateRevised.setSelected(CHECK_SELECTED_DEFAULT_BOOLEAN);
   
     // Restore the DITA map check boxes.
     mapEnableUpdate.setSelected(CHECK_SELECTED_DEFAULT_BOOLEAN);
-    toggleMapChecks();
+    toggleMapChecks(CHECK_SELECTED_DEFAULT_BOOLEAN);
     
     mapSetCreator.setSelected(CHECK_SELECTED_DEFAULT_BOOLEAN);
-    
     mapSetCreated.setSelected(CHECK_SELECTED_DEFAULT_BOOLEAN);
-    
     mapUpdateContributor.setSelected(CHECK_SELECTED_DEFAULT_BOOLEAN);
-    
     mapUpdateRevised.setSelected(CHECK_SELECTED_DEFAULT_BOOLEAN);
   }
 }

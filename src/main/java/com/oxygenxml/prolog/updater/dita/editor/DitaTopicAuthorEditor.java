@@ -104,7 +104,7 @@ public class DitaTopicAuthorEditor implements DitaEditor{
   /**
    * Update the critdates element.
    * 
-   * @param prolog The prolog author element.
+   * @param prolog The prolog author element. Not <code>null</code>.
    * @param isNewDocument <code>true</code> if document is new, <code>false</code>otherwise.
    * @throws BadLocationException
    */
@@ -182,7 +182,7 @@ public class DitaTopicAuthorEditor implements DitaEditor{
 	/**
    * Update the document adding the names of the authors.
    * 
-   * @param prolog The prolog element.
+   * @param prolog The prolog element. Never <code>null</code>.
    * @param type The types of the authors: contributor or creator.
    * 
    * @throws BadLocationException
