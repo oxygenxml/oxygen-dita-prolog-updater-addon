@@ -42,6 +42,7 @@ public class PrologUpdaterExtension extends OptionPagePluginExtension implements
             private boolean wasSave = false;
             @Override
 						public boolean editorAboutToBeSavedVeto(int operationType) {
+            	System.out.println("aboutToBESave");
               wasNew  = editorAccess.isNewDocument();
 							return true;
 						}
