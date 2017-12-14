@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 import com.oxygenxml.prolog.updater.prolog.content.PrologContentCreator;
 import com.oxygenxml.prolog.updater.utils.AuthorPageDocumentUtil;
 import com.oxygenxml.prolog.updater.utils.XMLFragmentUtils;
+import com.oxygenxml.prolog.updater.utils.XPathConstants;
 import com.oxygenxml.prolog.updater.utils.XmlElementsConstants;
 
 import ro.sync.ecss.extensions.api.AuthorConstants;
@@ -96,6 +97,10 @@ public class DitaTopicAuthorEditor implements DitaEditor{
         
         if(prologXpath != null) {
           AuthorPageDocumentUtil.insertFragmentSchemaAware(documentController, prologFragment, prologXpath, AuthorConstants.POSITION_AFTER);
+        }else {
+          AuthorPageDocumentUtil.insertFragmentSchemaAware(documentController, prologFragment, XPathConstants.getRootXpath(documentType),
+              AuthorConstants.POSITION_INSIDE_FIRST);
+
         }
       }
     }

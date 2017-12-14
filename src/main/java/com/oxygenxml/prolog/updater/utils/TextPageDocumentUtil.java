@@ -167,7 +167,7 @@ private static WhatElementsCanGoHereContext findPrologContext(WSXMLTextEditorPag
   loop: for (int j = 0; j < childNo; j++) {
     WSXMLTextNodeRange currentNode = topicChild[j];
     // Get the offset of next line.
-    int offset = page.getOffsetOfLineStart(currentNode.getStartLine() + 1);
+    int offset = page.getOffsetOfLineEnd(currentNode.getEndLine());
     WhatElementsCanGoHereContext currentContext = schemaManager.createWhatElementsCanGoHereContext(offset);
     if (currentContext != null) {
       // Analyze if current context can contain the prolog element.

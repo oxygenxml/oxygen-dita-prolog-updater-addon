@@ -225,12 +225,12 @@ private static WhatElementsCanGoHereContext findPrologContext(AuthorDocumentCont
     AuthorSchemaManager schemaManager = controller.getAuthorSchemaManager();
     if (schemaManager != null) {
       AuthorElement rootElement = controller.getAuthorDocumentNode().getRootElement();
+      List<AuthorNode> childNodes = rootElement.getContentNodes();
+      int nodesSize = childNodes.size();
 
-      int startOffset = rootElement.getStartOffset();
-      int endOffset = rootElement.getEndOffset();
-
-      loop: for (int i = startOffset; i <= endOffset; i++) {
-        WhatElementsCanGoHereContext currentContext = schemaManager.createWhatElementsCanGoHereContext(i);
+      loop: for (int i = 0; i < nodesSize; i++) {
+        int offset = childNodes.get(i).getEndOffset();
+        WhatElementsCanGoHereContext currentContext = schemaManager.createWhatElementsCanGoHereContext(offset);
         if (currentContext != null) {
           // Analyze if current context can contain the prolog element.
           List<CIElement> possible = schemaManager.whatElementsCanGoHere(currentContext);
@@ -250,7 +250,6 @@ private static WhatElementsCanGoHereContext findPrologContext(AuthorDocumentCont
           }
         }
       }
-
     }
     return toReturn;
   }

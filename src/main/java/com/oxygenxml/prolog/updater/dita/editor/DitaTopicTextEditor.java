@@ -76,15 +76,23 @@ public class DitaTopicTextEditor implements DitaEditor {
 	  try {
 	    // get the prolog element
 	    WSXMLTextNodeRange[] prologs = wsTextEditorPage.findElementsByXPath(XPathConstants.getPrologXpath(documentType));
-	    // The document doesn't has a prolog element
-      if (prologs.length == 0) {
-          // Search for a possible prolog xpath.
-          String xp = TextPageDocumentUtil.findPrologXPath(wsTextEditorPage, documentType);
-          if (xp != null) {
-            TextPageDocumentUtil.insertXmlFragment(wsTextEditorPage, 
-                prologCreator.getPrologFragment(isNewDocument, documentType), xp,
-                RelativeInsertPosition.INSERT_LOCATION_AFTER);
-        }
+	    // The document doesn't have a prolog element
+	    if (prologs.length == 0) {
+	      // Search for a possible prolog xpath.
+	      String xp = TextPageDocumentUtil.findPrologXPath(wsTextEditorPage, documentType);
+	      if (xp != null) {
+	        TextPageDocumentUtil.insertXmlFragment(
+	            wsTextEditorPage, 
+	            prologCreator.getPrologFragment(isNewDocument, documentType), 
+	            xp,
+	            RelativeInsertPosition.INSERT_LOCATION_AFTER);
+	      }else {
+	        TextPageDocumentUtil.insertXmlFragment(
+              wsTextEditorPage, 
+              prologCreator.getPrologFragment(isNewDocument, documentType), 
+              XPathConstants.getRootXpath(documentType),
+              RelativeInsertPosition.INSERT_LOCATION_AS_FIRST_CHILD);
+	      }
 	    } else {
 	      // the prolog element exists
 	      updateAuthor(isNewDocument);
