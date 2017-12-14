@@ -35,7 +35,14 @@ public class TextPageDocumentUtil {
    */
    private static final Logger logger = Logger.getLogger(TextPageDocumentUtil.class);
 
-  
+   
+   /**
+    * Private constructor.
+    */
+   private TextPageDocumentUtil() {
+     throw new IllegalStateException("Utility class");
+   }
+   
   /**
    * Create a AWT thread and insert the given fragment,
    * 
