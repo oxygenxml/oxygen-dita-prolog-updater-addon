@@ -27,7 +27,7 @@ deploy:
   provider: releases
   api_key: ${PROLOG_TOKEN}
   file:
-    - target/oxygen-prolog-updater-${TRAVIS_TAG}-plugin.jar
+    - target/oxygen-dita-prolog-updater-${TRAVIS_TAG}-plugin.jar
     - target/addon.xml
   skip_cleanup: true
   on:
