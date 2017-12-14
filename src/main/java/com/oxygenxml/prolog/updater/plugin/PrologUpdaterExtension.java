@@ -28,15 +28,15 @@ public class PrologUpdaterExtension extends OptionPagePluginExtension implements
    * @see ro.sync.exml.plugin.workspace.WorkspaceAccessPluginExtension#applicationStarted(ro.sync.exml.workspace.api.standalone.StandalonePluginWorkspace)
    */
 	public void applicationStarted(final StandalonePluginWorkspace workspace) {
-		//create a XmlUpdater
+		// Create a XmlUpdater
 		final DitaUpdater xmlUpdater = createDitaUpdater();
 		
-		//add an WSEditorChangeListener
+		// Add an WSEditorChangeListener
 		workspace.addEditorChangeListener(new WSEditorChangeListener(){
 			@Override
 			public void editorOpened(URL editorLocation) {
 					final WSEditor editorAccess = workspace.getEditorAccess(editorLocation, PluginWorkspace.MAIN_EDITING_AREA);
-					//add an WSEditorListener
+					// Add an WSEditorListener
 					editorAccess.addEditorListener(new WSEditorListener(){
             private boolean wasNew = false;
             private boolean wasSave = false;
