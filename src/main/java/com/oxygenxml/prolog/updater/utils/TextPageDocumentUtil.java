@@ -5,6 +5,8 @@ import java.net.URL;
 import java.util.List;
 
 import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import javax.swing.text.Position;
 
 import org.apache.log4j.Logger;
 
@@ -18,6 +20,7 @@ import ro.sync.exml.workspace.api.PluginWorkspace;
 import ro.sync.exml.workspace.api.PluginWorkspaceProvider;
 import ro.sync.exml.workspace.api.editor.WSEditor;
 import ro.sync.exml.workspace.api.editor.page.text.WSTextXMLSchemaManager;
+import ro.sync.exml.workspace.api.editor.page.text.xml.TextDocumentController;
 import ro.sync.exml.workspace.api.editor.page.text.xml.TextOperationException;
 import ro.sync.exml.workspace.api.editor.page.text.xml.WSXMLTextEditorPage;
 import ro.sync.exml.workspace.api.editor.page.text.xml.WSXMLTextNodeRange;
@@ -46,7 +49,7 @@ public class TextPageDocumentUtil {
   /**
    * Create a AWT thread and insert the given fragment,
    * 
-   * @param wsTextEditorPage The text editor.
+   * @param page The text editor.
    * @param xmlFragment
    *          The XML fragment.
    * @param xPath
@@ -57,20 +60,41 @@ public class TextPageDocumentUtil {
    *          {@link RelativeInsertPosition#INSERT_LOCATION_AS_LAST_CHILD} or
    *          {@link RelativeInsertPosition#INSERT_LOCATION_BEFORE}.
    */
-  public static void insertXmlFragment(final WSXMLTextEditorPage wsTextEditorPage,  final String xmlFragment, final String xPath, final RelativeInsertPosition position) {
+  public static void insertXmlFragment(final WSXMLTextEditorPage page,  final String xmlFragment, final String xPath, final RelativeInsertPosition position) {
     if (xmlFragment != null && xPath != null && position != null) {
       ThreadUtils.invokeSynchronously(new Runnable() {
         public void run() {
           try {
-            wsTextEditorPage.getDocumentController().insertXMLFragment(
-                prettyPrintFragment(wsTextEditorPage, xmlFragment), 
+            TextDocumentController controller = page.getDocumentController();
+            
+            // Get the offset of caret.
+            int initialOffset = page.getCaretOffset();
+            // Create a position of caret.
+            Position pos = null;
+            if (initialOffset != -1) {
+              Document document = page.getDocument();
+              if(document != null) {
+                pos = document.createPosition(initialOffset);
+              }
+            }
+            controller.insertXMLFragment(
+                prettyPrintFragment(page, xmlFragment), 
                 xPath, 
                 position);
+
+            // Restore the position of caret.
+            if (pos != null) {
+              page.setCaretPosition(pos.getOffset());
+            }
+
           } catch (TextOperationException e) {
             logger.debug(e.getMessage(), e);
+          } catch (BadLocationException e) {
+            if (logger.isDebugEnabled()) {
+              logger.debug(e, e);
+            }
           }
         }
-
       });
     }
   }

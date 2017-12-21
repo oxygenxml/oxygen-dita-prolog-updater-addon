@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.text.BadLocationException;
+import javax.swing.text.Position;
 
 import org.apache.log4j.Logger;
 
@@ -19,6 +20,8 @@ import ro.sync.ecss.extensions.api.AuthorSchemaManager;
 import ro.sync.ecss.extensions.api.node.AttrValue;
 import ro.sync.ecss.extensions.api.node.AuthorElement;
 import ro.sync.ecss.extensions.api.node.AuthorNode;
+import ro.sync.exml.workspace.api.editor.page.WSEditorPage;
+import ro.sync.exml.workspace.api.editor.page.author.WSAuthorEditorPage;
 import ro.sync.exml.workspace.api.editor.page.text.xml.XPathException;
 
 /**
@@ -130,17 +133,37 @@ public class AuthorPageDocumentUtil {
   /**
    * Inserts an element schema aware.
    * 
+   * @param page The current page opened in editor.
    * @param controller The document controller.
    * @param xmlFragment The xml fragment.
    * @param offset The offset.
    */
-  public static void insertFragmentSchemaAware(final AuthorDocumentController controller, final String xmlFragment, final int offset){
+  public static void insertFragmentSchemaAware(final WSEditorPage page, final AuthorDocumentController controller, final String xmlFragment, final int offset){
     if (controller != null && xmlFragment != null && offset != -1) {
       ThreadUtils.invokeSynchronously(new Runnable() {
         public void run() {
           try {
+            Position position = null;
+            // Get the initial caret offset.
+            int caretOffset = -1;
+            if(page instanceof WSAuthorEditorPage) {
+              caretOffset = ((WSAuthorEditorPage) page).getCaretOffset();
+            }
+            if(caretOffset != -1) {
+              position = controller.createPositionInContent(caretOffset);
+            }
+            
+            // Insert the fragment.
             controller.insertXMLFragmentSchemaAware(xmlFragment, offset);
+            
+            // Restore the caret position.
+            if(position != null) {
+              ((WSAuthorEditorPage) page).setCaretPosition(position.getOffset());
+            }
+            
           } catch (AuthorOperationException e) {
+            logger.debug(e.getMessage(), e);
+          } catch (BadLocationException e) {
             logger.debug(e.getMessage(), e);
           }
         }
@@ -151,6 +174,7 @@ public class AuthorPageDocumentUtil {
   /**
    * Create a AWT thread and inserts the given fragment schema aware.
    * 
+   * @param page The current page opened in editor.
    * @param documentController The author document controller.
    * @param xmlFragment
    *          The XML fragment.
@@ -160,13 +184,30 @@ public class AuthorPageDocumentUtil {
    * Can be one of the constants: {@link AuthorConstants#POSITION_BEFORE}, {@link AuthorConstants#POSITION_AFTER}, 
    * {@link AuthorConstants#POSITION_INSIDE_FIRST} or {@link AuthorConstants#POSITION_INSIDE_LAST}.
    */
-  public static void insertFragmentSchemaAware(final AuthorDocumentController documentController,  final String xmlFragment, final String xPath, final String position) {
+  public static void insertFragmentSchemaAware(final WSEditorPage page,  final AuthorDocumentController documentController,  final String xmlFragment, final String xPath, final String position) {
     if (xmlFragment != null && xPath != null && position != null) {
       ThreadUtils.invokeSynchronously(new Runnable() {
         public void run() {
           try {
+            Position pos = null;
+            
+            int caretOffset = -1;
+            if(page instanceof WSAuthorEditorPage) {
+              caretOffset = ((WSAuthorEditorPage) page).getCaretOffset();
+            }
+            if(caretOffset != -1) {
+               pos = documentController.createPositionInContent(caretOffset);
+            }
+              
             documentController.insertXMLFragmentSchemaAware(xmlFragment, xPath, position);
+          
+            if(pos != null) {
+              ((WSAuthorEditorPage) page).setCaretPosition(pos.getOffset());
+            }
+            
           } catch (AuthorOperationException e) {
+            logger.debug(e, e.getCause());
+          } catch (BadLocationException e) {
             logger.debug(e, e.getCause());
           }
         }
@@ -179,7 +220,7 @@ public class AuthorPageDocumentUtil {
   /**
    * Find a possible xPath where prolog element can be inserted.
    *  
-   * @param page WSXMLTextEditorPage.
+   * @param documentController The author document controller.
    * @param documentType The type of the document ( {@link DocumentType#TOPIC}, {@link DocumentType#MAP} or  {@link DocumentType#BOOKMAP}  ).
    * @return A xPath where to insert the prolog node or <code>null</code>.
    * 

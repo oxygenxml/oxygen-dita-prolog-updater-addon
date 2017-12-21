@@ -17,6 +17,9 @@ import ro.sync.ecss.extensions.api.AuthorDocumentController;
 import ro.sync.ecss.extensions.api.node.AttrValue;
 import ro.sync.ecss.extensions.api.node.AuthorElement;
 import ro.sync.ecss.extensions.api.node.AuthorNode;
+import ro.sync.exml.workspace.api.editor.page.WSEditorPage;
+import ro.sync.exml.workspace.api.editor.page.author.WSAuthorEditorPage;
+import ro.sync.exml.workspace.api.editor.page.ditamap.WSDITAMapEditorPage;
 
 /**
  * Edit DITA topic in author mode.
@@ -44,14 +47,23 @@ public class DitaTopicAuthorEditor implements DitaEditor{
 	 * Logger
 	 */
 	 private static final Logger logger = Logger.getLogger(DitaTopicAuthorEditor.class);
+
+  private WSEditorPage page;
 	
 	/**
 	 * Constructor
 	 * @param documentController The document controller.
 	 * @param prologContentCreater Contains all elements from prolog.
 	 */
-	public DitaTopicAuthorEditor(AuthorDocumentController documentController, PrologContentCreator prologContentCreator) {
-		this.documentController = documentController;
+	public DitaTopicAuthorEditor(WSEditorPage page, PrologContentCreator prologContentCreator) {
+		
+	  this.page = page;
+	  
+    if(page instanceof WSAuthorEditorPage) {
+	    this.documentController = ((WSAuthorEditorPage) page).getDocumentController();
+	  }else {
+	    this.documentController = ((WSDITAMapEditorPage)page).getDocumentController();
+	  }
 		
 		AuthorElement rootElement = documentController.getAuthorDocumentNode().getRootElement();
 		AttrValue classValue = rootElement.getAttribute(XmlElementsConstants.CLASS);
@@ -96,9 +108,9 @@ public class DitaTopicAuthorEditor implements DitaEditor{
         String prologXpath = AuthorPageDocumentUtil.findPrologXPath(documentController, documentType);
         
         if(prologXpath != null) {
-          AuthorPageDocumentUtil.insertFragmentSchemaAware(documentController, prologFragment, prologXpath, AuthorConstants.POSITION_AFTER);
+          AuthorPageDocumentUtil.insertFragmentSchemaAware(page, documentController, prologFragment, prologXpath, AuthorConstants.POSITION_AFTER);
         }else {
-          AuthorPageDocumentUtil.insertFragmentSchemaAware(documentController, prologFragment, XPathConstants.getRootXpath(documentType),
+          AuthorPageDocumentUtil.insertFragmentSchemaAware(page, documentController, prologFragment, XPathConstants.getRootXpath(documentType),
               AuthorConstants.POSITION_INSIDE_FIRST);
 
         }
@@ -144,7 +156,7 @@ public class DitaTopicAuthorEditor implements DitaEditor{
       }
     }
     
-    AuthorPageDocumentUtil.insertFragmentSchemaAware(documentController, fragment, offset);
+    AuthorPageDocumentUtil.insertFragmentSchemaAware(page, documentController, fragment, offset);
   }
 	
 	/**
@@ -180,7 +192,7 @@ public class DitaTopicAuthorEditor implements DitaEditor{
         offset = revisedElements.get(revisedElementSize -1).getEndOffset()+1;
 			}
 			// Now insert it.
-			AuthorPageDocumentUtil.insertFragmentSchemaAware(documentController, fragment, offset);
+			AuthorPageDocumentUtil.insertFragmentSchemaAware(page, documentController, fragment, offset);
 		}
 	}
 
@@ -213,6 +225,6 @@ public class DitaTopicAuthorEditor implements DitaEditor{
       fragment = prologCreator.getCreatorFragment(documentType);
     }
     
-    AuthorPageDocumentUtil.insertFragmentSchemaAware(documentController, fragment, offset);
+    AuthorPageDocumentUtil.insertFragmentSchemaAware(page, documentController, fragment, offset);
   }
 }
