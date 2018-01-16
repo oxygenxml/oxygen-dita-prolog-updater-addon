@@ -69,15 +69,16 @@ public class DitaUpdater {
   protected String getAuthorName(){
     String toReturn = UNKNOWN;
     
-    WSOptionsStorage optionsStorage = PluginWorkspaceProvider.getPluginWorkspace().getOptionsStorage();
     String name = System.getProperty(USER_NAME_PROPERTY);
-    if(optionsStorage != null) {
-      toReturn = optionsStorage.getOption(OptionKeys.AUTHOR_NAME, name);
-    }else {
-      if(name != null) {
-        toReturn = name;
-      }
+    if(name != null) {
+    	toReturn = name;
     }
+    
+    WSOptionsStorage optionsStorage = PluginWorkspaceProvider.getPluginWorkspace().getOptionsStorage();
+    if(optionsStorage != null) {
+      toReturn = optionsStorage.getOption(OptionKeys.AUTHOR_NAME, toReturn);
+    }
+    
     return toReturn;
   }
 }

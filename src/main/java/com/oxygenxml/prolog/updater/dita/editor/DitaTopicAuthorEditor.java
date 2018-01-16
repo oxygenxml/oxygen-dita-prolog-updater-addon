@@ -27,6 +27,11 @@ import ro.sync.exml.workspace.api.editor.page.ditamap.WSDITAMapEditorPage;
  * @author cosmin_duna
  */
 public class DitaTopicAuthorEditor implements DitaEditor{
+
+	/**
+	 * Logger
+	 */
+	private static final Logger logger = Logger.getLogger(DitaTopicAuthorEditor.class);
 	 
 	/**
 	 * Contains all elements(tags) from prolog.
@@ -42,40 +47,40 @@ public class DitaTopicAuthorEditor implements DitaEditor{
 	 *The document type( {@link DocumentType#TOPIC}, {@link DocumentType#MAP} or {@link DocumentType#BOOKMAP}  ).
 	 */
 	private DocumentType documentType = DocumentType.TOPIC;
-	
-	/**
-	 * Logger
-	 */
-	 private static final Logger logger = Logger.getLogger(DitaTopicAuthorEditor.class);
 
+	/**
+	 * The page from WsEditor.
+	 */
   private WSEditorPage page;
 	
 	/**
 	 * Constructor
-	 * @param documentController The document controller.
+	 * @param page The page from WSEditor.
 	 * @param prologContentCreater Contains all elements from prolog.
 	 */
 	public DitaTopicAuthorEditor(WSEditorPage page, PrologContentCreator prologContentCreator) {
-		
 	  this.page = page;
 	  
     if(page instanceof WSAuthorEditorPage) {
 	    this.documentController = ((WSAuthorEditorPage) page).getDocumentController();
-	  }else {
+	  } else if(page instanceof WSDITAMapEditorPage) {
 	    this.documentController = ((WSDITAMapEditorPage)page).getDocumentController();
 	  }
 		
-		AuthorElement rootElement = documentController.getAuthorDocumentNode().getRootElement();
-		AttrValue classValue = rootElement.getAttribute(XmlElementsConstants.CLASS);
-		if (classValue != null && classValue.getValue().contains(" map/map ")) {
-			documentType = DocumentType.MAP;
-		}
-		if (classValue != null && classValue.getValue().contains(" bookmap/bookmap ")) {
-			documentType = DocumentType.BOOKMAP;
-		}
-		
-		prologCreator = prologContentCreator;
+    if(documentController != null) {
+    	AuthorElement rootElement = documentController.getAuthorDocumentNode().getRootElement();
+    	AttrValue classValue = rootElement.getAttribute(XmlElementsConstants.CLASS);
+    	if (classValue != null && classValue.getValue().contains(" map/map ")) {
+    		documentType = DocumentType.MAP;
+    	}
+    	if (classValue != null && classValue.getValue().contains(" bookmap/bookmap ")) {
+    		documentType = DocumentType.BOOKMAP;
+    	}
+    	
+    	prologCreator = prologContentCreator;
+    }
 	}
+	
 	
 	/**
 	 * Update the prolog in DITA topic document(author mode) according to given flag(isNewDocument)
@@ -83,41 +88,63 @@ public class DitaTopicAuthorEditor implements DitaEditor{
 	 * 
 	 */
 	public void updateProlog(boolean isNewDocument) {
-		// Get the root element.
-		AuthorElement rootElement = documentController.getAuthorDocumentNode().getRootElement();
-		String type = isNewDocument ? XmlElementsConstants.CREATOR_TYPE : XmlElementsConstants.CONTRIBUTOR_TYPE;
-		
-		if (rootElement != null) {
-		  // Get the prolog element.
-		  AuthorElement prolog = AuthorPageDocumentUtil.findElementByClass(rootElement, XmlElementsConstants.getPrologClass(documentType));
-		  if (prolog != null) {
-		    try {
-		      // Updates the creators and/or contributors of document
-          updateAuthorElements(prolog, type);
-          
-          // Update the critdates element .
-          updateCritdates(prolog, isNewDocument);
-		    } catch (BadLocationException e) {
-		      if (logger.isDebugEnabled()) {
-		        logger.debug(e.getMessage(), e);
-          }
-		    }
-      } else {
-        String prologFragment = prologCreator.getPrologFragment(isNewDocument, documentType);
-
-        String prologXpath = AuthorPageDocumentUtil.findPrologXPath(documentController, documentType);
-        
-        if(prologXpath != null) {
-          AuthorPageDocumentUtil.insertFragmentSchemaAware(page, documentController, prologFragment, prologXpath, AuthorConstants.POSITION_AFTER);
-        }else {
-          AuthorPageDocumentUtil.insertFragmentSchemaAware(page, documentController, prologFragment, XPathConstants.getRootXpath(documentType),
-              AuthorConstants.POSITION_INSIDE_FIRST);
-
-        }
-      }
-    }
+		if(documentController != null) {
+			// Get the root element.
+			AuthorElement rootElement = documentController.getAuthorDocumentNode().getRootElement();
+			
+			if (rootElement != null) {
+				// Get the prolog element.
+				AuthorElement prolog = AuthorPageDocumentUtil.findElementByClass(rootElement, XmlElementsConstants.getPrologClass(documentType));
+				if (prolog != null) {
+					// Prolog element exists; edit this element.
+					editProlog(prolog, isNewDocument);
+				} else {
+					// Add the prolog element.
+					addProlog(isNewDocument);
+				}
+			}
+		}
 	}
 
+	
+	 /**
+   * Add the prolog element.
+   * @param isNewDocument <code>true</code> if document is new, <code>false</code>otherwise.
+   */
+	private void addProlog(boolean isNewDocument) {
+		String prologFragment = prologCreator.getPrologFragment(isNewDocument, documentType);
+		String prologXpath = AuthorPageDocumentUtil.findPrologXPath(documentController, documentType);
+		
+		if(prologXpath != null) {
+			AuthorPageDocumentUtil.insertFragmentSchemaAware(page, documentController, prologFragment, prologXpath, AuthorConstants.POSITION_AFTER);
+		}	else {
+			AuthorPageDocumentUtil.insertFragmentSchemaAware(page, documentController, prologFragment, XPathConstants.getRootXpath(documentType),
+					AuthorConstants.POSITION_INSIDE_FIRST);
+		}
+	}
+
+	
+	/**
+	 * Edit the given prolog element.
+	 * @param critdates The element to be edited. <code>Not null</code>
+	 * @param isNewDocument  <code>true</code> if document is new, <code>false</code>otherwise.
+	 * @throws BadLocationException
+	 */
+	private void editProlog(AuthorElement prolog, boolean isNewDocument) {
+		try {
+			// Updates the creators and/or contributors of document
+			updateAuthorElements(prolog, isNewDocument);
+			
+			// Update the critdates element .
+			updateCritdates(prolog, isNewDocument);
+		} catch (BadLocationException e) {
+			if (logger.isDebugEnabled()) {
+				logger.debug(e.getMessage(), e);
+			}
+		}
+	}
+
+	
   /**
    * Update the critdates element.
    * 
@@ -128,37 +155,63 @@ public class DitaTopicAuthorEditor implements DitaEditor{
   private void updateCritdates(AuthorElement prolog, boolean isNewDocument) throws BadLocationException {
     // Where to insert
     AuthorElement cridates = AuthorPageDocumentUtil.findElementByClass(prolog, XmlElementsConstants.TOPIC_CRITDATES_CLASS);
-    int offset = -1;
-    String fragment = null;
     if (cridates != null) {
-      if (isNewDocument) {
-        AuthorElement createdElement = AuthorPageDocumentUtil.findElementByClass(cridates, XmlElementsConstants.CREATED_DATE_ELEMENT_CLASS);
-        // Was not added yet. 
-        if (createdElement == null) {
-          // Add it.
-          offset = cridates.getStartOffset() + 1;
-          fragment = prologCreator.getCreatedDateFragment(documentType);
-        }
-      } else {
-        // it's not a new document
-        // add revised element
-        addRevisedElement(cridates);
+    	// The critdates element exists, edit the content of this element.
+    	editCritdates(cridates, isNewDocument);
+    } else {
+    	// The critdates element doesn't exist, add this element.
+    	addCritdates(prolog, isNewDocument);
+    }
+  }
+
+  
+  /**
+   * Add the critdates element into the given prolog element.
+   * @param prolog The prolog element where the critdates is add. <code>Not null</code>  
+   * @param isNewDocument <code>true</code> if document is new, <code>false</code>otherwise.
+   */
+	private void addCritdates(AuthorElement prolog, boolean isNewDocument) {
+		int offset = -1;
+		String fragment = null;
+		List<AuthorElement> authors = AuthorPageDocumentUtil.findElementsByClass(prolog, XmlElementsConstants.PROLOG_AUTHOR_ELEMENT_CLASS);
+		// Create an element here.
+		fragment = XMLFragmentUtils.createCritdateTag(prologCreator.getDateFragment(isNewDocument, documentType));
+		if(authors.isEmpty()) {
+		  offset = prolog.getEndOffset();
+		} else {
+		  AuthorElement lastAuthorElement = authors.get(authors.size()-1);
+		  offset = lastAuthorElement.getEndOffset() + 1;
+		}
+		AuthorPageDocumentUtil.insertFragmentSchemaAware(page, documentController, fragment, offset);
+	}
+  
+	
+	/**
+	 * Edit the given critdate element.
+	 * @param critdates The element to be edited. <code>Not null</code>
+	 * @param isNewDocument  <code>true</code> if document is new, <code>false</code>otherwise.
+	 * @throws BadLocationException
+	 */
+  private void editCritdates(AuthorElement critdates, boolean isNewDocument) throws BadLocationException {
+    if (isNewDocument) {
+      AuthorElement createdElement = AuthorPageDocumentUtil.findElementByClass(critdates, XmlElementsConstants.CREATED_DATE_ELEMENT_CLASS);
+      // Was not added yet. 
+      if (createdElement == null) {
+        // Add it.
+      	AuthorPageDocumentUtil.insertFragmentSchemaAware(page, 
+      			documentController,
+      			prologCreator.getCreatedDateFragment(documentType),
+      			critdates.getStartOffset() + 1);
       }
     } else {
-      List<AuthorElement> authors = AuthorPageDocumentUtil.findElementsByClass(prolog, XmlElementsConstants.PROLOG_AUTHOR_ELEMENT_CLASS);
-      // Create an element here.
-      fragment = XMLFragmentUtils.createCritdateTag(prologCreator.getDateFragment(isNewDocument, documentType));
-      if(authors.isEmpty()) {
-        offset = prolog.getEndOffset();
-      } else {
-        AuthorElement lastAuthorElement = authors.get(authors.size()-1);
-        offset = lastAuthorElement.getEndOffset() + 1;
-      }
+      // it's not a new document
+      // add revised element
+      addRevisedElement(critdates);
     }
-    
-    AuthorPageDocumentUtil.insertFragmentSchemaAware(page, documentController, fragment, offset);
+  
   }
-	
+  
+  
 	/**
 	 * Add the revised element if it doesn't exits.
 	 * @param critdatesElement critdates element(element that has revised child). <code>Not null</code>
@@ -196,16 +249,19 @@ public class DitaTopicAuthorEditor implements DitaEditor{
 		}
 	}
 
+	
 	/**
    * Update the document adding the names of the authors.
    * 
    * @param prolog The prolog element. Never <code>null</code>.
-   * @param type The types of the authors: contributor or creator.
+   * @param isNewDocument <code>true</code> if document is new, <code>false</code>otherwise.
    * 
    * @throws BadLocationException
    */
-  private void updateAuthorElements(AuthorElement prolog, String type ) throws BadLocationException {
-    List<AuthorElement> authors = AuthorPageDocumentUtil.findElementsByClass(prolog, XmlElementsConstants.PROLOG_AUTHOR_ELEMENT_CLASS);
+  private void updateAuthorElements(AuthorElement prolog, boolean isNewDocument) throws BadLocationException {
+		String type = isNewDocument ? XmlElementsConstants.CREATOR_TYPE : XmlElementsConstants.CONTRIBUTOR_TYPE;
+  	
+  	List<AuthorElement> authors = AuthorPageDocumentUtil.findElementsByClass(prolog, XmlElementsConstants.PROLOG_AUTHOR_ELEMENT_CLASS);
     final int length = authors.size();
     
     // Search for author with given type.
