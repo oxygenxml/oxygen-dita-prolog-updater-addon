@@ -12,14 +12,15 @@ https://www.oxygenxml.com/doc/versions/18.1/ug-editor/topics/packing-and-deployi
         <xt:oxy_version>19.0+</xt:oxy_version>
         <xt:type>plugin</xt:type>
         <xt:author>Oxygen XML Editor</xt:author>
-        <xt:name>Prolog Updater</xt:name>
+        <xt:name>DITA Prolog Updater</xt:name>
         <xt:description><html xmlns="http://www.w3.org/1999/xhtml">
                 <head>
                     <title>Oxygen Dita Prolog Updater</title>
                 </head>
                 <body>
                 <div>
-                    <p>Oxygen XML plugin which updates the author information, created and modified dates in the DITA prolog section for topics and maps.</p>
+                    <p>Oxygen XML plugin that updates the "prolog" section of a DITA topic/map.</p>
+                    <a href="https://github.com/oxygenxml/oxygen-dita-prolog-updater">https://github.com/oxygenxml/oxygen-dita-prolog-updater</a>
                     </div>
             </body>
             </html>
