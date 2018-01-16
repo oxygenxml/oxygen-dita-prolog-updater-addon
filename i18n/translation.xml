@@ -18,20 +18,20 @@
 	
 	<key value="prolog.updater.dita.topic">
 		<comment>The label for the dita topic section.</comment>
-		<val lang="en_US">DITA Topic</val>
-		<val lang="de_DE">DITA Topic</val>
-		<val lang="fr_FR">DITA Topic</val>
-		<val lang="ja_JP">DITA Topic</val>
-		<val lang="nl_NL">DITA Topic</val>
+		<val lang="en_US">Topic</val>
+		<val lang="de_DE">Topic</val>
+		<val lang="fr_FR">Topic</val>
+		<val lang="ja_JP">Topic</val>
+		<val lang="nl_NL">Topic</val>
 	</key>
 
 	<key value="prolog.updater.dita.map">
 		<comment>The label for the dita map section.</comment>
-		<val lang="en_US">DITA Map</val>
-		<val lang="de_DE">DITA Map</val>
-		<val lang="fr_FR">DITA Map</val>
-		<val lang="ja_JP">DITA Map</val>
-		<val lang="nl_NL">DITA Map</val>
+		<val lang="en_US">Map</val>
+		<val lang="de_DE">Map</val>
+		<val lang="fr_FR">Map</val>
+		<val lang="ja_JP">Map</val>
+		<val lang="nl_NL">Map</val>
 	</key>
 
 	<key value="prolog.updater.enable.on.save">
