@@ -11,7 +11,8 @@ import org.xml.sax.SAXException;
 import com.oxygenxml.prolog.updater.dita.editor.DitaTopicTextEditor;
 import com.oxygenxml.prolog.updater.dita.editor.DocumentType;
 import com.oxygenxml.prolog.updater.prolog.content.PrologContentCreator;
-import com.oxygenxml.prolog.updater.utils.XPathConstants;
+import com.oxygenxml.prolog.updater.utils.ElementXPathConstants;
+import com.oxygenxml.prolog.updater.utils.ElementXPathUtils;
 
 import junit.framework.TestCase;
 import ro.sync.exml.editor.xmleditor.operations.context.RelativeInsertPosition;
@@ -37,9 +38,9 @@ public class DitaMapUpdateTextModeTest extends TestCase{
     //Mock the WSXMLTextEditorPage
     wsTextEditorPage = Mockito.mock(WSXMLTextEditorPage.class);
 
-    Mockito.when(wsTextEditorPage.findElementsByXPath(XPathConstants.ROOT_MAP_XPATH))
+    Mockito.when(wsTextEditorPage.findElementsByXPath(ElementXPathConstants.ROOT_MAP_XPATH))
     .thenReturn(new WSXMLTextNodeRange[1]);
-    Mockito.when(wsTextEditorPage.findElementsByXPath(XPathConstants.ROOT_BOOKMAP_XPATH))
+    Mockito.when(wsTextEditorPage.findElementsByXPath(ElementXPathConstants.ROOT_BOOKMAP_XPATH))
     .thenReturn(new WSXMLTextNodeRange[0]);
     
     //Mock the TextDocumentController
@@ -64,13 +65,13 @@ public class DitaMapUpdateTextModeTest extends TestCase{
   @Test
   public void testUpdateProlog() throws TextOperationException, XPathException {
     
-		Mockito.when(wsTextEditorPage.findElementsByXPath(XPathConstants.TOPICMETA_XPATH)).
+		Mockito.when(wsTextEditorPage.findElementsByXPath(ElementXPathConstants.TOPICMETA_XPATH)).
 		thenReturn(new WSXMLTextNodeRange[1]);
 		
-		Mockito.when(wsTextEditorPage.findElementsByXPath(XPathConstants.TOPICMETA_AUTHORS)).
+		Mockito.when(wsTextEditorPage.findElementsByXPath(ElementXPathConstants.TOPICMETA_AUTHORS)).
 		thenReturn(new WSXMLTextNodeRange[0]);
 		
-		Mockito.when(wsTextEditorPage.findElementsByXPath(XPathConstants.TOPICMETA_CRITDATES)).
+		Mockito.when(wsTextEditorPage.findElementsByXPath(ElementXPathConstants.TOPICMETA_CRITDATES)).
 		thenReturn(new WSXMLTextNodeRange[0]);
 		
 		
@@ -88,16 +89,16 @@ public class DitaMapUpdateTextModeTest extends TestCase{
 	@Test
 	public void testUpdateAuthor() throws XPathException, TextOperationException {
 	  
-    Mockito.when(wsTextEditorPage.findElementsByXPath(XPathConstants.TOPICMETA_XPATH))
+    Mockito.when(wsTextEditorPage.findElementsByXPath(ElementXPathConstants.TOPICMETA_XPATH))
         .thenReturn(new WSXMLTextNodeRange[1]);
 
-    Mockito.when(wsTextEditorPage.findElementsByXPath(XPathConstants.TOPICMETA_AUTHORS)).
+    Mockito.when(wsTextEditorPage.findElementsByXPath(ElementXPathConstants.TOPICMETA_AUTHORS)).
     thenReturn(new WSXMLTextNodeRange[1]);
     
-    Mockito.when(wsTextEditorPage.evaluateXPath(XPathConstants.TOPICMETA_AUTHORS_CREATOR))
+    Mockito.when(wsTextEditorPage.evaluateXPath(ElementXPathConstants.TOPICMETA_AUTHORS_CREATOR))
         .thenReturn(new WSXMLTextNodeRange[1]);
 
-    Mockito.when(wsTextEditorPage.findElementsByXPath(XPathConstants.TOPICMETA_CRITDATES))
+    Mockito.when(wsTextEditorPage.findElementsByXPath(ElementXPathConstants.TOPICMETA_CRITDATES))
         .thenReturn(new WSXMLTextNodeRange[0]);
 
     ditaTopicTextEditor.updateProlog(true);
@@ -114,22 +115,22 @@ public class DitaMapUpdateTextModeTest extends TestCase{
    */
 	@Test
   public void testUpdateCritdates() throws XPathException, TextOperationException {
-    Mockito.when(wsTextEditorPage.findElementsByXPath(XPathConstants.TOPICMETA_XPATH))
+    Mockito.when(wsTextEditorPage.findElementsByXPath(ElementXPathConstants.TOPICMETA_XPATH))
         .thenReturn(new WSXMLTextNodeRange[1]);
 
-    Mockito.when(wsTextEditorPage.findElementsByXPath(XPathConstants.TOPICMETA_AUTHORS)).
+    Mockito.when(wsTextEditorPage.findElementsByXPath(ElementXPathConstants.TOPICMETA_AUTHORS)).
     thenReturn(new WSXMLTextNodeRange[0]);
     
-    Mockito.when(wsTextEditorPage.evaluateXPath(XPathConstants.TOPICMETA_AUTHORS_CREATOR))
+    Mockito.when(wsTextEditorPage.evaluateXPath(ElementXPathConstants.TOPICMETA_AUTHORS_CREATOR))
         .thenReturn(new WSXMLTextNodeRange[0]);
 
-    Mockito.when(wsTextEditorPage.findElementsByXPath(XPathConstants.TOPICMETA_CRITDATES))
+    Mockito.when(wsTextEditorPage.findElementsByXPath(ElementXPathConstants.TOPICMETA_CRITDATES))
         .thenReturn(new WSXMLTextNodeRange[1]);
     
-    Mockito.when(wsTextEditorPage.findElementsByXPath(XPathConstants.TOPICMETA_CRITDATES))
+    Mockito.when(wsTextEditorPage.findElementsByXPath(ElementXPathConstants.TOPICMETA_CRITDATES))
     .thenReturn(new WSXMLTextNodeRange[1]);
     
-    Mockito.when(wsTextEditorPage.evaluateXPath(XPathConstants.getCreatedXpath(DocumentType.MAP)))
+    Mockito.when(wsTextEditorPage.evaluateXPath(ElementXPathUtils.getCreatedXpath(DocumentType.MAP)))
     .thenReturn(new WSXMLTextNodeRange[1]);
 
     ditaTopicTextEditor.updateProlog(true);
@@ -146,19 +147,19 @@ public class DitaMapUpdateTextModeTest extends TestCase{
    */
   @Test
   public void testUpdateWhenContainsContent() throws XPathException, TextOperationException {
-    Mockito.when(wsTextEditorPage.findElementsByXPath(XPathConstants.TOPICMETA_XPATH))
+    Mockito.when(wsTextEditorPage.findElementsByXPath(ElementXPathConstants.TOPICMETA_XPATH))
         .thenReturn(new WSXMLTextNodeRange[1]);
 
-    Mockito.when(wsTextEditorPage.findElementsByXPath(XPathConstants.TOPICMETA_AUTHORS)).
+    Mockito.when(wsTextEditorPage.findElementsByXPath(ElementXPathConstants.TOPICMETA_AUTHORS)).
     thenReturn(new WSXMLTextNodeRange[1]);
     
-    Mockito.when(wsTextEditorPage.evaluateXPath(XPathConstants.TOPICMETA_AUTHORS_CREATOR))
+    Mockito.when(wsTextEditorPage.evaluateXPath(ElementXPathConstants.TOPICMETA_AUTHORS_CREATOR))
     .thenReturn(new WSXMLTextNodeRange[1]);
 
-    Mockito.when(wsTextEditorPage.findElementsByXPath(XPathConstants.TOPICMETA_CRITDATES))
+    Mockito.when(wsTextEditorPage.findElementsByXPath(ElementXPathConstants.TOPICMETA_CRITDATES))
     .thenReturn(new WSXMLTextNodeRange[1]);
 
-    Mockito.when(wsTextEditorPage.evaluateXPath(XPathConstants.TOPICMETA_CREATED_ELEMENT))
+    Mockito.when(wsTextEditorPage.evaluateXPath(ElementXPathConstants.TOPICMETA_CREATED_ELEMENT))
         .thenReturn(new WSXMLTextNodeRange[1]);
 
     ditaTopicTextEditor.updateProlog(true);
