@@ -20,10 +20,14 @@ import ro.sync.exml.workspace.api.options.WSOptionsStorage;
  */
 @RunWith(PowerMockRunner.class)
 public class PrologContentCreatorTopicTest extends TestCase {
-  private static final String AUTHOR_NAME = "name";
-  private static final String LOCAL_DATE = "2017-12-04"; 
-  private static final String TRUE_VALUE = String.valueOf(true);
-  private static final String FALSE_VALUE = String.valueOf(false);
+	/**
+	 * The author name added in inserted content.
+	 */
+	private static final String AUTHOR_NAME = "name";
+	/**
+	 * The local date added in inserted content.
+	 */
+	private static final String LOCAL_DATE = "2017-12-04"; 
   
   private WSOptionsStorage wsOptionsStorage;
   
@@ -47,7 +51,7 @@ public class PrologContentCreatorTopicTest extends TestCase {
   @PrepareForTest({ PluginWorkspaceProvider.class })
   @Test
   public void testUpdateDisable() {
-    Mockito.when(wsOptionsStorage.getOption(OptionKeys.TOPIC_ENABLE_UPDATE_ON_SAVE, TRUE_VALUE)).thenReturn(FALSE_VALUE);
+    Mockito.when(wsOptionsStorage.getOption(OptionKeys.TOPIC_ENABLE_UPDATE_ON_SAVE, Boolean.TRUE.toString())).thenReturn(Boolean.FALSE.toString());
     PrologContentCreator prologContentCreator = new PrologContentCreator(AUTHOR_NAME);
     
     //Get the prolog according to settings when document is new.
@@ -71,11 +75,11 @@ public class PrologContentCreatorTopicTest extends TestCase {
   @PrepareForTest({ PluginWorkspaceProvider.class })
   @Test
   public void testOptionsFalse() {
-    Mockito.when(wsOptionsStorage.getOption(OptionKeys.TOPIC_ENABLE_UPDATE_ON_SAVE, TRUE_VALUE)).thenReturn(TRUE_VALUE);
-    Mockito.when(wsOptionsStorage.getOption(OptionKeys.TOPIC_SET_CREATOR, TRUE_VALUE)).thenReturn(FALSE_VALUE);
-    Mockito.when(wsOptionsStorage.getOption(OptionKeys.TOPIC_SET_CREATED_DATE, TRUE_VALUE)).thenReturn(FALSE_VALUE);
-    Mockito.when(wsOptionsStorage.getOption(OptionKeys.TOPIC_UPDATE_CONTRIBUTOR, TRUE_VALUE)).thenReturn(FALSE_VALUE);
-    Mockito.when(wsOptionsStorage.getOption(OptionKeys.TOPIC_UPDATE_REVISED_DATES, TRUE_VALUE)).thenReturn(FALSE_VALUE);
+    Mockito.when(wsOptionsStorage.getOption(OptionKeys.TOPIC_ENABLE_UPDATE_ON_SAVE, Boolean.TRUE.toString())).thenReturn(Boolean.TRUE.toString());
+    Mockito.when(wsOptionsStorage.getOption(OptionKeys.TOPIC_SET_CREATOR, Boolean.TRUE.toString())).thenReturn(Boolean.FALSE.toString());
+    Mockito.when(wsOptionsStorage.getOption(OptionKeys.TOPIC_SET_CREATED_DATE, Boolean.TRUE.toString())).thenReturn(Boolean.FALSE.toString());
+    Mockito.when(wsOptionsStorage.getOption(OptionKeys.TOPIC_UPDATE_CONTRIBUTOR, Boolean.TRUE.toString())).thenReturn(Boolean.FALSE.toString());
+    Mockito.when(wsOptionsStorage.getOption(OptionKeys.TOPIC_UPDATE_REVISED_DATES, Boolean.TRUE.toString())).thenReturn(Boolean.FALSE.toString());
     
     PrologContentCreator prologContentCreator = new PrologContentCreator(AUTHOR_NAME);
     
@@ -101,11 +105,11 @@ public class PrologContentCreatorTopicTest extends TestCase {
   @PrepareForTest({ PluginWorkspaceProvider.class })
   @Test
   public void testSetCreator() {
-    Mockito.when(wsOptionsStorage.getOption(OptionKeys.TOPIC_ENABLE_UPDATE_ON_SAVE, TRUE_VALUE)).thenReturn(TRUE_VALUE);
-    Mockito.when(wsOptionsStorage.getOption(OptionKeys.TOPIC_SET_CREATOR, TRUE_VALUE)).thenReturn(TRUE_VALUE);
-    Mockito.when(wsOptionsStorage.getOption(OptionKeys.TOPIC_SET_CREATED_DATE, TRUE_VALUE)).thenReturn(FALSE_VALUE);
-    Mockito.when(wsOptionsStorage.getOption(OptionKeys.TOPIC_UPDATE_CONTRIBUTOR, TRUE_VALUE)).thenReturn(FALSE_VALUE);
-    Mockito.when(wsOptionsStorage.getOption(OptionKeys.TOPIC_UPDATE_REVISED_DATES, TRUE_VALUE)).thenReturn(FALSE_VALUE);
+    Mockito.when(wsOptionsStorage.getOption(OptionKeys.TOPIC_ENABLE_UPDATE_ON_SAVE, Boolean.TRUE.toString())).thenReturn(Boolean.TRUE.toString());
+    Mockito.when(wsOptionsStorage.getOption(OptionKeys.TOPIC_SET_CREATOR, Boolean.TRUE.toString())).thenReturn(Boolean.TRUE.toString());
+    Mockito.when(wsOptionsStorage.getOption(OptionKeys.TOPIC_SET_CREATED_DATE, Boolean.TRUE.toString())).thenReturn(Boolean.FALSE.toString());
+    Mockito.when(wsOptionsStorage.getOption(OptionKeys.TOPIC_UPDATE_CONTRIBUTOR, Boolean.TRUE.toString())).thenReturn(Boolean.FALSE.toString());
+    Mockito.when(wsOptionsStorage.getOption(OptionKeys.TOPIC_UPDATE_REVISED_DATES, Boolean.TRUE.toString())).thenReturn(Boolean.FALSE.toString());
     
     // When TOPIC_SET_CREATOR is false 
     PrologContentCreator prologContentCreator = new PrologContentCreator(AUTHOR_NAME);
@@ -129,11 +133,11 @@ public class PrologContentCreatorTopicTest extends TestCase {
   @PrepareForTest({ PluginWorkspaceProvider.class })
   @Test
   public void testSetCreatedDate() {
-    Mockito.when(wsOptionsStorage.getOption(OptionKeys.TOPIC_ENABLE_UPDATE_ON_SAVE, TRUE_VALUE)).thenReturn(TRUE_VALUE);
-    Mockito.when(wsOptionsStorage.getOption(OptionKeys.TOPIC_SET_CREATOR, TRUE_VALUE)).thenReturn(FALSE_VALUE);
-    Mockito.when(wsOptionsStorage.getOption(OptionKeys.TOPIC_SET_CREATED_DATE, TRUE_VALUE)).thenReturn(TRUE_VALUE);
-    Mockito.when(wsOptionsStorage.getOption(OptionKeys.TOPIC_UPDATE_CONTRIBUTOR, TRUE_VALUE)).thenReturn(FALSE_VALUE);
-    Mockito.when(wsOptionsStorage.getOption(OptionKeys.TOPIC_UPDATE_REVISED_DATES, TRUE_VALUE)).thenReturn(FALSE_VALUE);
+    Mockito.when(wsOptionsStorage.getOption(OptionKeys.TOPIC_ENABLE_UPDATE_ON_SAVE, Boolean.TRUE.toString())).thenReturn(Boolean.TRUE.toString());
+    Mockito.when(wsOptionsStorage.getOption(OptionKeys.TOPIC_SET_CREATOR, Boolean.TRUE.toString())).thenReturn(Boolean.FALSE.toString());
+    Mockito.when(wsOptionsStorage.getOption(OptionKeys.TOPIC_SET_CREATED_DATE, Boolean.TRUE.toString())).thenReturn(Boolean.TRUE.toString());
+    Mockito.when(wsOptionsStorage.getOption(OptionKeys.TOPIC_UPDATE_CONTRIBUTOR, Boolean.TRUE.toString())).thenReturn(Boolean.FALSE.toString());
+    Mockito.when(wsOptionsStorage.getOption(OptionKeys.TOPIC_UPDATE_REVISED_DATES, Boolean.TRUE.toString())).thenReturn(Boolean.FALSE.toString());
     
     // When TOPIC_SET_CREATOR is false 
     PrologContentCreator prologContentCreator = new PrologContentCreator(AUTHOR_NAME) {
@@ -163,11 +167,11 @@ public class PrologContentCreatorTopicTest extends TestCase {
   @PrepareForTest({ PluginWorkspaceProvider.class })
   @Test
   public void testUpdateContributor() {
-    Mockito.when(wsOptionsStorage.getOption(OptionKeys.TOPIC_ENABLE_UPDATE_ON_SAVE, TRUE_VALUE)).thenReturn(TRUE_VALUE);
-    Mockito.when(wsOptionsStorage.getOption(OptionKeys.TOPIC_SET_CREATOR, TRUE_VALUE)).thenReturn(FALSE_VALUE);
-    Mockito.when(wsOptionsStorage.getOption(OptionKeys.TOPIC_SET_CREATED_DATE, TRUE_VALUE)).thenReturn(FALSE_VALUE);
-    Mockito.when(wsOptionsStorage.getOption(OptionKeys.TOPIC_UPDATE_CONTRIBUTOR, TRUE_VALUE)).thenReturn(TRUE_VALUE);
-    Mockito.when(wsOptionsStorage.getOption(OptionKeys.TOPIC_UPDATE_REVISED_DATES, TRUE_VALUE)).thenReturn(FALSE_VALUE);
+    Mockito.when(wsOptionsStorage.getOption(OptionKeys.TOPIC_ENABLE_UPDATE_ON_SAVE, Boolean.TRUE.toString())).thenReturn(Boolean.TRUE.toString());
+    Mockito.when(wsOptionsStorage.getOption(OptionKeys.TOPIC_SET_CREATOR, Boolean.TRUE.toString())).thenReturn(Boolean.FALSE.toString());
+    Mockito.when(wsOptionsStorage.getOption(OptionKeys.TOPIC_SET_CREATED_DATE, Boolean.TRUE.toString())).thenReturn(Boolean.FALSE.toString());
+    Mockito.when(wsOptionsStorage.getOption(OptionKeys.TOPIC_UPDATE_CONTRIBUTOR, Boolean.TRUE.toString())).thenReturn(Boolean.TRUE.toString());
+    Mockito.when(wsOptionsStorage.getOption(OptionKeys.TOPIC_UPDATE_REVISED_DATES, Boolean.TRUE.toString())).thenReturn(Boolean.FALSE.toString());
     
     // When TOPIC_SET_CREATOR is false 
     PrologContentCreator prologContentCreator = new PrologContentCreator(AUTHOR_NAME);
@@ -193,11 +197,11 @@ public class PrologContentCreatorTopicTest extends TestCase {
   @PrepareForTest({ PluginWorkspaceProvider.class })
   @Test
   public void testUpdateRevised() {
-    Mockito.when(wsOptionsStorage.getOption(OptionKeys.TOPIC_ENABLE_UPDATE_ON_SAVE, TRUE_VALUE)).thenReturn(TRUE_VALUE);
-    Mockito.when(wsOptionsStorage.getOption(OptionKeys.TOPIC_SET_CREATOR, TRUE_VALUE)).thenReturn(FALSE_VALUE);
-    Mockito.when(wsOptionsStorage.getOption(OptionKeys.TOPIC_SET_CREATED_DATE, TRUE_VALUE)).thenReturn(FALSE_VALUE);
-    Mockito.when(wsOptionsStorage.getOption(OptionKeys.TOPIC_UPDATE_CONTRIBUTOR, TRUE_VALUE)).thenReturn(FALSE_VALUE);
-    Mockito.when(wsOptionsStorage.getOption(OptionKeys.TOPIC_UPDATE_REVISED_DATES, TRUE_VALUE)).thenReturn(TRUE_VALUE);
+    Mockito.when(wsOptionsStorage.getOption(OptionKeys.TOPIC_ENABLE_UPDATE_ON_SAVE, Boolean.TRUE.toString())).thenReturn(Boolean.TRUE.toString());
+    Mockito.when(wsOptionsStorage.getOption(OptionKeys.TOPIC_SET_CREATOR, Boolean.TRUE.toString())).thenReturn(Boolean.FALSE.toString());
+    Mockito.when(wsOptionsStorage.getOption(OptionKeys.TOPIC_SET_CREATED_DATE, Boolean.TRUE.toString())).thenReturn(Boolean.FALSE.toString());
+    Mockito.when(wsOptionsStorage.getOption(OptionKeys.TOPIC_UPDATE_CONTRIBUTOR, Boolean.TRUE.toString())).thenReturn(Boolean.FALSE.toString());
+    Mockito.when(wsOptionsStorage.getOption(OptionKeys.TOPIC_UPDATE_REVISED_DATES, Boolean.TRUE.toString())).thenReturn(Boolean.TRUE.toString());
     
     // When TOPIC_SET_CREATOR is false 
     PrologContentCreator prologContentCreator = new PrologContentCreator(AUTHOR_NAME) {

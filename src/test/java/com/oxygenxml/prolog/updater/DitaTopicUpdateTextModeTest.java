@@ -24,11 +24,27 @@ import ro.sync.exml.workspace.api.editor.page.text.xml.XPathException;
 
 public class DitaTopicUpdateTextModeTest extends TestCase{
 
+	/**
+	 * The name of the author.
+	 */
 	static final String AUTHOR_NAME = "test";
+	/**
+	 * The page from wsEditor
+	 */
   private WSXMLTextEditorPage wsTextEditorPage;
+  /**
+   * Document controller
+   */
   private TextDocumentController textDocumentController;
+  /**
+   * Creates the content that is inserted.
+   */
   private PrologContentCreator prologContentCreater;
+  /**
+   * Text editor for prolog in dita. 
+   */
   private DitaTopicTextEditor ditaTopicTextEditor;
+  
 	
   @Override
   protected void setUp() throws Exception {

@@ -21,14 +21,25 @@ import org.xml.sax.SAXNotSupportedException;
 import org.xml.sax.XMLReader;
 
 /**
- * XML prettifier used in JUnits
+ * XML pretty printer used in JUnits
  * 
  * @author cosmin_duna
  *
  */
-public class XmlPrettifierUtil {
+public class XmlPrettyPrinterUtil {
 
-	public static String prettify(String xmlContent) throws IOException {
+	/**
+	 * Indent the given XML content.
+	 * @param xmlContent The content to indent.
+	 * @return The indented content.
+	 * @throws IOException
+	 * @throws SAXException 
+	 * @throws ParserConfigurationException 
+	 * @throws SAXNotSupportedException 
+	 * @throws SAXNotRecognizedException 
+	 * @throws TransformerException 
+	 */
+	public static String indent(String xmlContent) throws IOException, SAXNotRecognizedException, SAXNotSupportedException, ParserConfigurationException, SAXException, TransformerException {
 		String prettifiedContent;
 
 		TransformerFactory transformerFactory = TransformerFactory.newInstance();
@@ -41,15 +52,12 @@ public class XmlPrettifierUtil {
 		StringWriter sw = new StringWriter();
 		StreamResult res = new StreamResult(sw);
 
-		try {
 			transformer = transformerFactory.newTransformer();
 
 			// set the output properties
 			transformer.setOutputProperty(OutputKeys.METHOD, "xml");
 			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 			transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-			
-			
 			
 			// prettify and print
 			SAXSource saxSource = new SAXSource(inputSource);
@@ -61,17 +69,6 @@ public class XmlPrettifierUtil {
       });
 			saxSource.setXMLReader(reader);
 			transformer.transform(saxSource, res);
-		} catch (TransformerException e) {
-		  e.printStackTrace();
-		} catch (SAXNotRecognizedException e) {
-      e.printStackTrace();
-    } catch (SAXNotSupportedException e) {
-      e.printStackTrace();
-    } catch (ParserConfigurationException e) {
-      e.printStackTrace();
-    } catch (SAXException e) {
-      e.printStackTrace();
-    }
 		prettifiedContent = sw.toString();
 
 		sw.close();

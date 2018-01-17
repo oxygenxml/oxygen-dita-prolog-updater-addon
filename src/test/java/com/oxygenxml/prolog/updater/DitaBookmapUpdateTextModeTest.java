@@ -27,10 +27,26 @@ import ro.sync.exml.workspace.api.editor.page.text.xml.XPathException;
  */
 public class DitaBookmapUpdateTextModeTest extends TestCase{
 
+	/**
+	 * The name of the author.
+	 */
 	static final String AUTHOR_NAME = "test";
+	
+	/**
+	 * The page from wsEditor
+	 */
   private WSXMLTextEditorPage wsTextEditorPage;
+  /**
+   * Document controller
+   */
   private TextDocumentController textDocumentController;
+  /**
+   * Creates the content that is inserted.
+   */
   private PrologContentCreator prologContentCreater;
+  /**
+   * Text editor for prolog in dita. 
+   */
   private DitaTopicTextEditor ditaTopicTextEditor;
 	
   @Override
@@ -77,6 +93,7 @@ public class DitaBookmapUpdateTextModeTest extends TestCase{
 		
 		ditaTopicTextEditor.updateProlog(true);
 		
+		// Verify if the insertXMLFragment was called for 2 times.
 		Mockito.verify(textDocumentController, Mockito.times(2)).insertXMLFragment(Mockito.anyString(), Mockito.anyString(), Mockito.any(RelativeInsertPosition.class));
 		Mockito.reset(textDocumentController);
 	}
@@ -103,6 +120,7 @@ public class DitaBookmapUpdateTextModeTest extends TestCase{
 
     ditaTopicTextEditor.updateProlog(true);
 
+  	// Verify if the insertXMLFragment was called 1 time.
     Mockito.verify(textDocumentController, Mockito.times(1)).insertXMLFragment(Mockito.anyString(), Mockito.anyString(),
         Mockito.any(RelativeInsertPosition.class));
     Mockito.reset(textDocumentController);
@@ -135,6 +153,7 @@ public class DitaBookmapUpdateTextModeTest extends TestCase{
 
     ditaTopicTextEditor.updateProlog(true);
 
+  	// Verify if the insertXMLFragment was called one time.
     Mockito.verify(textDocumentController, Mockito.times(1)).insertXMLFragment(Mockito.anyString(), Mockito.anyString(),
         Mockito.any(RelativeInsertPosition.class));
     Mockito.reset(textDocumentController);
@@ -164,6 +183,7 @@ public class DitaBookmapUpdateTextModeTest extends TestCase{
 
     ditaTopicTextEditor.updateProlog(true);
 
+  	// Verify if the insertXMLFragment wasn't called.
     Mockito.verify(textDocumentController, Mockito.times(0)).insertXMLFragment(Mockito.anyString(), Mockito.anyString(),
         Mockito.any(RelativeInsertPosition.class));
     Mockito.reset(textDocumentController);

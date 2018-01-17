@@ -21,11 +21,17 @@ import ro.sync.exml.workspace.api.options.WSOptionsStorage;
  */
 @RunWith(PowerMockRunner.class)
 public class PrologContentCreatorMapTest extends TestCase {
+	/**
+	 * The author name added in inserted content.
+	 */
   private static final String AUTHOR_NAME = "name";
+  /**
+   * The local date added to inserted content.
+   */
   private static final String LOCAL_DATE = "2017-12-04"; 
-  private static final String TRUE_VALUE = String.valueOf(true);
-  private static final String FALSE_VALUE = String.valueOf(false);
-  
+  /**
+   * The storage for options in oxygen.
+   */
   private WSOptionsStorage wsOptionsStorage;
   
   @Override
@@ -46,7 +52,7 @@ public class PrologContentCreatorMapTest extends TestCase {
   @PrepareForTest({ PluginWorkspaceProvider.class })
   @Test
   public void testUpdateDisable() {
-    Mockito.when(wsOptionsStorage.getOption(OptionKeys.MAP_ENABLE_UPDATE_ON_SAVE, TRUE_VALUE)).thenReturn(FALSE_VALUE);
+    Mockito.when(wsOptionsStorage.getOption(OptionKeys.MAP_ENABLE_UPDATE_ON_SAVE, Boolean.TRUE.toString())).thenReturn(Boolean.FALSE.toString());
     PrologContentCreator prologContentCreator = new PrologContentCreator(AUTHOR_NAME);
     
     //Get the prolog according to settings when document is new.
@@ -70,11 +76,11 @@ public class PrologContentCreatorMapTest extends TestCase {
   @PrepareForTest({ PluginWorkspaceProvider.class })
   @Test
   public void testOptionsFalse() {
-    Mockito.when(wsOptionsStorage.getOption(OptionKeys.MAP_ENABLE_UPDATE_ON_SAVE, TRUE_VALUE)).thenReturn(TRUE_VALUE);
-    Mockito.when(wsOptionsStorage.getOption(OptionKeys.MAP_SET_CREATOR, TRUE_VALUE)).thenReturn(FALSE_VALUE);
-    Mockito.when(wsOptionsStorage.getOption(OptionKeys.MAP_SET_CREATED_DATE, TRUE_VALUE)).thenReturn(FALSE_VALUE);
-    Mockito.when(wsOptionsStorage.getOption(OptionKeys.MAP_UPDATE_CONTRIBUTOR, TRUE_VALUE)).thenReturn(FALSE_VALUE);
-    Mockito.when(wsOptionsStorage.getOption(OptionKeys.MAP_UPDATE_REVISED_DATES, TRUE_VALUE)).thenReturn(FALSE_VALUE);
+    Mockito.when(wsOptionsStorage.getOption(OptionKeys.MAP_ENABLE_UPDATE_ON_SAVE, Boolean.TRUE.toString())).thenReturn(Boolean.TRUE.toString());
+    Mockito.when(wsOptionsStorage.getOption(OptionKeys.MAP_SET_CREATOR, Boolean.TRUE.toString())).thenReturn(Boolean.FALSE.toString());
+    Mockito.when(wsOptionsStorage.getOption(OptionKeys.MAP_SET_CREATED_DATE, Boolean.TRUE.toString())).thenReturn(Boolean.FALSE.toString());
+    Mockito.when(wsOptionsStorage.getOption(OptionKeys.MAP_UPDATE_CONTRIBUTOR, Boolean.TRUE.toString())).thenReturn(Boolean.FALSE.toString());
+    Mockito.when(wsOptionsStorage.getOption(OptionKeys.MAP_UPDATE_REVISED_DATES, Boolean.TRUE.toString())).thenReturn(Boolean.FALSE.toString());
     
     PrologContentCreator prologContentCreator = new PrologContentCreator(AUTHOR_NAME);
     
@@ -100,11 +106,11 @@ public class PrologContentCreatorMapTest extends TestCase {
   @PrepareForTest({ PluginWorkspaceProvider.class })
   @Test
   public void testSetCreator() {
-    Mockito.when(wsOptionsStorage.getOption(OptionKeys.MAP_ENABLE_UPDATE_ON_SAVE, TRUE_VALUE)).thenReturn(TRUE_VALUE);
-    Mockito.when(wsOptionsStorage.getOption(OptionKeys.MAP_SET_CREATOR, TRUE_VALUE)).thenReturn(TRUE_VALUE);
-    Mockito.when(wsOptionsStorage.getOption(OptionKeys.MAP_SET_CREATED_DATE, TRUE_VALUE)).thenReturn(FALSE_VALUE);
-    Mockito.when(wsOptionsStorage.getOption(OptionKeys.MAP_UPDATE_CONTRIBUTOR, TRUE_VALUE)).thenReturn(FALSE_VALUE);
-    Mockito.when(wsOptionsStorage.getOption(OptionKeys.MAP_UPDATE_REVISED_DATES, TRUE_VALUE)).thenReturn(FALSE_VALUE);
+    Mockito.when(wsOptionsStorage.getOption(OptionKeys.MAP_ENABLE_UPDATE_ON_SAVE, Boolean.TRUE.toString())).thenReturn(Boolean.TRUE.toString());
+    Mockito.when(wsOptionsStorage.getOption(OptionKeys.MAP_SET_CREATOR, Boolean.TRUE.toString())).thenReturn(Boolean.TRUE.toString());
+    Mockito.when(wsOptionsStorage.getOption(OptionKeys.MAP_SET_CREATED_DATE, Boolean.TRUE.toString())).thenReturn(Boolean.FALSE.toString());
+    Mockito.when(wsOptionsStorage.getOption(OptionKeys.MAP_UPDATE_CONTRIBUTOR, Boolean.TRUE.toString())).thenReturn(Boolean.FALSE.toString());
+    Mockito.when(wsOptionsStorage.getOption(OptionKeys.MAP_UPDATE_REVISED_DATES, Boolean.TRUE.toString())).thenReturn(Boolean.FALSE.toString());
     
     // When MAP_SET_CREATOR is false 
     PrologContentCreator prologContentCreator = new PrologContentCreator(AUTHOR_NAME);
@@ -128,11 +134,11 @@ public class PrologContentCreatorMapTest extends TestCase {
   @PrepareForTest({ PluginWorkspaceProvider.class })
   @Test
   public void testSetCreatedDate() {
-    Mockito.when(wsOptionsStorage.getOption(OptionKeys.MAP_ENABLE_UPDATE_ON_SAVE, TRUE_VALUE)).thenReturn(TRUE_VALUE);
-    Mockito.when(wsOptionsStorage.getOption(OptionKeys.MAP_SET_CREATOR, TRUE_VALUE)).thenReturn(FALSE_VALUE);
-    Mockito.when(wsOptionsStorage.getOption(OptionKeys.MAP_SET_CREATED_DATE, TRUE_VALUE)).thenReturn(TRUE_VALUE);
-    Mockito.when(wsOptionsStorage.getOption(OptionKeys.MAP_UPDATE_CONTRIBUTOR, TRUE_VALUE)).thenReturn(FALSE_VALUE);
-    Mockito.when(wsOptionsStorage.getOption(OptionKeys.MAP_UPDATE_REVISED_DATES, TRUE_VALUE)).thenReturn(FALSE_VALUE);
+    Mockito.when(wsOptionsStorage.getOption(OptionKeys.MAP_ENABLE_UPDATE_ON_SAVE, Boolean.TRUE.toString())).thenReturn(Boolean.TRUE.toString());
+    Mockito.when(wsOptionsStorage.getOption(OptionKeys.MAP_SET_CREATOR, Boolean.TRUE.toString())).thenReturn(Boolean.FALSE.toString());
+    Mockito.when(wsOptionsStorage.getOption(OptionKeys.MAP_SET_CREATED_DATE, Boolean.TRUE.toString())).thenReturn(Boolean.TRUE.toString());
+    Mockito.when(wsOptionsStorage.getOption(OptionKeys.MAP_UPDATE_CONTRIBUTOR, Boolean.TRUE.toString())).thenReturn(Boolean.FALSE.toString());
+    Mockito.when(wsOptionsStorage.getOption(OptionKeys.MAP_UPDATE_REVISED_DATES, Boolean.TRUE.toString())).thenReturn(Boolean.FALSE.toString());
     
     // When MAP_SET_CREATOR is false 
     PrologContentCreator prologContentCreator = new PrologContentCreator(AUTHOR_NAME) {
@@ -162,11 +168,11 @@ public class PrologContentCreatorMapTest extends TestCase {
   @PrepareForTest({ PluginWorkspaceProvider.class })
   @Test
   public void testUpdateContributor() {
-    Mockito.when(wsOptionsStorage.getOption(OptionKeys.MAP_ENABLE_UPDATE_ON_SAVE, TRUE_VALUE)).thenReturn(TRUE_VALUE);
-    Mockito.when(wsOptionsStorage.getOption(OptionKeys.MAP_SET_CREATOR, TRUE_VALUE)).thenReturn(FALSE_VALUE);
-    Mockito.when(wsOptionsStorage.getOption(OptionKeys.MAP_SET_CREATED_DATE, TRUE_VALUE)).thenReturn(FALSE_VALUE);
-    Mockito.when(wsOptionsStorage.getOption(OptionKeys.MAP_UPDATE_CONTRIBUTOR, TRUE_VALUE)).thenReturn(TRUE_VALUE);
-    Mockito.when(wsOptionsStorage.getOption(OptionKeys.MAP_UPDATE_REVISED_DATES, TRUE_VALUE)).thenReturn(FALSE_VALUE);
+    Mockito.when(wsOptionsStorage.getOption(OptionKeys.MAP_ENABLE_UPDATE_ON_SAVE, Boolean.TRUE.toString())).thenReturn(Boolean.TRUE.toString());
+    Mockito.when(wsOptionsStorage.getOption(OptionKeys.MAP_SET_CREATOR, Boolean.TRUE.toString())).thenReturn(Boolean.FALSE.toString());
+    Mockito.when(wsOptionsStorage.getOption(OptionKeys.MAP_SET_CREATED_DATE, Boolean.TRUE.toString())).thenReturn(Boolean.FALSE.toString());
+    Mockito.when(wsOptionsStorage.getOption(OptionKeys.MAP_UPDATE_CONTRIBUTOR, Boolean.TRUE.toString())).thenReturn(Boolean.TRUE.toString());
+    Mockito.when(wsOptionsStorage.getOption(OptionKeys.MAP_UPDATE_REVISED_DATES, Boolean.TRUE.toString())).thenReturn(Boolean.FALSE.toString());
     
     // When MAP_SET_CREATOR is false 
     PrologContentCreator prologContentCreator = new PrologContentCreator(AUTHOR_NAME);
@@ -192,11 +198,11 @@ public class PrologContentCreatorMapTest extends TestCase {
   @PrepareForTest({ PluginWorkspaceProvider.class })
   @Test
   public void testUpdateRevised() {
-    Mockito.when(wsOptionsStorage.getOption(OptionKeys.MAP_ENABLE_UPDATE_ON_SAVE, TRUE_VALUE)).thenReturn(TRUE_VALUE);
-    Mockito.when(wsOptionsStorage.getOption(OptionKeys.MAP_SET_CREATOR, TRUE_VALUE)).thenReturn(FALSE_VALUE);
-    Mockito.when(wsOptionsStorage.getOption(OptionKeys.MAP_SET_CREATED_DATE, TRUE_VALUE)).thenReturn(FALSE_VALUE);
-    Mockito.when(wsOptionsStorage.getOption(OptionKeys.MAP_UPDATE_CONTRIBUTOR, TRUE_VALUE)).thenReturn(FALSE_VALUE);
-    Mockito.when(wsOptionsStorage.getOption(OptionKeys.MAP_UPDATE_REVISED_DATES, TRUE_VALUE)).thenReturn(TRUE_VALUE);
+    Mockito.when(wsOptionsStorage.getOption(OptionKeys.MAP_ENABLE_UPDATE_ON_SAVE, Boolean.TRUE.toString())).thenReturn(Boolean.TRUE.toString());
+    Mockito.when(wsOptionsStorage.getOption(OptionKeys.MAP_SET_CREATOR, Boolean.TRUE.toString())).thenReturn(Boolean.FALSE.toString());
+    Mockito.when(wsOptionsStorage.getOption(OptionKeys.MAP_SET_CREATED_DATE, Boolean.TRUE.toString())).thenReturn(Boolean.FALSE.toString());
+    Mockito.when(wsOptionsStorage.getOption(OptionKeys.MAP_UPDATE_CONTRIBUTOR, Boolean.TRUE.toString())).thenReturn(Boolean.FALSE.toString());
+    Mockito.when(wsOptionsStorage.getOption(OptionKeys.MAP_UPDATE_REVISED_DATES, Boolean.TRUE.toString())).thenReturn(Boolean.TRUE.toString());
     
     // When MAP_SET_CREATOR is false 
     PrologContentCreator prologContentCreator = new PrologContentCreator(AUTHOR_NAME) {

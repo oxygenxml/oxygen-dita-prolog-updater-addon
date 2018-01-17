@@ -6,20 +6,22 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.swing.text.BadLocationException;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 
 import org.xml.sax.SAXException;
 
-import junit.framework.TestCase;
-
-public class DitaUpdaterCritdatesTest extends TestCase {
+public class DitaUpdaterCritdatesTest extends DitaUpdateTestUtil {
 
 	/**
 	 * Test if the critdates tag is correct modified after save operation.
 	 * @throws IOException
 	 * @throws SAXException
 	 * @throws BadLocationException
+	 * @throws ParserConfigurationException 
+	 * @throws TransformerException 
 	 */
-	public void testUpdateProlog() throws IOException, SAXException, BadLocationException {
+	public void testUpdateProlog() throws IOException, SAXException, BadLocationException, ParserConfigurationException, TransformerException {
 
 		//Get the local date
 		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
@@ -80,10 +82,10 @@ public class DitaUpdaterCritdatesTest extends TestCase {
 			" ";
 	
 	// test when document is new
-	DitaUpdateTestUtil.testInAuthorMode(xmlWithCreated, true,  expectedNewXMLWithCreated);
+	testInAuthorMode(xmlWithCreated, true,  expectedNewXMLWithCreated);
 	
 	//test when document isn't new
-	DitaUpdateTestUtil.testInAuthorMode(xmlWithCreated, false ,  expectedOldXmlWithCreated);
+	testInAuthorMode(xmlWithCreated, false ,  expectedOldXmlWithCreated);
 	
 	
 	
@@ -141,10 +143,10 @@ public class DitaUpdaterCritdatesTest extends TestCase {
 			" ";
 	
 	// test when document is new
-	DitaUpdateTestUtil.testInAuthorMode(xmlWithRevised, true,  expectedNewXMLWithRevised);
+	testInAuthorMode(xmlWithRevised, true,  expectedNewXMLWithRevised);
 	
 	//test when document isn't new
-	DitaUpdateTestUtil.testInAuthorMode(xmlWithRevised, false ,  expectedOldXmlWithRevised);
+	testInAuthorMode(xmlWithRevised, false ,  expectedOldXmlWithRevised);
 	
 	
 	//
@@ -188,7 +190,7 @@ public class DitaUpdaterCritdatesTest extends TestCase {
 			" ";
 	
 	// test when document isn't new
-	DitaUpdateTestUtil.testInAuthorMode(xmlWithOldRevised, false,  expectedWithOldRevised);
+	testInAuthorMode(xmlWithOldRevised, false,  expectedWithOldRevised);
 	
 	
 	
@@ -234,8 +236,7 @@ public class DitaUpdaterCritdatesTest extends TestCase {
 			" ";
 	
 	// test when document isn't new
-	DitaUpdateTestUtil.testInAuthorMode(xmlWithContributorComment, false,  expectedWithContributorComment);
-	
+	testInAuthorMode(xmlWithContributorComment, false,  expectedWithContributorComment);
 	
 	}
 }

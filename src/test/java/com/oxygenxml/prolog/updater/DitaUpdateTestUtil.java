@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.StringReader;
 
 import javax.swing.text.BadLocationException;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.stream.StreamSource;
 
 import org.mockito.Mockito;
@@ -27,13 +29,17 @@ import ro.sync.exml.workspace.api.editor.page.author.WSAuthorEditorPage;
  * @author cosmin_duna
  *
  */
-public class DitaUpdateTestUtil extends TestCase{
+public abstract class DitaUpdateTestUtil extends TestCase{
 
 	/**
 	 * The name of author.
 	 */
 	final static String AUTHOR_NAME = "test";
-  private static final String CONFIG_FOLDER = "config";
+	
+	/**
+	 * The relative path to catalogs.
+	 */
+  private static final String CATALOG = "config/catalogs/catalog.xml";
 	
   /**
    * Initializes the catalogs. Search for them in the config folder.
@@ -42,18 +48,12 @@ public class DitaUpdateTestUtil extends TestCase{
    * @throws IOException When the installation dir does not exist.
    */
   private static void initializeCatalogs() throws IOException {
-    String defaultCatalog = new File(CONFIG_FOLDER + "/catalogs/catalog.xml").toURI().toString();
+    String defaultCatalog = new File(CATALOG).toURI().toString();
     
     // Sets the catalogs
     String[] catalogURIs = new String[] {defaultCatalog};
     
     CatalogResolverFacade.setCatalogs(catalogURIs, "public");
-  }
-	
-  @Override
-  protected void setUp() throws Exception {
-    super.setUp();
-    initializeCatalogs();
   }
 	
 	/**
@@ -64,20 +64,17 @@ public class DitaUpdateTestUtil extends TestCase{
 	 * @throws IOException
 	 * @throws SAXException
 	 * @throws BadLocationException
+	 * @throws ParserConfigurationException 
+	 * @throws TransformerException 
 	 */
-	public static void testInAuthorMode(String inputXML, boolean isNewDocument, String expectedXML) throws IOException, SAXException, BadLocationException{
-	  // I would say the init must be call only once.
-	  initializeCatalogs();
-	  
-	  //
+	protected void testInAuthorMode(String inputXML, boolean isNewDocument, String expectedXML) throws IOException, SAXException, BadLocationException, ParserConfigurationException, TransformerException{
+		initializeCatalogs();
+		
+		//
 		//Create a AuthorDocumentController
 		//
 		AuthorDocumentFacadeFactory facadeFactory = new AuthorDocumentFacadeFactory();
-		
 		InputSource[] cssInputSources = new InputSource[] { new InputSource(new StringReader("* {display: block;}")) };
-		
-		
-		
 		StringReader reader = new StringReader(inputXML);
     AuthorDocumentFacade facade = facadeFactory.createFacade( new StreamSource(reader),
 				cssInputSources, null, new File("."));
@@ -113,8 +110,8 @@ public class DitaUpdateTestUtil extends TestCase{
 		AuthorDocumentFragment fragment = controller.createDocumentFragment(documentNode, true);
 		String toXML = controller.serializeFragmentToXML(fragment);
 
-		String expected = XmlPrettifierUtil.prettify(expectedXML).replaceAll(" +", " ");
-    String actual = XmlPrettifierUtil.prettify(toXML).replaceAll(" +", " ");
+		String expected = XmlPrettyPrinterUtil.indent(expectedXML).replaceAll(" +", " ");
+    String actual = XmlPrettyPrinterUtil.indent(toXML).replaceAll(" +", " ");
     
     expected = expected.replaceAll(" <", "<");
     actual = actual.replaceAll(" <", "<");
@@ -126,8 +123,5 @@ public class DitaUpdateTestUtil extends TestCase{
     assertEquals(expected, actual);
 	}
 	
-  public void testNothing() throws Exception {
-    assertTrue(true);
-  }
 
 }

@@ -6,27 +6,28 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.swing.text.BadLocationException;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 
 import org.xml.sax.SAXException;
 
-import junit.framework.TestCase;
-
-public class DitaTopicUpdaterAuthorTest extends TestCase{
+public class DitaTopicUpdaterAuthorTest extends DitaUpdateTestUtil{
 
 	/**
 	 * Test if the author tag is correct modified after save operation in DITA Topic.
 	 * @throws IOException
 	 * @throws SAXException
 	 * @throws BadLocationException
+	 * @throws ParserConfigurationException 
+	 * @throws TransformerException 
 	 */
-	public void testUpdateAuthorInProlog() throws IOException, SAXException, BadLocationException {
+	public void testUpdateAuthorInProlog() throws IOException, SAXException, BadLocationException, ParserConfigurationException, TransformerException {
 
 		//Get the local date
 		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
 		Date date = new Date();
 		
 		final String localDate = dateFormat.format(date);
-		
 		
 		//
 		//Test document with prolog element that contains creator author.
@@ -78,10 +79,10 @@ public class DitaTopicUpdaterAuthorTest extends TestCase{
 				" ";
 		
 		// test when document is new
-		DitaUpdateTestUtil.testInAuthorMode(xmlWithCreator, true,  expectedNewXMLWithCreator);
+		testInAuthorMode(xmlWithCreator, true,  expectedNewXMLWithCreator);
 		
 		//test when document isn't new
-		DitaUpdateTestUtil.testInAuthorMode(xmlWithCreator, false ,  expectedOldXmlWithCreator);
+		testInAuthorMode(xmlWithCreator, false ,  expectedOldXmlWithCreator);
 		
 		
 		
@@ -135,10 +136,10 @@ public class DitaTopicUpdaterAuthorTest extends TestCase{
 				" ";
 		
 		// test when document is new
-		DitaUpdateTestUtil.testInAuthorMode(xmlWithContributor, true,  expectedNewXMLWithContributor);
+		testInAuthorMode(xmlWithContributor, true,  expectedNewXMLWithContributor);
 		
 		//test when document isn't new
-		DitaUpdateTestUtil.testInAuthorMode(xmlWithContributor, false ,  expectedOldXmlWithContributor);
+		testInAuthorMode(xmlWithContributor, false ,  expectedOldXmlWithContributor);
 		
 	
 	
@@ -184,7 +185,7 @@ public class DitaTopicUpdaterAuthorTest extends TestCase{
 			" ";
 	
 	// test when document isn't new
-	DitaUpdateTestUtil.testInAuthorMode(xmlWithDifferentContributor, false,  expectedOldXmlWithDifferentContributor);
+	testInAuthorMode(xmlWithDifferentContributor, false,  expectedOldXmlWithDifferentContributor);
 	
 	}
 
@@ -217,10 +218,8 @@ public class DitaTopicUpdaterAuthorTest extends TestCase{
         "";
     
     
-    
-    
     // test when document is new
-    DitaUpdateTestUtil.testInAuthorMode(fragment, true,  fragment);
+    testInAuthorMode(fragment, true,  fragment);
     
   }
 

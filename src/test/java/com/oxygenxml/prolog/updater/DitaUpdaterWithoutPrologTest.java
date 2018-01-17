@@ -6,20 +6,22 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.swing.text.BadLocationException;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 
 import org.xml.sax.SAXException;
 
-import junit.framework.TestCase;
-
-public class DitaUpdaterWithoutPrologTest extends TestCase{
+public class DitaUpdaterWithoutPrologTest extends DitaUpdateTestUtil{
 
 	/**
 	 * Test if the prolog is correct added after save operation.
 	 * @throws IOException
 	 * @throws SAXException
 	 * @throws BadLocationException
+	 * @throws ParserConfigurationException 
+	 * @throws TransformerException 
 	 */
-	public void testAddProlog() throws IOException, SAXException, BadLocationException {
+	public void testAddProlog() throws IOException, SAXException, BadLocationException, ParserConfigurationException, TransformerException {
 
 		//Get the local date
 		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
@@ -73,7 +75,7 @@ public class DitaUpdaterWithoutPrologTest extends TestCase{
 				"</topic>" + 
 				"";
 		
-		// test when document is new
+		// test when document is new 
 		//DitaUpdateTestUtil.testInAuthorMode(xmlWithoutProlog, true, expectedNewXML);
 		
 		//test when document isn't new
@@ -128,11 +130,10 @@ public class DitaUpdaterWithoutPrologTest extends TestCase{
 				" ";
 		
 		// test when document is new
-		DitaUpdateTestUtil.testInAuthorMode(xmlWithEmptyProlog, true, expectedNewXMLWithEmptyProlog);
+		testInAuthorMode(xmlWithEmptyProlog, true, expectedNewXMLWithEmptyProlog);
 		
 		//test when document isn't new
-		DitaUpdateTestUtil.testInAuthorMode(xmlWithEmptyProlog, false , expectedOldXmlWithEmptyProlog);
-		
+		testInAuthorMode(xmlWithEmptyProlog, false , expectedOldXmlWithEmptyProlog);
 	}
 
 }
