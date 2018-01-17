@@ -30,49 +30,49 @@ public class PrologOptionPage extends JPanel {
   /**
    * The text field that contains the author name;
    */
-  JTextField authorTextField = new JTextField();
+  private JTextField authorTextField = new JTextField();
 
   /**
    * CheckBox for enable prolog update in DITA topics
    */
-  JCheckBox topicEnableUpdate;
+  private JCheckBox topicEnableUpdate;
   /**
    * CheckBox which sets the creator in DITA topics.
    */
-  JCheckBox topicSetCreator;
+  private JCheckBox topicSetCreator;
   /**
    * CheckBox which sets the created date in DITA topics.
    */
-  JCheckBox topicSetCreated;
+  private JCheckBox topicSetCreated;
   /**
    * CheckBox which updates the contributor in DITA topics.
    */
-  JCheckBox topicUpdateContributor;
+  private JCheckBox topicUpdateContributor;
   /**
    * CheckBox which updates the revised date in DITA topics.
    */
-  JCheckBox topicUpdateRevised;
+  private JCheckBox topicUpdateRevised;
 
   /**
    * CheckBox for enable prolog update in DITA maps
    */
-  JCheckBox mapEnableUpdate;
+  private JCheckBox mapEnableUpdate;
   /**
    * CheckBox which sets the creator in DITA maps.
    */
-  JCheckBox mapSetCreator;
+  private JCheckBox mapSetCreator;
   /**
    * CheckBox which sets the created date in DITA maps.
    */
-  JCheckBox mapSetCreated;
+  private JCheckBox mapSetCreated;
   /**
    * CheckBox which updates the contributor in DITA maps.
    */
-  JCheckBox mapUpdateContributor;
+  private JCheckBox mapUpdateContributor;
   /**
    * CheckBox which updates the revised date in DITA maps.
    */
-  JCheckBox mapUpdateRevised;
+  private JCheckBox mapUpdateRevised;
   
   /**
    * Default value for check boxes in boolean format

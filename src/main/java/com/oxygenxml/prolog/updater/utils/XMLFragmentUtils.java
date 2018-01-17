@@ -43,7 +43,10 @@ public class XMLFragmentUtils {
    */
   public static StringBuilder createAuthorFragment(String authorName, String type) {
     StringBuilder toReturn = new StringBuilder();
-    toReturn.append("<author type=\"" + type+ "\">").append(authorName).append("</author>");
+    toReturn.append("<author type=\"").append(type).append("\">"); 
+    toReturn.append(authorName); 
+    toReturn.append("</author>");
+    
     return toReturn;
   }
   

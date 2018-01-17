@@ -74,4 +74,13 @@
 		<val lang="ja_JP">Update the revised dates</val>
 		<val lang="nl_NL">Update the revised dates</val>
 	</key>
+	
+	<key value="prolog.updater.error.message">
+		<comment>The error message used when prolog isn't update properly.</comment>
+		<val lang="en_US">The prolog wasn't updated.</val>
+		<val lang="de_DE">The prolog wasn't updated.</val>
+		<val lang="fr_FR">The prolog wasn't updated.</val>
+		<val lang="ja_JP">The prolog wasn't updated.</val>
+		<val lang="nl_NL">The prolog wasn't updated.</val>
+	</key>
 </translation>

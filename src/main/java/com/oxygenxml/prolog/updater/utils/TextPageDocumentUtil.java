@@ -46,12 +46,13 @@ public class TextPageDocumentUtil {
      throw new IllegalStateException("Utility class");
    }
    
+   
   /**
    * Create a AWT thread and insert the given fragment,
    * 
    * @param page The text editor.
    * @param xmlFragment
-   *          The XML fragment.
+   *          The XML fragment to insert.
    * @param xPath
    *          The xPath to insert fragment relative to.
    * @param position
@@ -59,45 +60,36 @@ public class TextPageDocumentUtil {
    *          {@link RelativeInsertPosition#INSERT_LOCATION_AFTER}, {@link RelativeInsertPosition#INSERT_LOCATION_AS_FIRST_CHILD},
    *          {@link RelativeInsertPosition#INSERT_LOCATION_AS_LAST_CHILD} or
    *          {@link RelativeInsertPosition#INSERT_LOCATION_BEFORE}.
+   * @throws TextOperationException If the fragment could not be inserted.
    */
-  public static void insertXmlFragment(final WSXMLTextEditorPage page,  final String xmlFragment, final String xPath, final RelativeInsertPosition position) {
-    if (xmlFragment != null && xPath != null && position != null) {
-      ThreadUtils.invokeSynchronously(new Runnable() {
-        public void run() {
-          try {
-            TextDocumentController controller = page.getDocumentController();
-            
-            // Get the offset of caret.
-            int initialOffset = page.getCaretOffset();
-            // Create a position of caret.
-            Position pos = null;
-            if (initialOffset != -1) {
-              Document document = page.getDocument();
-              if(document != null) {
-                pos = document.createPosition(initialOffset);
-              }
-            }
-            controller.insertXMLFragment(
-                prettyPrintFragment(page, xmlFragment), 
-                xPath, 
-                position);
+  public static void insertXmlFragment(final WSXMLTextEditorPage page,  final String xmlFragment, final String xPath, final RelativeInsertPosition position) throws TextOperationException {
+		if (xmlFragment != null && xPath != null && position != null) {
+			TextDocumentController controller = page.getDocumentController();
 
-            // Restore the position of caret.
-            if (pos != null) {
-              page.setCaretPosition(pos.getOffset());
-            }
+			// Get the offset of caret.
+			int initialOffset = page.getCaretOffset();
+			// Create a position of caret.
+			Position pos = null;
+			if (initialOffset != -1) {
+				Document document = page.getDocument();
+				if (document != null) {
+					try {
+						pos = document.createPosition(initialOffset);
+					} catch (BadLocationException e) {
+						logger.debug(e.getMessage(), e);
+					}
+				}
+			}
+			controller.insertXMLFragment(prettyPrintFragment(page, xmlFragment), xPath, position);
 
-          } catch (TextOperationException e) {
-            logger.debug(e.getMessage(), e);
-          } catch (BadLocationException e) {
-            if (logger.isDebugEnabled()) {
-              logger.debug(e, e);
-            }
-          }
-        }
-      });
-    }
+			// Restore the position of caret.
+			if (pos != null) {
+				page.setCaretPosition(pos.getOffset());
+			}
+
+		}
   }
+  
   
   /**
    * Pretty print the given fragment.
@@ -114,7 +106,10 @@ public class TextPageDocumentUtil {
         try {
           fragment = pluginWorkspace.getXMLUtilAccess().prettyPrint(new StringReader(fragment), location.toExternalForm());
           // Pretty print moves to next line. We don't want that.
-          if (fragment.endsWith("\n") || fragment.endsWith("\r\n") || fragment.endsWith("\r")) {
+          if(fragment.endsWith("\r\n")) {
+          	 fragment = fragment.substring(0, fragment.length() - 2);
+          }
+          else if (fragment.endsWith("\n") || fragment.endsWith("\r\n") || fragment.endsWith("\r")) {
             fragment = fragment.substring(0, fragment.length() - 1);
           }
         } catch (PrettyPrintException e) {
@@ -124,6 +119,7 @@ public class TextPageDocumentUtil {
     }
     return fragment;
   }
+  
   
   /**
    * @param textPage The text page.
@@ -140,86 +136,90 @@ public class TextPageDocumentUtil {
     return url;
   }
   
+  
   /**
    * Find a possible xPath where prolog element can be inserted.
    *  
-   * @param page WSXMLTextEditorPage.
+   * @param page The page from the WsEditor.
    * @param documentType The type of the document ( {@link DocumentType#TOPIC}, {@link DocumentType#MAP} or  {@link DocumentType#BOOKMAP}  ).
    * @return A xPath where to insert the prolog node or <code>null</code>.
    * 
-   * @throws BadLocationException
-   * @throws XPathException
    */
-public static String findPrologXPath(WSXMLTextEditorPage page, DocumentType documentType) {
-  String toReturn = null;
-  ContextElement nodeToInsertAfter = null;
-  
-  // Find the context where prolog element can be inserted.
-  WhatElementsCanGoHereContext context;
-  try {
-    context = findPrologContext(page, documentType);
-    if (context != null) {
-      List<ContextElement> previous = context.getPreviousSiblingElements();
-      if (previous != null && !previous.isEmpty()) {
-        // Get the previous sibling.
-        nodeToInsertAfter = previous.get(previous.size() - 1);
-        // Generate the XPath.
-        toReturn = XPathConstants.getRootXpath(documentType) + "/" + nodeToInsertAfter.getQName();
-      }
-    }
-  } catch (BadLocationException e) {
-    logger.warn(e, e.getCause());
-  } catch (XPathException e) {
-    logger.warn(e, e.getCause());
-  }
-  return toReturn;
-}
-  
-  /**
-   * Find a possible context where prolog element can be inserted.
-   * 
-   * @param page WSXMLTextEditorPage
-   * @param documentType The type of the document ( {@link DocumentType#TOPIC}, {@link DocumentType#MAP} or  {@link DocumentType#BOOKMAP}  ).
-   * @return A context where prolog element can go or <code>null</code>.
-   * @throws BadLocationException 
-   * @throws ro.sync.exml.workspace.api.editor.page.text.xml.XPathException 
-   */
-private static WhatElementsCanGoHereContext findPrologContext(WSXMLTextEditorPage page, DocumentType documentType) throws BadLocationException, XPathException {
-  WhatElementsCanGoHereContext toReturn = null;
+	public static String findPrologXPath(WSXMLTextEditorPage page, DocumentType documentType) {
+		String toReturn = null;
+		ContextElement nodeToInsertAfter = null;
 
-  // Get the XmlSchemaManager.
-  WSTextXMLSchemaManager schemaManager = page.getXMLSchemaManager();
-
-    // Get all child of root topic.
-    WSXMLTextNodeRange[] topicChild = page.findElementsByXPath(XPathConstants.getRootChildXpath(documentType));
-    
-    int childNo = topicChild.length;
-  // Iterate over topic child
-  loop: for (int j = 0; j < childNo; j++) {
-    WSXMLTextNodeRange currentNode = topicChild[j];
-    // Get the offset of next line.
-    int offset = page.getOffsetOfLineEnd(currentNode.getEndLine());
-    WhatElementsCanGoHereContext currentContext = schemaManager.createWhatElementsCanGoHereContext(offset);
-    if (currentContext != null) {
-      // Analyze if current context can contain the prolog element.
-      List<CIElement> possible = schemaManager.whatElementsCanGoHere(currentContext);
-      if (possible != null) {
-        // Iterate over possible elements.
-        int size = possible.size();
-        for (int i = 0; i < size; i++) {
-          CIElement ciElement = possible.get(i);
-          if (ciElement.getName().equals(XmlElementsConstants.getPrologName(documentType))) {
-            toReturn = currentContext;
-            if (i == 0) {
-              // if prolog element is first in possible elements list. STOP.
-              break loop;
-            }
-          }
-        }
-      }
-    }
-  }
-  return toReturn;
-}
+		// Find the context where prolog element can be inserted.
+		try {
+			WhatElementsCanGoHereContext context = findPrologContext(page, documentType);
+			if (context != null) {
+				List<ContextElement> previous = context.getPreviousSiblingElements();
+				if (previous != null && !previous.isEmpty()) {
+					// Get the previous sibling.
+					nodeToInsertAfter = previous.get(previous.size() - 1);
+					// Generate the XPath.
+					toReturn = ElementXPathUtils.getRootXpath(documentType) + "/" + nodeToInsertAfter.getQName();
+				}
+			}
+		} catch (XPathException e) {
+			logger.warn(e, e.getCause());
+		}
+		return toReturn;
+	}
   
+	
+	/**
+	 * Find a possible context where prolog element can be inserted.
+	 * 
+	 * @param page
+	 *          Workspace text editor page.
+	 * @param documentType
+	 *          The type of the document ( {@link DocumentType#TOPIC},
+	 *          {@link DocumentType#MAP} or {@link DocumentType#BOOKMAP} ).
+	 * @return A context where prolog element can go or <code>null</code>.
+	 * @throws XPathException If prolog context can't be found.
+	 */
+	private static WhatElementsCanGoHereContext findPrologContext(WSXMLTextEditorPage page, DocumentType documentType) throws XPathException {
+		WhatElementsCanGoHereContext toReturn = null;
+
+		// Get the XmlSchemaManager.
+		WSTextXMLSchemaManager schemaManager = page.getXMLSchemaManager();
+
+		// Get all child of root topic.
+		WSXMLTextNodeRange[] topicChild = page.findElementsByXPath(ElementXPathUtils.getRootChildXpath(documentType));
+
+		int childNo = topicChild.length;
+		// Iterate over topic child
+		loop: for (int j = 0; j < childNo; j++) {
+			WSXMLTextNodeRange currentNode = topicChild[j];
+			// Get the offset of next line.
+			WhatElementsCanGoHereContext currentContext = null;
+			try {
+				int offset = page.getOffsetOfLineEnd(currentNode.getEndLine());
+				currentContext = schemaManager.createWhatElementsCanGoHereContext(offset);
+			} catch (BadLocationException e) {
+				logger.debug(e.getMessage(), e);
+			}
+			if (currentContext != null) {
+				// Analyze if current context can contain the prolog element.
+				List<CIElement> possible = schemaManager.whatElementsCanGoHere(currentContext);
+				if (possible != null) {
+					// Iterate over possible elements.
+					int size = possible.size();
+					for (int i = 0; i < size; i++) {
+						CIElement ciElement = possible.get(i);
+						if (ciElement.getName().equals(XmlElementsUtils.getPrologName(documentType))) {
+							toReturn = currentContext;
+							if (i == 0) {
+								// if prolog element is first in possible elements list. STOP.
+								break loop;
+							}
+						}
+					}
+				}
+			}
+		}
+		return toReturn;
+	}
+
 }

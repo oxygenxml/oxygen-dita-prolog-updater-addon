@@ -5,7 +5,10 @@ import com.oxygenxml.prolog.updater.dita.editor.DitaTopicAuthorEditor;
 import com.oxygenxml.prolog.updater.dita.editor.DitaTopicTextEditor;
 import com.oxygenxml.prolog.updater.prolog.content.PrologContentCreator;
 import com.oxygenxml.prolog.updater.tags.OptionKeys;
+import com.oxygenxml.prolog.updater.tags.Tags;
+import com.oxygenxml.prolog.updater.utils.AWTUtil;
 
+import ro.sync.exml.workspace.api.PluginResourceBundle;
 import ro.sync.exml.workspace.api.PluginWorkspaceProvider;
 import ro.sync.exml.workspace.api.editor.WSEditor;
 import ro.sync.exml.workspace.api.editor.page.WSEditorPage;
@@ -13,6 +16,7 @@ import ro.sync.exml.workspace.api.editor.page.author.WSAuthorEditorPage;
 import ro.sync.exml.workspace.api.editor.page.ditamap.WSDITAMapEditorPage;
 import ro.sync.exml.workspace.api.editor.page.text.xml.WSXMLTextEditorPage;
 import ro.sync.exml.workspace.api.options.WSOptionsStorage;
+import ro.sync.exml.workspace.api.standalone.StandalonePluginWorkspace;
 
 /**
  * Update the prolog in DITA topics.
@@ -34,33 +38,41 @@ public class DitaUpdater {
    * 
    * @param wsEditor Workspace editor.
    */
-  public void updateProlog(WSEditor wsEditor , boolean isNewDocument) {
+  public void updateProlog(WSEditor wsEditor , final boolean isNewDocument) {
     //get the currentPage
     WSEditorPage currentPage = wsEditor.getCurrentPage();
 
     //create a PrologContentCreator
     PrologContentCreator prologContentCreater = new PrologContentCreator(getAuthorName());
     
-    DitaEditor ditaEditor = null;
+    final DitaEditor[] ditaEditor = new DitaEditor[1];
     if (currentPage instanceof WSAuthorEditorPage) {
       //Author page
       WSAuthorEditorPage authorPage = (WSAuthorEditorPage)currentPage;
-      ditaEditor = new DitaTopicAuthorEditor(authorPage, prologContentCreater);
+      ditaEditor[0] = new DitaTopicAuthorEditor(authorPage, prologContentCreater);
     
     } else if (currentPage instanceof WSXMLTextEditorPage) {
       //Text page
       WSXMLTextEditorPage textPage = (WSXMLTextEditorPage)currentPage;
-      ditaEditor = new DitaTopicTextEditor(textPage, prologContentCreater);
+      ditaEditor[0] = new DitaTopicTextEditor(textPage, prologContentCreater);
       
     } else if (currentPage instanceof WSDITAMapEditorPage) {
       //DMM
       WSDITAMapEditorPage mapEditorPage = (WSDITAMapEditorPage)currentPage;
-      ditaEditor = new DitaTopicAuthorEditor(mapEditorPage, prologContentCreater);
+      ditaEditor[0] = new DitaTopicAuthorEditor(mapEditorPage, prologContentCreater);
     }
     
-    if(ditaEditor != null){
-      ditaEditor.updateProlog(isNewDocument);
-    }
+    // Update prolog.
+    AWTUtil.invokeSynchronously(new Runnable() {
+			public void run() {
+				if (ditaEditor[0] != null) {
+					boolean wasUpdated = ditaEditor[0].updateProlog(isNewDocument);
+					if (!wasUpdated) {
+						showErrorMessage();
+					}
+				}
+			}
+		});
   }
 
   /**
@@ -80,5 +92,13 @@ public class DitaUpdater {
     }
     
     return toReturn;
+  }
+  
+  private void showErrorMessage() {
+  	StandalonePluginWorkspace pluginWorkspace = (StandalonePluginWorkspace) PluginWorkspaceProvider.getPluginWorkspace();
+  	if(pluginWorkspace != null) {
+  		PluginResourceBundle messages = pluginWorkspace.getResourceBundle();
+  		pluginWorkspace.showErrorMessage(messages.getMessage(Tags.ERROR_MESSAGE));
+  	}
   }
 }

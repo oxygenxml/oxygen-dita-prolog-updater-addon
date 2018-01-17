@@ -31,7 +31,7 @@ public class SectionPane extends JPanel{
     // Add the label.
     c.gridx = 0;
     c.gridy = 0;
-    c.anchor = GridBagConstraints.NORTHWEST;
+    c.anchor = GridBagConstraints.WEST;
     c.insets = new Insets(20, 0, 5, 5);
     JLabel titleLabel = new JLabel(title);
     titleLabel.setFont(titleLabel.getFont().deriveFont(Font.BOLD));
@@ -42,7 +42,7 @@ public class SectionPane extends JPanel{
     c.fill = GridBagConstraints.HORIZONTAL;
     c.anchor = GridBagConstraints.WEST;
     c.weightx = 1;
-    c.insets = new Insets(20, 0, 5, 0);
+    c.insets.right = 0;
     add(new JSeparator(), c);
   }
 }

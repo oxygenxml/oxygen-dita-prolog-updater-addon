@@ -5,7 +5,7 @@
 <plugin
  id="com.oxygenxml.prolog.updater"
  name="DITA Prolog Updater"
- description="Oxygen XML plugin which updates the author information, created and modified dates in the DITA prolog section for topics and maps."
+ description="Oxygen XML plugin that updates the prolog section of a DITA topic/map."
  version="${project.version}"
  vendor="oXygen XML"
  class="com.oxygenxml.prolog.updater.plugin.PrologUpdaterPlugin"

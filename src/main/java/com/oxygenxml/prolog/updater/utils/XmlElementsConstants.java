@@ -1,7 +1,5 @@
 package com.oxygenxml.prolog.updater.utils;
 
-import com.oxygenxml.prolog.updater.dita.editor.DocumentType;
-
 /**
  * Constant class where classes and attributes of XML elements are defined.
  */
@@ -74,33 +72,6 @@ public class XmlElementsConstants {
    */
   public static final String PROLOG_AUTHOR_ELEMENT_CLASS = " topic/author ";
   
-  /**
-   * Get the class's value of prolog element.( topic/prolog or map/topicmeta)
-   * @param documentType The document type( {@link DocumentType#TOPIC}, {@link DocumentType#MAP} or {@link DocumentType#BOOKMAP}  ).
-   * @return The class's value of prolog element
-   */
-  public static String getPrologClass(DocumentType documentType) {
-    String prologClass = TOPICMETA_CLASS;
-    if (documentType.equals(DocumentType.TOPIC)) {
-      prologClass = PROLOG_CLASS;
-    }
-    return prologClass;
-  }
-  
-  /**
-   * Get the name of prolog element. (prolog, topicmeta or bookmeta).
-   * @param documentType The document type( {@link DocumentType#TOPIC}, {@link DocumentType#MAP} or {@link DocumentType#BOOKMAP}  ).
-   * @return The name of prolog element
-   */
-  public static String getPrologName(DocumentType documentType) {
-    String name = PROLOG_NAME;
-    if(documentType.equals(DocumentType.MAP)) {
-      name = TOPICMETA_NAME;
-    }else if (documentType.equals(DocumentType.BOOKMAP)){
-      name = BOOKMETA_NAME;
-    }
-    return name;
-  }
   
   /**
    * public constructor.

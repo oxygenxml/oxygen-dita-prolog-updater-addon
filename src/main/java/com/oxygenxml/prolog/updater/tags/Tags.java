@@ -54,7 +54,9 @@ public class Tags {
    */
   public static final String UPDATE_REVISED_DATES = "prolog.updater.update.revised.dates";
   
-  
-  
+  /**
+   * en: The prolog wasn't updated. 
+   */
+  public static final String ERROR_MESSAGE = "prolog.updater.error.message"; 
   
 }

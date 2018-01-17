@@ -5,10 +5,12 @@ import org.apache.log4j.Logger;
 import com.oxygenxml.prolog.updater.prolog.content.PrologContentCreator;
 import com.oxygenxml.prolog.updater.utils.TextPageDocumentUtil;
 import com.oxygenxml.prolog.updater.utils.XMLFragmentUtils;
-import com.oxygenxml.prolog.updater.utils.XPathConstants;
+import com.oxygenxml.prolog.updater.utils.ElementXPathConstants;
+import com.oxygenxml.prolog.updater.utils.ElementXPathUtils;
 
 import ro.sync.exml.editor.xmleditor.operations.context.RelativeInsertPosition;
 import ro.sync.exml.workspace.api.editor.page.text.xml.TextDocumentController;
+import ro.sync.exml.workspace.api.editor.page.text.xml.TextOperationException;
 import ro.sync.exml.workspace.api.editor.page.text.xml.WSXMLTextEditorPage;
 import ro.sync.exml.workspace.api.editor.page.text.xml.WSXMLTextNodeRange;
 import ro.sync.exml.workspace.api.editor.page.text.xml.XPathException;
@@ -56,11 +58,11 @@ public class DitaTopicTextEditor implements DitaEditor {
 		this.documentController = wsTextEditorPage.getDocumentController();
 		
 		try {
-      WSXMLTextNodeRange[] mapRoot = wsTextEditorPage.findElementsByXPath(XPathConstants.ROOT_MAP_XPATH);
+      WSXMLTextNodeRange[] mapRoot = wsTextEditorPage.findElementsByXPath(ElementXPathConstants.ROOT_MAP_XPATH);
       if (mapRoot.length != 0) {
         documentType = DocumentType.MAP;
       }
-      WSXMLTextNodeRange[] bookmapRoot = wsTextEditorPage.findElementsByXPath(XPathConstants.ROOT_BOOKMAP_XPATH);
+      WSXMLTextNodeRange[] bookmapRoot = wsTextEditorPage.findElementsByXPath(ElementXPathConstants.ROOT_BOOKMAP_XPATH);
       if (bookmapRoot.length != 0) {
         documentType = DocumentType.BOOKMAP;
       }
@@ -73,36 +75,44 @@ public class DitaTopicTextEditor implements DitaEditor {
 	
 	/**
 	 * Update the prolog element in text page.
-	 * 
 	 * @param isNewDocument <code>true</code> if document is new
+	 * 
+	 * @return <code>true</code> if prolog was update, <code>false</code> otherwise.
 	 */
-	public void updateProlog(boolean isNewDocument) {
+	public boolean updateProlog(boolean isNewDocument) {
+		boolean toReturn = true;
+		// get the prolog element
+		WSXMLTextNodeRange[] prologs;
 		try {
-	    // get the prolog element
-	    WSXMLTextNodeRange[] prologs = wsTextEditorPage.findElementsByXPath(XPathConstants.getPrologXpath(documentType));
-	    // The document doesn't have a prolog element
-	    if (prologs.length == 0) {
-	    	// the prolog element doesn't exist
-	      addProlog(isNewDocument);
-	    } else {
-	      // the prolog element exists.
-	    	// update the author element.
-	      updateAuthor(isNewDocument);
-	      
-	      //update the critdates element
-	      updateCritdates(isNewDocument);
-	    }
+			prologs = wsTextEditorPage.findElementsByXPath(ElementXPathUtils.getPrologXpath(documentType));
+			// The document doesn't have a prolog element
+			if (prologs.length == 0) {
+				// the prolog element doesn't exist
+				addProlog(isNewDocument);
+			} else {
+				// the prolog element exists.
+				// update the author element.
+				updateAuthor(isNewDocument);
+
+				// update the critdates element
+				updateCritdates(isNewDocument);
+			}
 		} catch (XPathException e) {
-	    logger.debug(e.getMessage(), e);
-	  }
+			toReturn = false;
+		} catch (TextOperationException e) {
+			toReturn = false;
+		}
+		
+		return toReturn;
 	}
 
 	/**
 	 * Add the prolog element.
 	 * @param isNewDocument <code>true</code> if document is new
+	 * @throws TextOperationException  If the element could not be added.
 	 *
 	 */
-	private void addProlog(boolean isNewDocument) {
+	private void addProlog(boolean isNewDocument) throws TextOperationException {
 		// Search for a possible prolog xpath.
 		String xp = TextPageDocumentUtil.findPrologXPath(wsTextEditorPage, documentType);
 		if (xp != null) {
@@ -115,7 +125,7 @@ public class DitaTopicTextEditor implements DitaEditor {
 		  TextPageDocumentUtil.insertXmlFragment(
 		      wsTextEditorPage, 
 		      prologCreator.getPrologFragment(isNewDocument, documentType), 
-		      XPathConstants.getRootXpath(documentType),
+		      ElementXPathUtils.getRootXpath(documentType),
 		      RelativeInsertPosition.INSERT_LOCATION_AS_FIRST_CHILD);
 		}
 	}
@@ -124,19 +134,20 @@ public class DitaTopicTextEditor implements DitaEditor {
 	 * Update the critdates element of prolog.
 	 * 
 	 * @param isNewDocument <code>true</code> if document is new, <code>false</code> otherwise
-	 * @throws XPathException 
+	 * @throws XPathException If the element could not be update
+	 * @throws TextOperationException  If the element could not be update.
 	 */
-	private void updateCritdates(boolean isNewDocument) throws XPathException {
+	private void updateCritdates(boolean isNewDocument) throws XPathException, TextOperationException {
 		
 	  // get the critdates element
-		WSXMLTextNodeRange[] critdateElements = wsTextEditorPage.findElementsByXPath(XPathConstants.getCritdatesXpath(documentType));
+		WSXMLTextNodeRange[] critdateElements = wsTextEditorPage.findElementsByXPath(ElementXPathUtils.getCritdatesXpath(documentType));
 
 		if (critdateElements.length == 0) {
 			// The critdates doesn't exist.
 	    // Add the cridates xml fragment
 	    String dateFragment = prologCreator.getDateFragment(isNewDocument, documentType);
 	    String toAdd = XMLFragmentUtils.createCritdateTag(dateFragment);
-	    TextPageDocumentUtil.insertXmlFragment(wsTextEditorPage, toAdd, XPathConstants.getLastAuthorXpath(documentType),
+	    TextPageDocumentUtil.insertXmlFragment(wsTextEditorPage, toAdd, ElementXPathUtils.getLastAuthorXpath(documentType),
 	        RelativeInsertPosition.INSERT_LOCATION_AFTER);
 
 	  } else {
@@ -149,28 +160,29 @@ public class DitaTopicTextEditor implements DitaEditor {
 	/**
 	 * Edit the existing critdates element.
 	 * @param isNewDocument <code>true</code> if document is new, <code>false</code> otherwise
-	 * @throws XPathException
+	 * @throws XPathException If the element could not be update
+	 * @throws TextOperationException  If the element could not be edited.
 	 */
-	private void editCritdates(boolean isNewDocument) throws XPathException {
+	private void editCritdates(boolean isNewDocument) throws XPathException, TextOperationException {
 		// the critdates element exists
 		if (isNewDocument) {
 		  // document is new
 		  // search for created element.
 		  Object[] createdElements = wsTextEditorPage
-		      .evaluateXPath(XPathConstants.getCreatedXpath(documentType));
+		      .evaluateXPath(ElementXPathUtils.getCreatedXpath(documentType));
 
 		  // created element doesn't exist
 		  if (createdElements.length == 0) {
 		    // add the created xml fragment
 		    TextPageDocumentUtil.insertXmlFragment(wsTextEditorPage, prologCreator.getPrologAuthorElement(isNewDocument, documentType),
-		        XPathConstants.getCritdatesXpath(documentType),
+		        ElementXPathUtils.getCritdatesXpath(documentType),
 		        RelativeInsertPosition.INSERT_LOCATION_AS_FIRST_CHILD);
 		  } 
 		} else {
 		  //it's not a new document
 		  //search for revised elements that have local date as modified and have contributor as comment
 		  Object[] revisedElements = wsTextEditorPage
-		      .findElementsByXPath(XPathConstants.getCritdatesXpath(documentType) + "/revised[@modified = '"
+		      .findElementsByXPath(ElementXPathUtils.getCritdatesXpath(documentType) + "/revised[@modified = '"
 		          + prologCreator.getLocalDate() + "']/"
 		          + "preceding-sibling::node()[2][.='"+prologCreator.getAuthor()+"']"); 
 
@@ -178,7 +190,7 @@ public class DitaTopicTextEditor implements DitaEditor {
 		  if (revisedElements.length == 0) {
 		    //add revised xml fragament
 		    TextPageDocumentUtil.insertXmlFragment(wsTextEditorPage, prologCreator.getRevisedDateFragment(documentType),
-		        XPathConstants.getCritdatesXpath(documentType), RelativeInsertPosition.INSERT_LOCATION_AS_LAST_CHILD);
+		        ElementXPathUtils.getCritdatesXpath(documentType), RelativeInsertPosition.INSERT_LOCATION_AS_LAST_CHILD);
 		  }
 		}
 	}
@@ -186,17 +198,18 @@ public class DitaTopicTextEditor implements DitaEditor {
 	/**
 	 * Update the author elements of prolog.
 	 * @param isNewDocument <code>true</code> if document is new, <code>false</code> otherwise
-	 * @throws XPathException 
+	 * @throws XPathException If the element could not be update
+	 * @throws TextOperationException If the element could not be update
 	 */
-	private void updateAuthor( boolean isNewDocument) throws XPathException {
+	private void updateAuthor( boolean isNewDocument) throws XPathException, TextOperationException {
 	  // get the author elements
-		Object[] authorElements = wsTextEditorPage.findElementsByXPath(XPathConstants.getAuthorXpath(documentType));
+		Object[] authorElements = wsTextEditorPage.findElementsByXPath(ElementXPathUtils.getAuthorXpath(documentType));
 		int authorElementSize = authorElements.length;
 
 		if (authorElementSize == 0) {
 	    // if the author elements doesn't exist
 	    // add author xml fragment
-	    TextPageDocumentUtil.insertXmlFragment(wsTextEditorPage, prologCreator.getPrologAuthorElement(isNewDocument, documentType), XPathConstants.getPrologXpath(documentType), RelativeInsertPosition.INSERT_LOCATION_AS_FIRST_CHILD);
+	    TextPageDocumentUtil.insertXmlFragment(wsTextEditorPage, prologCreator.getPrologAuthorElement(isNewDocument, documentType), ElementXPathUtils.getPrologXpath(documentType), RelativeInsertPosition.INSERT_LOCATION_AS_FIRST_CHILD);
 	  } else {
 	  	// The author element exists.
 	  	// Edit the author element.
@@ -207,14 +220,15 @@ public class DitaTopicTextEditor implements DitaEditor {
 	/**
 	 * Edit the author elements of prolog element.
 	 * @param isNewDocument <code>true</code> if document is new, <code>false</code> otherwise
-	 * @throws XPathException 
+	 * @throws XPathException If the element could not be edited.
+	 * @throws TextOperationException If the element could not be edited.
 	 */
-	private void editAuthor(boolean isNewDocument) throws XPathException {
+	private void editAuthor(boolean isNewDocument) throws XPathException, TextOperationException {
 		// prolog contains author elements
 		if (isNewDocument) {
 		  // the document is new
 		  // search for a author with value of attribute type equal with creator
-		  Object[] creatorAuthorElements = wsTextEditorPage.evaluateXPath(XPathConstants.getAuthorCreatorXpath(documentType));
+		  Object[] creatorAuthorElements = wsTextEditorPage.evaluateXPath(ElementXPathUtils.getAuthorCreatorXpath(documentType));
 		  int creatorElementSize = creatorAuthorElements.length;
 
 		  // check if creator author was found
@@ -222,20 +236,20 @@ public class DitaTopicTextEditor implements DitaEditor {
 		    // there aren't creator author elements in prolog
 		    // add the creator author xml fragment
 		    TextPageDocumentUtil.insertXmlFragment(wsTextEditorPage, prologCreator.getCreatorFragment(documentType), 
-		        XPathConstants.getPrologXpath(documentType), RelativeInsertPosition.INSERT_LOCATION_AS_FIRST_CHILD);
+		        ElementXPathUtils.getPrologXpath(documentType), RelativeInsertPosition.INSERT_LOCATION_AS_FIRST_CHILD);
 		  }
 
 		} else {
 		  // the document isn't new
 		  // search for a contributor author that has local author name as text
-		  Object[] contributorAuthorElements = wsTextEditorPage.evaluateXPath(XPathConstants.getPrologXpath(documentType) + "/author[@type='contributor' and text()= '" + prologCreator.getAuthor() + "']");
+		  Object[] contributorAuthorElements = wsTextEditorPage.evaluateXPath(ElementXPathUtils.getPrologXpath(documentType) + "/author[@type='contributor' and text()= '" + prologCreator.getAuthor() + "']");
 		  int contributorElementSize = contributorAuthorElements.length;
 
 		  if (contributorElementSize == 0) {
 		    // there aren't contributor author elements in prolog
 		    // add the contributor author xml content
 		    TextPageDocumentUtil.insertXmlFragment(wsTextEditorPage, prologCreator.getContributorFragment(documentType),
-		        XPathConstants.getLastAuthorXpath(documentType), RelativeInsertPosition.INSERT_LOCATION_AFTER);
+		        ElementXPathUtils.getLastAuthorXpath(documentType), RelativeInsertPosition.INSERT_LOCATION_AFTER);
 		  }
 		}
 	}

@@ -7,6 +7,7 @@ import com.oxygenxml.prolog.updater.dita.editor.DocumentType;
 import com.oxygenxml.prolog.updater.tags.OptionKeys;
 import com.oxygenxml.prolog.updater.utils.XMLFragmentUtils;
 import com.oxygenxml.prolog.updater.utils.XmlElementsConstants;
+import com.oxygenxml.prolog.updater.utils.XmlElementsUtils;
 
 import ro.sync.exml.workspace.api.PluginWorkspace;
 import ro.sync.exml.workspace.api.PluginWorkspaceProvider;
@@ -139,10 +140,9 @@ public class PrologContentCreator {
 
     if ((updateTopicProlog && documentType.equals(DocumentType.TOPIC)) || (updateMapProlog && !documentType.equals(DocumentType.TOPIC))) {
       fragment.append('<');
-      fragment.append(XmlElementsConstants.getPrologName(documentType));
+      fragment.append(XmlElementsUtils.getPrologName(documentType));
       fragment.append('>');
 
-      // Poate, poate facem o metoda cu if-else-ul asta.
       if (isNewDocument) {
         // 
         String creator = getCreatorFragment(documentType);
@@ -173,7 +173,7 @@ public class PrologContentCreator {
 
       fragment.append(aux);
       fragment.append("</");
-      fragment.append(XmlElementsConstants.getPrologName(documentType));
+      fragment.append(XmlElementsUtils.getPrologName(documentType));
       fragment.append('>');
     }
 

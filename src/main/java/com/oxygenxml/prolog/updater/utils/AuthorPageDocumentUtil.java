@@ -47,6 +47,7 @@ public class AuthorPageDocumentUtil {
    * Search and return a list of elements with a specific class.
    * 
    * @param rootElement The node where the search should start.
+   * @param classValue The class value used to identify the element.
    * @return A list with elements with a specific class. If no element is found,
    * the method returns an empty list.
    */
@@ -69,9 +70,10 @@ public class AuthorPageDocumentUtil {
   
   
   /**
-   * Search and return first element identified by class value.
+   * Search and return first element identified by given class value.
    * 
    * @param rootElement Document root element.
+   * @param classValue The class value used to identify the element.
    * @return <code>null</code> or the identified element.
    */
   public static AuthorElement findElementByClass(AuthorElement rootElement, String classValue) {
@@ -100,25 +102,29 @@ public class AuthorPageDocumentUtil {
    * @param authorName The name of the author.
    * 
    * @return <code>true</code> if was found an author with given type.
-   * @throws BadLocationException
    */
-  public static boolean hasAuthor(List<AuthorElement>authors, String type, String authorName) throws BadLocationException {
+  public static boolean hasAuthor(List<AuthorElement>authors, String type, String authorName) {
     boolean foundAuthor = false;
+  
     // Iterate over authors.
     for (AuthorElement el : authors) {
-      // Get the type's value,
+    	// Get the type's value,
       AttrValue typeAttr = el.getAttribute("type");
       if (typeAttr != null) {
         String typeAttrValue = typeAttr.getValue();
+      
         if (type.equals(typeAttrValue)) {
           // Was found a creator.
           foundAuthor = typeAttrValue.equals(XmlElementsConstants.CREATOR_TYPE);
-
           if (typeAttrValue.equals(XmlElementsConstants.CONTRIBUTOR_TYPE)) {
-            // Check the content of contributor element.
-            String textContent = el.getTextContent();
-            // Was found a valid contributor.
-            foundAuthor = authorName.equals(textContent);
+						try {
+							// Check the content of contributor element.
+							String textContent = el.getTextContent();
+							// Was found a valid contributor.
+							foundAuthor = authorName.equals(textContent);
+						} catch (BadLocationException e) {
+							logger.debug(e.getMessage(), e);
+						}
           } 
 
           if (foundAuthor) {
@@ -131,90 +137,82 @@ public class AuthorPageDocumentUtil {
   }
   
   /**
-   * Inserts an element schema aware.
+   * Inserts an element schema aware and restore the caret position.
    * 
    * @param page The current page opened in editor.
    * @param controller The document controller.
-   * @param xmlFragment The xml fragment.
-   * @param offset The offset.
+   * @param xmlFragment The xml fragment to insert.
+   * @param offset The insert position.
+   * @throws AuthorOperationException If the fragment could not be inserted.
    */
-  public static void insertFragmentSchemaAware(final WSEditorPage page, final AuthorDocumentController controller, final String xmlFragment, final int offset){
-    if (controller != null && xmlFragment != null && offset != -1) {
-      ThreadUtils.invokeSynchronously(new Runnable() {
-        public void run() {
-          try {
-            Position position = null;
-            // Get the initial caret offset.
-            int caretOffset = -1;
-            if(page instanceof WSAuthorEditorPage) {
-              caretOffset = ((WSAuthorEditorPage) page).getCaretOffset();
-            }
-            if(caretOffset != -1) {
-              position = controller.createPositionInContent(caretOffset);
-            }
-            
-            // Insert the fragment.
-            controller.insertXMLFragmentSchemaAware(xmlFragment, offset);
-            
-            // Restore the caret position.
-            if(position != null) {
-              ((WSAuthorEditorPage) page).setCaretPosition(position.getOffset());
-            }
-            
-          } catch (AuthorOperationException e) {
-            logger.debug(e.getMessage(), e);
-          } catch (BadLocationException e) {
-            logger.debug(e.getMessage(), e);
-          }
-        }
-      });
-    }
-  }
+	public static void insertFragmentSchemaAware(final WSEditorPage page, final AuthorDocumentController controller,
+			final String xmlFragment, final int offset) throws AuthorOperationException {
+		
+		if (controller != null && xmlFragment != null && offset != -1) {
+			Position position = null;
+			// Get the initial caret offset.
+			int caretOffset = -1;
+			if (page instanceof WSAuthorEditorPage) {
+				caretOffset = ((WSAuthorEditorPage) page).getCaretOffset();
+			}
+		
+			try {
+				if (caretOffset != -1) {
+					position = controller.createPositionInContent(caretOffset);
+				}
+			} catch (BadLocationException e) {
+				logger.debug(e.getMessage(), e);
+			}
+
+			// Insert the fragment.
+			controller.insertXMLFragmentSchemaAware(xmlFragment, offset);
+
+			// Restore the caret position.
+			if (position != null) {
+				((WSAuthorEditorPage) page).setCaretPosition(position.getOffset());
+			}
+
+		}
+	}
   
   /**
-   * Create a AWT thread and inserts the given fragment schema aware.
+   * Inserts the given fragment schema aware and restore the caret position.
    * 
    * @param page The current page opened in editor.
    * @param documentController The author document controller.
-   * @param xmlFragment
-   *          The XML fragment.
-   * @param xPath
-   *          The xPath to insert fragment relative to.
+   * @param xmlFragment The xml fragment that will be inserted.
+   * @param xPath The xPath to insert fragment relative to.
    * @param position The position relative to the node identified by the XPath location. 
    * Can be one of the constants: {@link AuthorConstants#POSITION_BEFORE}, {@link AuthorConstants#POSITION_AFTER}, 
    * {@link AuthorConstants#POSITION_INSIDE_FIRST} or {@link AuthorConstants#POSITION_INSIDE_LAST}.
+   * @throws AuthorOperationException  If the fragment could not be inserted.
    */
-  public static void insertFragmentSchemaAware(final WSEditorPage page,  final AuthorDocumentController documentController,  final String xmlFragment, final String xPath, final String position) {
-    if (xmlFragment != null && xPath != null && position != null) {
-      ThreadUtils.invokeSynchronously(new Runnable() {
-        public void run() {
-          try {
-            Position pos = null;
-            
-            int caretOffset = -1;
-            if(page instanceof WSAuthorEditorPage) {
-              caretOffset = ((WSAuthorEditorPage) page).getCaretOffset();
-            }
-            if(caretOffset != -1) {
-               pos = documentController.createPositionInContent(caretOffset);
-            }
-              
-            documentController.insertXMLFragmentSchemaAware(xmlFragment, xPath, position);
-          
-            if(pos != null) {
-              ((WSAuthorEditorPage) page).setCaretPosition(pos.getOffset());
-            }
-            
-          } catch (AuthorOperationException e) {
-            logger.debug(e, e.getCause());
-          } catch (BadLocationException e) {
-            logger.debug(e, e.getCause());
-          }
-        }
+  public static void insertFragmentSchemaAware(final WSEditorPage page,  final AuthorDocumentController documentController, 
+  		final String xmlFragment, final String xPath, final String position) throws AuthorOperationException {
+   
+		if (xmlFragment != null && xPath != null && position != null) {
+			Position pos = null;
 
-      });
-    }
-  }
+			int caretOffset = -1;
+			if (page instanceof WSAuthorEditorPage) {
+				caretOffset = ((WSAuthorEditorPage) page).getCaretOffset();
+			}
+			if (caretOffset != -1) {
+				try {
+					pos = documentController.createPositionInContent(caretOffset);
+				} catch (BadLocationException e) {
+					logger.debug(e.getMessage(), e);
+				}
+			}
+
+			documentController.insertXMLFragmentSchemaAware(xmlFragment, xPath, position);
+
+			if (pos != null) {
+				((WSAuthorEditorPage) page).setCaretPosition(pos.getOffset());
+			}
+		}
+
+	}
   
   
   /**
@@ -227,72 +225,75 @@ public class AuthorPageDocumentUtil {
    * @throws BadLocationException
    * @throws XPathException
    */
-public static String findPrologXPath(AuthorDocumentController controller, DocumentType documentType) {
-  String toReturn = null;
-  ContextElement nodeToInsertAfter = null;
-  
-  // Find the context where prolog element can be inserted.
-  WhatElementsCanGoHereContext context;
-  try {
-    context = findPrologContext(controller, documentType);
-    if (context != null) {
-      List<ContextElement> previous = context.getPreviousSiblingElements();
-      if (previous != null && !previous.isEmpty()) {
-        // Get the previous sibling.
-        nodeToInsertAfter = previous.get(previous.size() - 1);
-        // Generate the XPath.
-        toReturn = XPathConstants.getRootXpath(documentType) + "/" + nodeToInsertAfter.getQName();
-      }
-    }
-  } catch (BadLocationException e) {
-    logger.warn(e, e.getCause());
-  }
-  return toReturn;
-}
-  
-  /**
-   * Find a possible context where prolog element can be inserted.
-   * 
-   * @param controller AuthorDocumentController.
-   * @param documentType The type of the document ( {@link DocumentType#TOPIC}, {@link DocumentType#MAP} or  {@link DocumentType#BOOKMAP}  ).
-   * @return A context where prolog element can go or <code>null</code>.
-   * @throws BadLocationException 
-   * @throws ro.sync.exml.workspace.api.editor.page.text.xml.XPathException 
-   */
-private static WhatElementsCanGoHereContext findPrologContext(AuthorDocumentController controller, DocumentType documentType) throws BadLocationException {
-    WhatElementsCanGoHereContext toReturn = null;
+	public static String findPrologXPath(AuthorDocumentController controller, DocumentType documentType) {
+		String toReturn = null;
+		ContextElement nodeToInsertAfter = null;
 
-    // Get the AuthorSchemaManager.
-    AuthorSchemaManager schemaManager = controller.getAuthorSchemaManager();
-    if (schemaManager != null) {
-      AuthorElement rootElement = controller.getAuthorDocumentNode().getRootElement();
-      List<AuthorNode> childNodes = rootElement.getContentNodes();
-      int nodesSize = childNodes.size();
+		// Find the context where prolog element can be inserted.
+		WhatElementsCanGoHereContext context;
+		context = findPrologContext(controller, documentType);
+		if (context != null) {
+			List<ContextElement> previous = context.getPreviousSiblingElements();
+			if (previous != null && !previous.isEmpty()) {
+				// Get the previous sibling.
+				nodeToInsertAfter = previous.get(previous.size() - 1);
+				// Generate the XPath.
+				toReturn = ElementXPathUtils.getRootXpath(documentType) + "/" + nodeToInsertAfter.getQName();
+			}
+		}
+		return toReturn;
+	}
+  
+	/**
+	 * Find a possible context where prolog element can be inserted.
+	 * 
+	 * @param controller
+	 *          The controller for author document.
+	 * @param documentType
+	 *          The type of the document ( {@link DocumentType#TOPIC},
+	 *          {@link DocumentType#MAP} or {@link DocumentType#BOOKMAP} ).
+	 * @return A context where prolog element can go or <code>null</code>.
+	 */
+	private static WhatElementsCanGoHereContext findPrologContext(AuthorDocumentController controller,
+			DocumentType documentType) {
+		WhatElementsCanGoHereContext toReturn = null;
 
-      loop: for (int i = 0; i < nodesSize; i++) {
-        int offset = childNodes.get(i).getEndOffset();
-        WhatElementsCanGoHereContext currentContext = schemaManager.createWhatElementsCanGoHereContext(offset);
-        if (currentContext != null) {
-          // Analyze if current context can contain the prolog element.
-          List<CIElement> possible = schemaManager.whatElementsCanGoHere(currentContext);
-          if (possible != null) {
-            // Iterate over possible elements.
-            int size = possible.size();
-            for (int j = 0; j < size; j++) {
-              CIElement ciElement = possible.get(j);
-              if (ciElement.getName().equals(XmlElementsConstants.getPrologName(documentType))) {
-                toReturn = currentContext;
-                if (j == 0) {
-                  // if prolog element is first in possible elements list. STOP.
-                  break loop;
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-    return toReturn;
-  }
+		// Get the AuthorSchemaManager.
+		AuthorSchemaManager schemaManager = controller.getAuthorSchemaManager();
+		if (schemaManager != null) {
+			AuthorElement rootElement = controller.getAuthorDocumentNode().getRootElement();
+			List<AuthorNode> childNodes = rootElement.getContentNodes();
+			int nodesSize = childNodes.size();
+
+			loop: for (int i = 0; i < nodesSize; i++) {
+				int offset = childNodes.get(i).getEndOffset();
+				WhatElementsCanGoHereContext currentContext = null;
+				try {
+					currentContext = schemaManager.createWhatElementsCanGoHereContext(offset);
+				} catch (BadLocationException e) {
+					logger.warn(e, e.getCause());
+				}
+				if (currentContext != null) {
+					// Analyze if current context can contain the prolog element.
+					List<CIElement> possible = schemaManager.whatElementsCanGoHere(currentContext);
+					if (possible != null) {
+						// Iterate over possible elements.
+						int size = possible.size();
+						for (int j = 0; j < size; j++) {
+							CIElement ciElement = possible.get(j);
+							if (ciElement.getName().equals(XmlElementsUtils.getPrologName(documentType))) {
+								toReturn = currentContext;
+								if (j == 0) {
+									// if prolog element is first in possible elements list. STOP.
+									break loop;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		return toReturn;
+	}
 
 }

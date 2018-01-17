@@ -6,17 +6,23 @@ import javax.swing.SwingUtilities;
 
 import org.apache.log4j.Logger;
 
-public class ThreadUtils {
+/**
+ *  A collection of utility methods used in AWT invocations.
+ * 
+ * @author cosmin_duna
+ *
+ */
+public class AWTUtil {
 
   /**
    * Logger for logging.
    */
-  private static final Logger logger = Logger.getLogger(ThreadUtils.class.getName());
+  private static final Logger logger = Logger.getLogger(AWTUtil.class.getName());
   
   /**
    * Private constructor for utilities class. Avoid instantiation.
    */
-  private ThreadUtils() {
+  private AWTUtil() {
     // Nothing
   }
   
@@ -41,7 +47,4 @@ public class ThreadUtils {
       Thread.currentThread().interrupt();
     }
   }
-
-  
-  
 }

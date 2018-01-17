@@ -21,8 +21,11 @@ import ro.sync.exml.workspace.api.standalone.StandalonePluginWorkspace;
  * @author cosmin_duna
  */
 public class PrologUpdaterExtension extends OptionPagePluginExtension implements WorkspaceAccessPluginExtension{
-  
-  private PrologOptionPage prologOptionPage = null;
+
+	/**
+	 * The page with option for this plugin.
+	 */
+	private PrologOptionPage prologOptionPage = null;
 
   /**
    * @see ro.sync.exml.plugin.workspace.WorkspaceAccessPluginExtension#applicationStarted(ro.sync.exml.workspace.api.standalone.StandalonePluginWorkspace)
