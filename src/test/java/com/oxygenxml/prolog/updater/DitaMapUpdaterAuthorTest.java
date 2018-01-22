@@ -11,7 +11,7 @@ import javax.xml.transform.TransformerException;
 
 import org.xml.sax.SAXException;
 
-public class DitaMapUpdaterAuthorTest extends DitaUpdateTestUtil{
+public class DitaMapUpdaterAuthorTest extends AuthorTestCase{
 
 	/**
 	 * Test if the author tag is correct modified after save operation in DITA map.
@@ -38,7 +38,7 @@ public class DitaMapUpdaterAuthorTest extends DitaUpdateTestUtil{
 		    "<!DOCTYPE map PUBLIC \"-//OASIS//DTD DITA Map//EN\" \"map.dtd\">"+
 		    "<map>" + 
 				"    <topicmeta >" + 
-				"        <author type=\"creator\" >"+DitaUpdateTestUtil.AUTHOR_NAME+"</author> " + 
+				"        <author type=\"creator\" >"+AuthorTestCase.AUTHOR_NAME+"</author> " + 
 				"    </topicmeta>" + 
 			  "    <title > </title>" + 
 				"</map>" + 
@@ -47,7 +47,7 @@ public class DitaMapUpdaterAuthorTest extends DitaUpdateTestUtil{
 		//expected XML output for new input document
 		String expectedNewXMLWithCreator = "<?xml version=\"1.0\" encoding=\"utf-8\"?><map>" + 
 				"    <topicmeta >" + 
-				"        <author type=\"creator\" >"+DitaUpdateTestUtil.AUTHOR_NAME+"</author> " + 
+				"        <author type=\"creator\" >"+AuthorTestCase.AUTHOR_NAME+"</author> " + 
 				"        <critdates >" + 
 				"            <created date=\""+ localDate +"\" />  " + 
 				"        </critdates>" + 
@@ -59,10 +59,10 @@ public class DitaMapUpdaterAuthorTest extends DitaUpdateTestUtil{
 		//expected XML output for old input document
 		String expectedOldXmlWithCreator = "<?xml version=\"1.0\" encoding=\"utf-8\"?><map>" + 
 				"    <topicmeta >" + 
-				"        <author type=\"creator\" >"+DitaUpdateTestUtil.AUTHOR_NAME+"</author>" + 
-				"        <author type=\"contributor\" >"+DitaUpdateTestUtil.AUTHOR_NAME+"</author>" + 
+				"        <author type=\"creator\" >"+AuthorTestCase.AUTHOR_NAME+"</author>" + 
+				"        <author type=\"contributor\" >"+AuthorTestCase.AUTHOR_NAME+"</author>" + 
 				"        <critdates>" + 
-				"           <!--"+DitaUpdateTestUtil.AUTHOR_NAME+"-->" + 
+				"           <!--"+AuthorTestCase.AUTHOR_NAME+"-->" + 
 				"            <revised modified=\""+localDate+"\" />" + 
 				"        </critdates>" + 
 				"    </topicmeta>" + 
@@ -87,7 +87,7 @@ public class DitaMapUpdaterAuthorTest extends DitaUpdateTestUtil{
 		    "<map>" + 
 				"    <title > </title>" + 
 				"    <topicmeta >" + 
-				"        <author type=\"contributor\" >"+DitaUpdateTestUtil.AUTHOR_NAME+"</author> " + 
+				"        <author type=\"contributor\" >"+AuthorTestCase.AUTHOR_NAME+"</author> " + 
 				"    </topicmeta>" + 
 				"    <body >" + 
 				"        <p/>" + 
@@ -99,8 +99,8 @@ public class DitaMapUpdaterAuthorTest extends DitaUpdateTestUtil{
 		String expectedNewXMLWithContributor = "<?xml version=\"1.0\" encoding=\"utf-8\"?><map>" + 
 				"    <title > </title>" + 
 				"    <topicmeta >" + 
-				"        <author type=\"creator\" >"+DitaUpdateTestUtil.AUTHOR_NAME+"</author> " + 
-				"        <author type=\"contributor\" >"+DitaUpdateTestUtil.AUTHOR_NAME+"</author> " + 
+				"        <author type=\"creator\" >"+AuthorTestCase.AUTHOR_NAME+"</author> " + 
+				"        <author type=\"contributor\" >"+AuthorTestCase.AUTHOR_NAME+"</author> " + 
 				"        <critdates >" + 
 				"            <created date=\""+ localDate +"\" />  " + 
 				"        </critdates>" + 
@@ -115,9 +115,9 @@ public class DitaMapUpdaterAuthorTest extends DitaUpdateTestUtil{
 		String expectedOldXmlWithContributor = "<?xml version=\"1.0\" encoding=\"utf-8\"?><map>" + 
 				"    <title > </title>" + 
 				"    <topicmeta >" + 
-				"        <author type=\"contributor\" >"+DitaUpdateTestUtil.AUTHOR_NAME+"</author> " + 
+				"        <author type=\"contributor\" >"+AuthorTestCase.AUTHOR_NAME+"</author> " + 
 				"        <critdates>" + 
-				"           <!--"+DitaUpdateTestUtil.AUTHOR_NAME+"-->" + 
+				"           <!--"+AuthorTestCase.AUTHOR_NAME+"-->" + 
 				"            <revised modified=\""+localDate+"\" />" + 
 				"        </critdates>" + 
 				"    </topicmeta>" + 
@@ -162,11 +162,11 @@ public class DitaMapUpdaterAuthorTest extends DitaUpdateTestUtil{
 			"    <title > </title>" + 
 			"    <topicmeta >" + 
 			"        <author type=\"contributor\" >nume</author> " + 
-			"        <author type=\"contributor\" >"+DitaUpdateTestUtil.AUTHOR_NAME+"</author> " + 
+			"        <author type=\"contributor\" >"+AuthorTestCase.AUTHOR_NAME+"</author> " + 
 			"        <critdates>" + 
 			"           <!--nume-->" + 
 			"            <revised modified=\""+localDate+"\" />" + 
-			"           <!--"+DitaUpdateTestUtil.AUTHOR_NAME+"-->" + 
+			"           <!--"+AuthorTestCase.AUTHOR_NAME+"-->" + 
 			"            <revised modified=\""+localDate+"\" />" + 
 			"        </critdates>" + 
 			"    </topicmeta>" + 
@@ -198,7 +198,7 @@ public class DitaMapUpdaterAuthorTest extends DitaUpdateTestUtil{
         "<map>" + 
         "    <title> </title>" + 
         "    <topicmeta>" + 
-        "        <author type=\"creator\" >"+DitaUpdateTestUtil.AUTHOR_NAME+"</author> " + 
+        "        <author type=\"creator\" >"+AuthorTestCase.AUTHOR_NAME+"</author> " + 
         "        <critdates >" + 
         "            <created date=\""+ localDate +"\" />  " + 
         "        </critdates>" + 

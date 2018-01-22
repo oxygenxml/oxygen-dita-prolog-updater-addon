@@ -25,11 +25,11 @@ import ro.sync.exml.workspace.api.editor.page.author.WSAuthorEditorPage;
 
 
 /**
- * Utility class for DitaUpdateTest
+ * Extension of the test case for the tests in author page.  
  * @author cosmin_duna
  *
  */
-public abstract class DitaUpdateTestUtil extends TestCase{
+public abstract class AuthorTestCase extends TestCase{
 
 	/**
 	 * The name of author.
@@ -120,7 +120,7 @@ public abstract class DitaUpdateTestUtil extends TestCase{
     actual = actual.replaceAll("> ", ">");
  
     
-    assertEquals(expected, actual);
+    assertEquals("The updated content is wrong", expected, actual);
 	}
 	
 

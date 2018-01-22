@@ -40,7 +40,7 @@ public class XmlPrettyPrinterUtil {
 	 * @throws TransformerException 
 	 */
 	public static String indent(String xmlContent) throws IOException, SAXNotRecognizedException, SAXNotSupportedException, ParserConfigurationException, SAXException, TransformerException {
-		String prettifiedContent;
+		String prettifiedContent = null;
 
 		TransformerFactory transformerFactory = TransformerFactory.newInstance();
 		// create the transformer
@@ -48,30 +48,29 @@ public class XmlPrettyPrinterUtil {
 
 		// get the input source
 		InputSource inputSource = new InputSource(new StringReader(xmlContent));
-
 		StringWriter sw = new StringWriter();
-		StreamResult res = new StreamResult(sw);
 
+		try {
+			StreamResult res = new StreamResult(sw);
 			transformer = transformerFactory.newTransformer();
-
 			// set the output properties
 			transformer.setOutputProperty(OutputKeys.METHOD, "xml");
 			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 			transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-			
 			// prettify and print
 			SAXSource saxSource = new SAXSource(inputSource);
 			XMLReader reader = createXMLReader();
 			reader.setEntityResolver(new EntityResolver() {
-        public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
-          return new InputSource(new StringReader(""));
-        }
-      });
+				public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
+					return new InputSource(new StringReader(""));
+				}
+			});
 			saxSource.setXMLReader(reader);
 			transformer.transform(saxSource, res);
-		prettifiedContent = sw.toString();
-
-		sw.close();
+			prettifiedContent = sw.toString();
+		} finally {
+			sw.close();
+		}
 		return prettifiedContent;
 	}
 	

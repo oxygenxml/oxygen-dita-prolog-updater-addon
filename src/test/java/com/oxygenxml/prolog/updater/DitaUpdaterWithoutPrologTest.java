@@ -11,7 +11,7 @@ import javax.xml.transform.TransformerException;
 
 import org.xml.sax.SAXException;
 
-public class DitaUpdaterWithoutPrologTest extends DitaUpdateTestUtil{
+public class DitaUpdaterWithoutPrologTest extends AuthorTestCase{
 
 	/**
 	 * Test if the prolog is correct added after save operation.
@@ -48,7 +48,7 @@ public class DitaUpdaterWithoutPrologTest extends DitaUpdateTestUtil{
 		String expectedNewXML = "<?xml version=\"1.0\" encoding=\"utf-8\"?><topic id=\"topic_mfz_vwd_qbb\">" + 
 				"  <title> </title>" + 
 				"  <prolog>" + 
-				"    <author type=\"creator\">"+DitaUpdateTestUtil.AUTHOR_NAME+"</author> " + 
+				"    <author type=\"creator\">"+AuthorTestCase.AUTHOR_NAME+"</author> " + 
 				"    <critdates>" + 
 				"      <created date=\""+ localDate +"\" /> " + 
 				"    </critdates>" + 
@@ -63,9 +63,9 @@ public class DitaUpdaterWithoutPrologTest extends DitaUpdateTestUtil{
 		String expectedOldXml = "<?xml version=\"1.0\" encoding=\"utf-8\"?><topic id=\"topic_mfz_vwd_qbb\" >" + 
 				"  <title > </title>" + 
 				"  <prolog>" + 
-				"    <author type=\"contributor\" >"+DitaUpdateTestUtil.AUTHOR_NAME+"</author>" + 
+				"    <author type=\"contributor\" >"+AuthorTestCase.AUTHOR_NAME+"</author>" + 
 				"    <critdates >" + 
-				"      <!--"+DitaUpdateTestUtil.AUTHOR_NAME+"-->" + 
+				"      <!--"+AuthorTestCase.AUTHOR_NAME+"-->" + 
 				"      <revised modified=\""+localDate+"\" />" + 
 				"    </critdates>" + 
 				"  </prolog>" + 
@@ -102,7 +102,7 @@ public class DitaUpdaterWithoutPrologTest extends DitaUpdateTestUtil{
 		String expectedNewXMLWithEmptyProlog = "<?xml version=\"1.0\" encoding=\"utf-8\"?><topic id=\"topic_pmy_4gd_sbb\" >" + 
 				"  <title> </title>" + 
 				"  <prolog>" + 
-				"    <author type=\"creator\" >"+DitaUpdateTestUtil.AUTHOR_NAME+"</author> " + 
+				"    <author type=\"creator\" >"+AuthorTestCase.AUTHOR_NAME+"</author> " + 
 				"    <critdates >" + 
 				"      <created date=\""+ localDate +"\" /> " + 
 				"    </critdates>" + 
@@ -117,9 +117,9 @@ public class DitaUpdaterWithoutPrologTest extends DitaUpdateTestUtil{
 		String expectedOldXmlWithEmptyProlog = "<?xml version=\"1.0\" encoding=\"utf-8\"?><topic id=\"topic_pmy_4gd_sbb\" >" + 
 				"  <title> </title>" + 
 				"  <prolog>" + 
-				"    <author type=\"contributor\" >"+DitaUpdateTestUtil.AUTHOR_NAME+"</author>" + 
+				"    <author type=\"contributor\" >"+AuthorTestCase.AUTHOR_NAME+"</author>" + 
 				"    <critdates>" + 
-				"      <!--"+DitaUpdateTestUtil.AUTHOR_NAME+"-->" + 
+				"      <!--"+AuthorTestCase.AUTHOR_NAME+"-->" + 
 				"      <revised modified=\""+localDate+"\" />" + 
 				"    </critdates>" + 
 				"  </prolog>" + 

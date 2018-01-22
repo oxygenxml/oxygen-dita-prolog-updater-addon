@@ -59,13 +59,13 @@ public class PrologContentCreatorMapTest extends TestCase {
     String prologFragment = prologContentCreator.getPrologFragment(true, DocumentType.MAP);
     
     //The prolog fragment is not generated.
-    assertNull(prologFragment);
+    assertNull("The fragment shouldn't be generated.", prologFragment);
     
     //Get the prolog according to settings when document isn't new.
     prologFragment = prologContentCreator.getPrologFragment(false, DocumentType.MAP);
     
     //The prolog fragment is not generated.
-    assertNull(prologFragment);
+    assertNull("The fragment shouldn't be generated.", prologFragment);
   }
 
   
@@ -88,13 +88,13 @@ public class PrologContentCreatorMapTest extends TestCase {
     String prologFragment = prologContentCreator.getPrologFragment(true, DocumentType.MAP);
     
     //Check the generated prolog fragment.
-    assertNull(prologFragment);
+    assertNull("The fragment shouldn't be generated.", prologFragment);
     
     //Get the prolog when the document isn't new.
      prologFragment = prologContentCreator.getPrologFragment(false, DocumentType.MAP);
     
     //Check the generated prolog fragment.
-    assertNull(prologFragment);
+    assertNull("The fragment shouldn't be generated.", prologFragment);
   }
   
   
@@ -119,12 +119,12 @@ public class PrologContentCreatorMapTest extends TestCase {
     String prologFragment = prologContentCreator.getPrologFragment(true, DocumentType.MAP);
     
     //Check the generated prolog fragment.
-    assertEquals("<topicmeta><author type=\"creator\">name</author></topicmeta>", prologFragment);
+    assertEquals("The fragment is not generated according to options.", "<topicmeta><author type=\"creator\">name</author></topicmeta>", prologFragment);
     
     //Get the prolog when document isn't new.
     prologFragment = prologContentCreator.getPrologFragment(false, DocumentType.MAP);
     
-    assertNull(prologFragment);
+    assertNull("The fragment shouldn't be generated.", prologFragment);
   }
   
   /**
@@ -152,13 +152,13 @@ public class PrologContentCreatorMapTest extends TestCase {
     String prologFragment = prologContentCreator.getPrologFragment(true, DocumentType.MAP);
     
     //Check the generated prolog fragment.
-    assertEquals("<topicmeta><critdates><created date=\"2017-12-04\"/></critdates></topicmeta>", prologFragment);
+    assertEquals("The fragment is not generated according to options.", "<topicmeta><critdates><created date=\"2017-12-04\"/></critdates></topicmeta>", prologFragment);
     
     //Get the prolog when document isn't new.
      prologFragment = prologContentCreator.getPrologFragment(false, DocumentType.MAP);
     
     //Check the generated prolog fragment.
-    assertNull(prologFragment);
+    assertNull("The fragment shouldn't be generated.", prologFragment);
   }
   
   /**
@@ -181,13 +181,13 @@ public class PrologContentCreatorMapTest extends TestCase {
     String prologFragment = prologContentCreator.getPrologFragment(true, DocumentType.MAP);
     
     //Check the generated prolog fragment.
-    assertNull(prologFragment);
+    assertNull("The fragment shouldn't be generated.", prologFragment);
     
     //Get the prolog when document isn't new.
      prologFragment = prologContentCreator.getPrologFragment(false, DocumentType.MAP);
     
     //Check the generated prolog fragment.
-     assertEquals("<topicmeta><author type=\"contributor\">name</author></topicmeta>", prologFragment);
+     assertEquals("The fragment is not generated according to options.", "<topicmeta><author type=\"contributor\">name</author></topicmeta>", prologFragment);
     
   }
   
@@ -216,13 +216,11 @@ public class PrologContentCreatorMapTest extends TestCase {
     String prologFragment = prologContentCreator.getPrologFragment(true, DocumentType.MAP);
     
     //Check the generated prolog fragment.
-    assertNull(prologFragment);
+    assertNull("The fragment shouldn't be generated.", prologFragment);
     
     //Get the prolog when document isn't new.
      prologFragment = prologContentCreator.getPrologFragment(false, DocumentType.MAP);
-     assertEquals("<topicmeta><critdates><!--name--><revised modified=\"2017-12-04\"/></critdates></topicmeta>", prologFragment);
-    
-    //Check the generated prolog fragment.
+     assertEquals("The fragment is not generated according to options.", "<topicmeta><critdates><!--name--><revised modified=\"2017-12-04\"/></critdates></topicmeta>", prologFragment);
     
   }
 }

@@ -58,13 +58,13 @@ public class PrologContentCreatorTopicTest extends TestCase {
     String prologFragment = prologContentCreator.getPrologFragment(true, DocumentType.TOPIC);
     
     //The prolog fragment is not generated.
-    assertNull(prologFragment);
+    assertNull("The fragment shouldn't be generated.", prologFragment);
     
     //Get the prolog according to settings when document isn't new.
     prologFragment = prologContentCreator.getPrologFragment(false, DocumentType.TOPIC);
     
     //The prolog fragment is not generated.
-    assertNull(prologFragment);
+    assertNull("The fragment shouldn't be generated.", prologFragment);
   }
 
   
@@ -87,13 +87,13 @@ public class PrologContentCreatorTopicTest extends TestCase {
     String prologFragment = prologContentCreator.getPrologFragment(true, DocumentType.TOPIC);
     
     //Check the generated prolog fragment.
-    assertNull(prologFragment);
+    assertNull("The fragment shouldn't be generated.", prologFragment);
     
     //Get the prolog when the document isn't new.
      prologFragment = prologContentCreator.getPrologFragment(false, DocumentType.TOPIC);
     
     //Check the generated prolog fragment.
-    assertNull(prologFragment);
+    assertNull("The fragment shouldn't be generated.", prologFragment);
   }
   
   
@@ -118,12 +118,12 @@ public class PrologContentCreatorTopicTest extends TestCase {
     String prologFragment = prologContentCreator.getPrologFragment(true, DocumentType.TOPIC);
     
     //Check the generated prolog fragment.
-    assertEquals("<prolog><author type=\"creator\">name</author></prolog>", prologFragment);
+    assertEquals("The fragment is not generated according to options.", "<prolog><author type=\"creator\">name</author></prolog>", prologFragment);
     
     //Get the prolog when document isn't new.
     prologFragment = prologContentCreator.getPrologFragment(false, DocumentType.TOPIC);
     
-    assertNull(prologFragment);
+    assertNull("The fragment shouldn't be generated.", prologFragment);
   }
   
   /**
@@ -151,13 +151,13 @@ public class PrologContentCreatorTopicTest extends TestCase {
     String prologFragment = prologContentCreator.getPrologFragment(true, DocumentType.TOPIC);
     
     //Check the generated prolog fragment.
-    assertEquals("<prolog><critdates><created date=\"2017-12-04\"/></critdates></prolog>", prologFragment);
+    assertEquals("The fragment is not generated according to options.", "<prolog><critdates><created date=\"2017-12-04\"/></critdates></prolog>", prologFragment);
     
     //Get the prolog when document isn't new.
      prologFragment = prologContentCreator.getPrologFragment(false, DocumentType.TOPIC);
     
     //Check the generated prolog fragment.
-    assertNull(prologFragment);
+    assertNull("The fragment shouldn't be generated.", prologFragment);
   }
   
   /**
@@ -180,13 +180,13 @@ public class PrologContentCreatorTopicTest extends TestCase {
     String prologFragment = prologContentCreator.getPrologFragment(true, DocumentType.TOPIC);
     
     //Check the generated prolog fragment.
-    assertNull(prologFragment);
+    assertNull("The fragment shouldn't be generated.", prologFragment);
     
     //Get the prolog when document isn't new.
      prologFragment = prologContentCreator.getPrologFragment(false, DocumentType.TOPIC);
     
     //Check the generated prolog fragment.
-     assertEquals("<prolog><author type=\"contributor\">name</author></prolog>", prologFragment);
+     assertEquals("The fragment is not generated according to options.", "<prolog><author type=\"contributor\">name</author></prolog>", prologFragment);
     
   }
   
@@ -215,11 +215,11 @@ public class PrologContentCreatorTopicTest extends TestCase {
     String prologFragment = prologContentCreator.getPrologFragment(true, DocumentType.TOPIC);
     
     //Check the generated prolog fragment.
-    assertNull(prologFragment);
+    assertNull("The fragment shouldn't be generated.", prologFragment);
     
     //Get the prolog when document isn't new.
      prologFragment = prologContentCreator.getPrologFragment(false, DocumentType.TOPIC);
-     assertEquals("<prolog><critdates><!--name--><revised modified=\"2017-12-04\"/></critdates></prolog>", prologFragment);
+     assertEquals("The fragment is not generated according to options.", "The fragment is not generated according to options.","The fragment is not generated according to options.", "<prolog><critdates><!--name--><revised modified=\"2017-12-04\"/></critdates></prolog>", prologFragment);
     
     //Check the generated prolog fragment.
     

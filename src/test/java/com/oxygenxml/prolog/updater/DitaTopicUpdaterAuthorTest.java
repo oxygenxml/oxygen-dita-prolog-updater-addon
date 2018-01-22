@@ -11,7 +11,7 @@ import javax.xml.transform.TransformerException;
 
 import org.xml.sax.SAXException;
 
-public class DitaTopicUpdaterAuthorTest extends DitaUpdateTestUtil{
+public class DitaTopicUpdaterAuthorTest extends AuthorTestCase{
 
 	/**
 	 * Test if the author tag is correct modified after save operation in DITA Topic.
@@ -38,7 +38,7 @@ public class DitaTopicUpdaterAuthorTest extends DitaUpdateTestUtil{
 		    "<topic id=\"topic_pmy_4gd_sbb\">" + 
 				"    <title > </title>" + 
 				"    <prolog >" + 
-				"        <author type=\"creator\" >"+DitaUpdateTestUtil.AUTHOR_NAME+"</author> " + 
+				"        <author type=\"creator\" >"+AuthorTestCase.AUTHOR_NAME+"</author> " + 
 				"    </prolog>" + 
 				"    <body >" + 
 				"        <p/>" + 
@@ -50,7 +50,7 @@ public class DitaTopicUpdaterAuthorTest extends DitaUpdateTestUtil{
 		String expectedNewXMLWithCreator = "<?xml version=\"1.0\" encoding=\"utf-8\"?><topic id=\"topic_pmy_4gd_sbb\">" + 
 				"    <title > </title>" + 
 				"    <prolog >" + 
-				"        <author type=\"creator\" >"+DitaUpdateTestUtil.AUTHOR_NAME+"</author> " + 
+				"        <author type=\"creator\" >"+AuthorTestCase.AUTHOR_NAME+"</author> " + 
 				"        <critdates >" + 
 				"            <created date=\""+ localDate +"\" />  " + 
 				"        </critdates>" + 
@@ -65,10 +65,10 @@ public class DitaTopicUpdaterAuthorTest extends DitaUpdateTestUtil{
 		String expectedOldXmlWithCreator = "<?xml version=\"1.0\" encoding=\"utf-8\"?><topic id=\"topic_pmy_4gd_sbb\">" + 
 				"    <title > </title>" + 
 				"    <prolog >" + 
-				"        <author type=\"creator\" >"+DitaUpdateTestUtil.AUTHOR_NAME+"</author>" + 
-				"        <author type=\"contributor\" >"+DitaUpdateTestUtil.AUTHOR_NAME+"</author>" + 
+				"        <author type=\"creator\" >"+AuthorTestCase.AUTHOR_NAME+"</author>" + 
+				"        <author type=\"contributor\" >"+AuthorTestCase.AUTHOR_NAME+"</author>" + 
 				"        <critdates>" + 
-				"           <!--"+DitaUpdateTestUtil.AUTHOR_NAME+"-->" + 
+				"           <!--"+AuthorTestCase.AUTHOR_NAME+"-->" + 
 				"            <revised modified=\""+localDate+"\" />" + 
 				"        </critdates>" + 
 				"    </prolog>" + 
@@ -95,7 +95,7 @@ public class DitaTopicUpdaterAuthorTest extends DitaUpdateTestUtil{
 		    "<topic id=\"topic_pmy_4gd_sbb\">" + 
 				"    <title > </title>" + 
 				"    <prolog >" + 
-				"        <author type=\"contributor\" >"+DitaUpdateTestUtil.AUTHOR_NAME+"</author> " + 
+				"        <author type=\"contributor\" >"+AuthorTestCase.AUTHOR_NAME+"</author> " + 
 				"    </prolog>" + 
 				"    <body >" + 
 				"        <p/>" + 
@@ -107,8 +107,8 @@ public class DitaTopicUpdaterAuthorTest extends DitaUpdateTestUtil{
 		String expectedNewXMLWithContributor = "<?xml version=\"1.0\" encoding=\"utf-8\"?><topic id=\"topic_pmy_4gd_sbb\">" + 
 				"    <title > </title>" + 
 				"    <prolog >" + 
-				"        <author type=\"creator\" >"+DitaUpdateTestUtil.AUTHOR_NAME+"</author> " + 
-				"        <author type=\"contributor\" >"+DitaUpdateTestUtil.AUTHOR_NAME+"</author> " + 
+				"        <author type=\"creator\" >"+AuthorTestCase.AUTHOR_NAME+"</author> " + 
+				"        <author type=\"contributor\" >"+AuthorTestCase.AUTHOR_NAME+"</author> " + 
 				"        <critdates >" + 
 				"            <created date=\""+ localDate +"\" />  " + 
 				"        </critdates>" + 
@@ -123,9 +123,9 @@ public class DitaTopicUpdaterAuthorTest extends DitaUpdateTestUtil{
 		String expectedOldXmlWithContributor = "<?xml version=\"1.0\" encoding=\"utf-8\"?><topic id=\"topic_pmy_4gd_sbb\">" + 
 				"    <title > </title>" + 
 				"    <prolog >" + 
-				"        <author type=\"contributor\" >"+DitaUpdateTestUtil.AUTHOR_NAME+"</author> " + 
+				"        <author type=\"contributor\" >"+AuthorTestCase.AUTHOR_NAME+"</author> " + 
 				"        <critdates>" + 
-				"           <!--"+DitaUpdateTestUtil.AUTHOR_NAME+"-->" + 
+				"           <!--"+AuthorTestCase.AUTHOR_NAME+"-->" + 
 				"            <revised modified=\""+localDate+"\" />" + 
 				"        </critdates>" + 
 				"    </prolog>" + 
@@ -170,11 +170,11 @@ public class DitaTopicUpdaterAuthorTest extends DitaUpdateTestUtil{
 			"    <title > </title>" + 
 			"    <prolog >" + 
 			"        <author type=\"contributor\" >nume</author> " + 
-			"        <author type=\"contributor\" >"+DitaUpdateTestUtil.AUTHOR_NAME+"</author> " + 
+			"        <author type=\"contributor\" >"+AuthorTestCase.AUTHOR_NAME+"</author> " + 
 			"        <critdates>" + 
 			"           <!--nume-->" + 
 			"            <revised modified=\""+localDate+"\" />" + 
-			"           <!--"+DitaUpdateTestUtil.AUTHOR_NAME+"-->" + 
+			"           <!--"+AuthorTestCase.AUTHOR_NAME+"-->" + 
 			"            <revised modified=\""+localDate+"\" />" + 
 			"        </critdates>" + 
 			"    </prolog>" + 
@@ -206,7 +206,7 @@ public class DitaTopicUpdaterAuthorTest extends DitaUpdateTestUtil{
         "<topic id=\"topic_pmy_4gd_sb\">" + 
         "    <title> </title>" + 
         "    <prolog>" + 
-        "        <author type=\"creator\" >"+DitaUpdateTestUtil.AUTHOR_NAME+"</author> " + 
+        "        <author type=\"creator\" >"+AuthorTestCase.AUTHOR_NAME+"</author> " + 
         "        <critdates >" + 
         "            <created date=\""+ localDate +"\" />  " + 
         "        </critdates>" + 

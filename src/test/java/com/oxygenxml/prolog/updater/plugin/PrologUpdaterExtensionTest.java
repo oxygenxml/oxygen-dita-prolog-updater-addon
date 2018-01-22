@@ -77,17 +77,17 @@ public class PrologUpdaterExtensionTest extends TestCase {
 
 		assertNull(workspaceListeners[0]);
 		extension.applicationStarted(workspace);
-		assertNotNull(workspaceListeners[0]);
+		assertNotNull(" 'applicationStarted' method should be called.",workspaceListeners[0]);
 
 		// Check that the listener reacts to editorOpened event.
 		assertNull(editorListeners[0]);
 		workspaceListeners[0].editorOpened(new File("test/dummy.xml").toURI().toURL());
-		assertNotNull(editorListeners[0]);
+		assertNotNull(" 'editorOpened' method should be called.", editorListeners[0]);
 
 		assertFalse(doUpdateProlog[0]);
 		editorListeners[0].editorAboutToBeSavedVeto(0);
 		editorListeners[0].editorSaved(0);
-		assertTrue(doUpdateProlog[0]);
+		assertTrue(" 'editorSaved' method should be called.", doUpdateProlog[0]);
 		
 	}
 
