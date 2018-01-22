@@ -20,80 +20,84 @@ import ro.sync.exml.workspace.api.standalone.StandalonePluginWorkspace;
  * 
  * @author cosmin_duna
  */
-public class PrologUpdaterExtension extends OptionPagePluginExtension implements WorkspaceAccessPluginExtension{
+public class PrologUpdaterExtension extends OptionPagePluginExtension implements WorkspaceAccessPluginExtension {
 
 	/**
 	 * The page with option for this plugin.
 	 */
 	private PrologOptionPage prologOptionPage = null;
 
-  /**
-   * @see ro.sync.exml.plugin.workspace.WorkspaceAccessPluginExtension#applicationStarted(ro.sync.exml.workspace.api.standalone.StandalonePluginWorkspace)
-   */
+	/**
+	 * @see ro.sync.exml.plugin.workspace.WorkspaceAccessPluginExtension#applicationStarted(ro.sync.exml.workspace.api.standalone.StandalonePluginWorkspace)
+	 */
 	public void applicationStarted(final StandalonePluginWorkspace workspace) {
 		// Create a XmlUpdater
 		final DitaUpdater xmlUpdater = createDitaUpdater();
-		
+
 		// Add an WSEditorChangeListener
-		workspace.addEditorChangeListener(new WSEditorChangeListener(){
+		workspace.addEditorChangeListener(new WSEditorChangeListener() {
 			@Override
 			public void editorOpened(URL editorLocation) {
-					final WSEditor editorAccess = workspace.getEditorAccess(editorLocation, PluginWorkspace.MAIN_EDITING_AREA);
-					// Add an WSEditorListener
-					editorAccess.addEditorListener(new WSEditorListener(){
-            private boolean wasNew = false;
-            private boolean wasSave = false;
-            @Override
-						public boolean editorAboutToBeSavedVeto(int operationType) {
-              if(editorAccess.isNewDocument() && !editorAccess.isModified()) {
-                editorAccess.setModified(true);
-              }
-              wasNew  = editorAccess.isNewDocument();
-							return true;
+				final WSEditor editorAccess = workspace.getEditorAccess(editorLocation, PluginWorkspace.MAIN_EDITING_AREA);
+				// Add an WSEditorListener
+				editorAccess.addEditorListener(new WSEditorListener() {
+					private boolean wasNew = false;
+					private boolean wasSave = false;
+
+					@Override
+					public boolean editorAboutToBeSavedVeto(int operationType) {
+						if (editorAccess.isNewDocument() && !editorAccess.isModified()) {
+							editorAccess.setModified(true);
 						}
-						@Override
-						public void editorSaved(int operationType) {
-						  if(!wasSave) {
-						    wasSave = true;
-						    xmlUpdater.updateProlog(editorAccess, wasNew);
-                editorAccess.save();                    
-						    wasSave = false;
-						  }
+						wasNew = editorAccess.isNewDocument();
+						return true;
+					}
+
+					@Override
+					public void editorSaved(int operationType) {
+						if (!wasSave) {
+							wasSave = true;
+							xmlUpdater.updateProlog(editorAccess, wasNew);
+							editorAccess.save();
+							wasSave = false;
 						}
-						 
-					});
-					
+					}
+
+				});
+
 			}
 		}, PluginWorkspace.MAIN_EDITING_AREA);
-		
-    workspace.addEditorChangeListener(new WSEditorChangeListener() {
 
-      @Override
-      public void editorOpened(URL editorLocation) {
-        final WSEditor editorAccess = workspace.getEditorAccess(editorLocation, PluginWorkspace.DITA_MAPS_EDITING_AREA);
-        // add an WSEditorListener
-        editorAccess.addEditorListener(new WSEditorListener() {
-          private boolean wasNew = false;
-          private boolean wasSave = false;
-          @Override
-          public boolean editorAboutToBeSavedVeto(int operationType) {
-            wasNew  = editorAccess.isNewDocument();
-            return true;
-          }
-          @Override
-          public void editorSaved(int operationType) {
-            if(!wasSave) {
-              wasSave = true;
-              xmlUpdater.updateProlog(editorAccess, wasNew);
-              editorAccess.save();
-              wasSave = false;
-            }
-            super.editorSaved(operationType);
-          }
-        });
-      }
-    }, PluginWorkspace.DITA_MAPS_EDITING_AREA);
-  }
+		workspace.addEditorChangeListener(new WSEditorChangeListener() {
+
+			@Override
+			public void editorOpened(URL editorLocation) {
+				final WSEditor editorAccess = workspace.getEditorAccess(editorLocation, PluginWorkspace.DITA_MAPS_EDITING_AREA);
+				// add an WSEditorListener
+				editorAccess.addEditorListener(new WSEditorListener() {
+					private boolean wasNew = false;
+					private boolean wasSave = false;
+
+					@Override
+					public boolean editorAboutToBeSavedVeto(int operationType) {
+						wasNew = editorAccess.isNewDocument();
+						return true;
+					}
+
+					@Override
+					public void editorSaved(int operationType) {
+						if (!wasSave) {
+							wasSave = true;
+							xmlUpdater.updateProlog(editorAccess, wasNew);
+							editorAccess.save();
+							wasSave = false;
+						}
+						super.editorSaved(operationType);
+					}
+				});
+			}
+		}, PluginWorkspace.DITA_MAPS_EDITING_AREA);
+	}
 
 	/**
 	 * Creates the updater.
@@ -106,35 +110,37 @@ public class PrologUpdaterExtension extends OptionPagePluginExtension implements
 
 	/**
 	 * Notified before the editors are closed and the application exits
-	 * @return <code>True</code> application can close, <code>false</code>, if vetoed
+	 * 
+	 * @return <code>True</code> application can close, <code>false</code>, if
+	 *         vetoed
 	 */
 	public boolean applicationClosing() {
 		return true;
 	}
 
-  @Override
-  public void apply(PluginWorkspace pluginWorkspace) {
-   if(prologOptionPage != null) {
-     prologOptionPage.savePageState();
-   }
-  }
+	@Override
+	public void apply(PluginWorkspace pluginWorkspace) {
+		if (prologOptionPage != null) {
+			prologOptionPage.savePageState();
+		}
+	}
 
-  @Override
-  public void restoreDefaults() {
-    if(prologOptionPage != null) {
-      prologOptionPage.restoreDefault();
-    }
-  }
+	@Override
+	public void restoreDefaults() {
+		if (prologOptionPage != null) {
+			prologOptionPage.restoreDefault();
+		}
+	}
 
-  @Override
-  public String getTitle() {
-    return PrologUpdaterPlugin.getInstance().getDescriptor().getName();
-  }
+	@Override
+	public String getTitle() {
+		return PrologUpdaterPlugin.getInstance().getDescriptor().getName();
+	}
 
-  @Override
-  public JComponent init(PluginWorkspace pluginWorkspace) {
-    prologOptionPage = new PrologOptionPage();
-    return prologOptionPage;
-  }
-	
+	@Override
+	public JComponent init(PluginWorkspace pluginWorkspace) {
+		prologOptionPage = new PrologOptionPage();
+		return prologOptionPage;
+	}
+
 }

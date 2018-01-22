@@ -1,4 +1,5 @@
 package com.oxygenxml.prolog.updater;
+
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -30,16 +31,19 @@ public class XmlPrettyPrinterUtil {
 
 	/**
 	 * Indent the given XML content.
-	 * @param xmlContent The content to indent.
+	 * 
+	 * @param xmlContent
+	 *          The content to indent.
 	 * @return The indented content.
 	 * @throws IOException
-	 * @throws SAXException 
-	 * @throws ParserConfigurationException 
-	 * @throws SAXNotSupportedException 
-	 * @throws SAXNotRecognizedException 
-	 * @throws TransformerException 
+	 * @throws SAXException
+	 * @throws ParserConfigurationException
+	 * @throws SAXNotSupportedException
+	 * @throws SAXNotRecognizedException
+	 * @throws TransformerException
 	 */
-	public static String indent(String xmlContent) throws IOException, SAXNotRecognizedException, SAXNotSupportedException, ParserConfigurationException, SAXException, TransformerException {
+	public static String indent(String xmlContent) throws IOException, SAXNotRecognizedException,
+			SAXNotSupportedException, ParserConfigurationException, SAXException, TransformerException {
 		String prettifiedContent = null;
 
 		TransformerFactory transformerFactory = TransformerFactory.newInstance();
@@ -73,17 +77,16 @@ public class XmlPrettyPrinterUtil {
 		}
 		return prettifiedContent;
 	}
-	
-	
+
 	public static XMLReader createXMLReader()
-      throws SAXNotRecognizedException, SAXNotSupportedException, ParserConfigurationException, SAXException {
-    
-    SAXParserFactory factory = SAXParserFactory.newInstance();
-    factory.setNamespaceAware(true);
-    factory.setValidating(false);
-    SAXParser saxParser = factory.newSAXParser();
-    
-    return saxParser.getXMLReader();
-  }
-	
+			throws SAXNotRecognizedException, SAXNotSupportedException, ParserConfigurationException, SAXException {
+
+		SAXParserFactory factory = SAXParserFactory.newInstance();
+		factory.setNamespaceAware(true);
+		factory.setValidating(false);
+		SAXParser saxParser = factory.newSAXParser();
+
+		return saxParser.getXMLReader();
+	}
+
 }

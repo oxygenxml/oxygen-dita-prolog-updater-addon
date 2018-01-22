@@ -26,97 +26,105 @@ import ro.sync.exml.workspace.api.editor.page.text.xml.XPathException;
 
 /**
  * A collection of utility methods to be used in the author page.
- *  
+ * 
  * @author adrian_sorop
  */
 public class AuthorPageDocumentUtil {
-  
-  /**
-   * Logger for logging.
-   */
-  private static final Logger logger = Logger.getLogger(AuthorPageDocumentUtil.class.getName());
-  
-  /**
-   * Private constructor. Avoid instantiation.
-   */
-  private AuthorPageDocumentUtil() {
-    // Nothing
-  }
-  
-  /**
-   * Search and return a list of elements with a specific class.
-   * 
-   * @param rootElement The node where the search should start.
-   * @param classValue The class value used to identify the element.
-   * @return A list with elements with a specific class. If no element is found,
-   * the method returns an empty list.
-   */
-  public static List<AuthorElement> findElementsByClass(AuthorElement rootElement, String classValue) {
-    List<AuthorElement> toReturn = new ArrayList<AuthorElement>();
-    List<AuthorNode> contentNodes = rootElement.getContentNodes();
-    if (contentNodes != null && !contentNodes.isEmpty()) {
-      for (AuthorNode authorNode : contentNodes) {
-        if (authorNode.getType() == AuthorElement.NODE_TYPE_ELEMENT) {
-          AuthorElement el = (AuthorElement) authorNode;
-          AttrValue clazz = el.getAttribute("class");
-          if (clazz != null && clazz.getValue() != null && clazz.getValue().contains(classValue)) {
-            toReturn.add(el);
-          }         
-        }
-      }
-    }
-    return toReturn;
-  }
-  
-  
-  /**
-   * Search and return first element identified by given class value.
-   * 
-   * @param rootElement Document root element.
-   * @param classValue The class value used to identify the element.
-   * @return <code>null</code> or the identified element.
-   */
-  public static AuthorElement findElementByClass(AuthorElement rootElement, String classValue) {
-    AuthorElement toReturn = null;
-    List<AuthorNode> contentNodes = rootElement.getContentNodes();
-    if (contentNodes != null && !contentNodes.isEmpty()) {
-      for (AuthorNode authorNode : contentNodes) {
-        if (authorNode.getType() == AuthorElement.NODE_TYPE_ELEMENT) {
-          AuthorElement el = (AuthorElement) authorNode;
-          AttrValue clazz = el.getAttribute("class");
-          if (clazz != null && clazz.getValue() != null && clazz.getValue().contains(classValue)) {
-            toReturn = el;
-            break;
-          }
-        }
-      }
-    }
-    return toReturn;
-  }
-  
-  /**
-   * Search for author according to given type.
-   * 
-   * @param authors The list with authors.
-   * @param type The searched author type ( {@link XmlElementsConstants#CREATOR_TYPE} or {@link XmlElementsConstants#CONTRIBUTOR_TYPE})
-   * @param authorName The name of the author.
-   * 
-   * @return <code>true</code> if was found an author with given type.
-   */
-  public static boolean hasAuthor(List<AuthorElement>authors, String type, String authorName) {
-    boolean foundAuthor = false;
-  
-    // Iterate over authors.
-    for (AuthorElement el : authors) {
-    	// Get the type's value,
-      AttrValue typeAttr = el.getAttribute("type");
-      if (typeAttr != null) {
-        String typeAttrValue = typeAttr.getValue();
-      
-        if (type.equals(typeAttrValue)) {
-          // Was found a creator.
-          foundAuthor = typeAttrValue.equals(XmlElementsConstants.CREATOR_TYPE);
-          if (typeAttrValue.equals(XmlElementsConstants.CONTRIBUTOR_TYPE)) {
+
+	/**
+	 * Logger for logging.
+	 */
+	private static final Logger logger = Logger.getLogger(AuthorPageDocumentUtil.class.getName());
+
+	/**
+	 * Private constructor. Avoid instantiation.
+	 */
+	private AuthorPageDocumentUtil() {
+		// Nothing
+	}
+
+	/**
+	 * Search and return a list of elements with a specific class.
+	 * 
+	 * @param rootElement
+	 *          The node where the search should start.
+	 * @param classValue
+	 *          The class value used to identify the element.
+	 * @return A list with elements with a specific class. If no element is found,
+	 *         the method returns an empty list.
+	 */
+	public static List<AuthorElement> findElementsByClass(AuthorElement rootElement, String classValue) {
+		List<AuthorElement> toReturn = new ArrayList<AuthorElement>();
+		List<AuthorNode> contentNodes = rootElement.getContentNodes();
+		if (contentNodes != null && !contentNodes.isEmpty()) {
+			for (AuthorNode authorNode : contentNodes) {
+				if (authorNode.getType() == AuthorElement.NODE_TYPE_ELEMENT) {
+					AuthorElement el = (AuthorElement) authorNode;
+					AttrValue clazz = el.getAttribute("class");
+					if (clazz != null && clazz.getValue() != null && clazz.getValue().contains(classValue)) {
+						toReturn.add(el);
+					}
+				}
+			}
+		}
+		return toReturn;
+	}
+
+	/**
+	 * Search and return first element identified by given class value.
+	 * 
+	 * @param rootElement
+	 *          Document root element.
+	 * @param classValue
+	 *          The class value used to identify the element.
+	 * @return <code>null</code> or the identified element.
+	 */
+	public static AuthorElement findElementByClass(AuthorElement rootElement, String classValue) {
+		AuthorElement toReturn = null;
+		List<AuthorNode> contentNodes = rootElement.getContentNodes();
+		if (contentNodes != null && !contentNodes.isEmpty()) {
+			for (AuthorNode authorNode : contentNodes) {
+				if (authorNode.getType() == AuthorElement.NODE_TYPE_ELEMENT) {
+					AuthorElement el = (AuthorElement) authorNode;
+					AttrValue clazz = el.getAttribute("class");
+					if (clazz != null && clazz.getValue() != null && clazz.getValue().contains(classValue)) {
+						toReturn = el;
+						break;
+					}
+				}
+			}
+		}
+		return toReturn;
+	}
+
+	/**
+	 * Search for author according to given type.
+	 * 
+	 * @param authors
+	 *          The list with authors.
+	 * @param type
+	 *          The searched author type (
+	 *          {@link XmlElementsConstants#CREATOR_TYPE} or
+	 *          {@link XmlElementsConstants#CONTRIBUTOR_TYPE})
+	 * @param authorName
+	 *          The name of the author.
+	 * 
+	 * @return <code>true</code> if was found an author with given type.
+	 */
+	public static boolean hasAuthor(List<AuthorElement> authors, String type, String authorName) {
+		boolean foundAuthor = false;
+
+		// Iterate over authors.
+		for (AuthorElement el : authors) {
+			// Get the type's value,
+			AttrValue typeAttr = el.getAttribute("type");
+			if (typeAttr != null) {
+				String typeAttrValue = typeAttr.getValue();
+
+				if (type.equals(typeAttrValue)) {
+					// Was found a creator.
+					foundAuthor = typeAttrValue.equals(XmlElementsConstants.CREATOR_TYPE);
+					if (typeAttrValue.equals(XmlElementsConstants.CONTRIBUTOR_TYPE)) {
 						try {
 							// Check the content of contributor element.
 							String textContent = el.getTextContent();
@@ -125,29 +133,34 @@ public class AuthorPageDocumentUtil {
 						} catch (BadLocationException e) {
 							logger.debug(e.getMessage(), e);
 						}
-          } 
+					}
 
-          if (foundAuthor) {
-            break;
-          }
-        }
-      }
-    }
-    return foundAuthor;
-  }
-  
-  /**
-   * Inserts an element schema aware and restore the caret position.
-   * 
-   * @param page The current page opened in editor.
-   * @param controller The document controller.
-   * @param xmlFragment The xml fragment to insert.
-   * @param offset The insert position.
-   * @throws AuthorOperationException If the fragment could not be inserted.
-   */
+					if (foundAuthor) {
+						break;
+					}
+				}
+			}
+		}
+		return foundAuthor;
+	}
+
+	/**
+	 * Inserts an element schema aware and restore the caret position.
+	 * 
+	 * @param page
+	 *          The current page opened in editor.
+	 * @param controller
+	 *          The document controller.
+	 * @param xmlFragment
+	 *          The xml fragment to insert.
+	 * @param offset
+	 *          The insert position.
+	 * @throws AuthorOperationException
+	 *           If the fragment could not be inserted.
+	 */
 	public static void insertFragmentSchemaAware(final WSEditorPage page, final AuthorDocumentController controller,
 			final String xmlFragment, final int offset) throws AuthorOperationException {
-		
+
 		if (controller != null && xmlFragment != null && offset != -1) {
 			Position position = null;
 			// Get the initial caret offset.
@@ -155,7 +168,7 @@ public class AuthorPageDocumentUtil {
 			if (page instanceof WSAuthorEditorPage) {
 				caretOffset = ((WSAuthorEditorPage) page).getCaretOffset();
 			}
-		
+
 			try {
 				if (caretOffset != -1) {
 					position = controller.createPositionInContent(caretOffset);
@@ -174,22 +187,32 @@ public class AuthorPageDocumentUtil {
 
 		}
 	}
-  
-  /**
-   * Inserts the given fragment schema aware and restore the caret position.
-   * 
-   * @param page The current page opened in editor.
-   * @param documentController The author document controller.
-   * @param xmlFragment The xml fragment that will be inserted.
-   * @param xPath The xPath to insert fragment relative to.
-   * @param position The position relative to the node identified by the XPath location. 
-   * Can be one of the constants: {@link AuthorConstants#POSITION_BEFORE}, {@link AuthorConstants#POSITION_AFTER}, 
-   * {@link AuthorConstants#POSITION_INSIDE_FIRST} or {@link AuthorConstants#POSITION_INSIDE_LAST}.
-   * @throws AuthorOperationException  If the fragment could not be inserted.
-   */
-  public static void insertFragmentSchemaAware(final WSEditorPage page,  final AuthorDocumentController documentController, 
-  		final String xmlFragment, final String xPath, final String position) throws AuthorOperationException {
-   
+
+	/**
+	 * Inserts the given fragment schema aware and restore the caret position.
+	 * 
+	 * @param page
+	 *          The current page opened in editor.
+	 * @param documentController
+	 *          The author document controller.
+	 * @param xmlFragment
+	 *          The xml fragment that will be inserted.
+	 * @param xPath
+	 *          The xPath to insert fragment relative to.
+	 * @param position
+	 *          The position relative to the node identified by the XPath
+	 *          location. Can be one of the constants:
+	 *          {@link AuthorConstants#POSITION_BEFORE},
+	 *          {@link AuthorConstants#POSITION_AFTER},
+	 *          {@link AuthorConstants#POSITION_INSIDE_FIRST} or
+	 *          {@link AuthorConstants#POSITION_INSIDE_LAST}.
+	 * @throws AuthorOperationException
+	 *           If the fragment could not be inserted.
+	 */
+	public static void insertFragmentSchemaAware(final WSEditorPage page,
+			final AuthorDocumentController documentController, final String xmlFragment, final String xPath,
+			final String position) throws AuthorOperationException {
+
 		if (xmlFragment != null && xPath != null && position != null) {
 			Position pos = null;
 
@@ -213,18 +236,20 @@ public class AuthorPageDocumentUtil {
 		}
 
 	}
-  
-  
-  /**
-   * Find a possible xPath where prolog element can be inserted.
-   *  
-   * @param documentController The author document controller.
-   * @param documentType The type of the document ( {@link DocumentType#TOPIC}, {@link DocumentType#MAP} or  {@link DocumentType#BOOKMAP}  ).
-   * @return A xPath where to insert the prolog node or <code>null</code>.
-   * 
-   * @throws BadLocationException
-   * @throws XPathException
-   */
+
+	/**
+	 * Find a possible xPath where prolog element can be inserted.
+	 * 
+	 * @param documentController
+	 *          The author document controller.
+	 * @param documentType
+	 *          The type of the document ( {@link DocumentType#TOPIC},
+	 *          {@link DocumentType#MAP} or {@link DocumentType#BOOKMAP} ).
+	 * @return A xPath where to insert the prolog node or <code>null</code>.
+	 * 
+	 * @throws BadLocationException
+	 * @throws XPathException
+	 */
 	public static String findPrologXPath(AuthorDocumentController controller, DocumentType documentType) {
 		String toReturn = null;
 		ContextElement nodeToInsertAfter = null;
@@ -243,7 +268,7 @@ public class AuthorPageDocumentUtil {
 		}
 		return toReturn;
 	}
-  
+
 	/**
 	 * Find a possible context where prolog element can be inserted.
 	 * 

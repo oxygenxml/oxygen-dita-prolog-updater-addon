@@ -5,36 +5,38 @@ import ro.sync.exml.plugin.PluginDescriptor;
 
 /**
  * Prolog updater class.
+ * 
  * @author cosmin_duna
  *
  */
 public class PrologUpdaterPlugin extends Plugin {
-  /**
-   * The static plugin instance.
-   */
-  private static PrologUpdaterPlugin instance = null;
+	/**
+	 * The static plugin instance.
+	 */
+	private static PrologUpdaterPlugin instance = null;
 
-  /**
-   * Constructs the plugin.
-   * 
-   * @param descriptor The plugin descriptor
-   */
-  public PrologUpdaterPlugin(PluginDescriptor descriptor) {
-    super(descriptor);
+	/**
+	 * Constructs the plugin.
+	 * 
+	 * @param descriptor
+	 *          The plugin descriptor
+	 */
+	public PrologUpdaterPlugin(PluginDescriptor descriptor) {
+		super(descriptor);
 
-    if (instance != null) {
-      throw new IllegalStateException("Already instantiated!");
-    }
-    instance = this;
-  }
-  
-  /**
-   * Get the plugin instance.
-   * 
-   * @return the shared plugin instance.
-   */
-  public static PrologUpdaterPlugin getInstance() {
-    return instance;
-  }
+		if (instance != null) {
+			throw new IllegalStateException("Already instantiated!");
+		}
+		instance = this;
+	}
+
+	/**
+	 * Get the plugin instance.
+	 * 
+	 * @return the shared plugin instance.
+	 */
+	public static PrologUpdaterPlugin getInstance() {
+		return instance;
+	}
 
 }

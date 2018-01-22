@@ -23,65 +23,72 @@ import ro.sync.ecss.extensions.api.node.AuthorDocumentFragment;
 import ro.sync.exml.workspace.api.editor.WSEditor;
 import ro.sync.exml.workspace.api.editor.page.author.WSAuthorEditorPage;
 
-
 /**
- * Extension of the test case for the tests in author page.  
+ * Extension of the test case for the tests in author page.
+ * 
  * @author cosmin_duna
  *
  */
-public abstract class AuthorTestCase extends TestCase{
+public abstract class AuthorTestCase extends TestCase {
 
 	/**
 	 * The name of author.
 	 */
 	final static String AUTHOR_NAME = "test";
-	
+
 	/**
 	 * The relative path to catalogs.
 	 */
-  private static final String CATALOG = "config/catalogs/catalog.xml";
-	
-  /**
-   * Initializes the catalogs. Search for them in the config folder.
-   * 
-   * @param options The command line options.
-   * @throws IOException When the installation dir does not exist.
-   */
-  private static void initializeCatalogs() throws IOException {
-    String defaultCatalog = new File(CATALOG).toURI().toString();
-    
-    // Sets the catalogs
-    String[] catalogURIs = new String[] {defaultCatalog};
-    
-    CatalogResolverFacade.setCatalogs(catalogURIs, "public");
-  }
-	
+	private static final String CATALOG = "config/catalogs/catalog.xml";
+
+	/**
+	 * Initializes the catalogs. Search for them in the config folder.
+	 * 
+	 * @param options
+	 *          The command line options.
+	 * @throws IOException
+	 *           When the installation dir does not exist.
+	 */
+	private static void initializeCatalogs() throws IOException {
+		String defaultCatalog = new File(CATALOG).toURI().toString();
+
+		// Sets the catalogs
+		String[] catalogURIs = new String[] { defaultCatalog };
+
+		CatalogResolverFacade.setCatalogs(catalogURIs, "public");
+	}
+
 	/**
 	 * Test the prolog update of given input in author mode.
-	 * @param inputXML The input document.
-	 * @param isNewDocument <code>true</code> if document is new, <code>false</code> otherwise
-	 * @param expectedXML The expected output document.
+	 * 
+	 * @param inputXML
+	 *          The input document.
+	 * @param isNewDocument
+	 *          <code>true</code> if document is new, <code>false</code> otherwise
+	 * @param expectedXML
+	 *          The expected output document.
 	 * @throws IOException
 	 * @throws SAXException
 	 * @throws BadLocationException
-	 * @throws ParserConfigurationException 
-	 * @throws TransformerException 
+	 * @throws ParserConfigurationException
+	 * @throws TransformerException
 	 */
-	protected void testInAuthorMode(String inputXML, boolean isNewDocument, String expectedXML) throws IOException, SAXException, BadLocationException, ParserConfigurationException, TransformerException{
+	protected void testInAuthorMode(String inputXML, boolean isNewDocument, String expectedXML)
+			throws IOException, SAXException, BadLocationException, ParserConfigurationException, TransformerException {
 		initializeCatalogs();
-		
+
 		//
-		//Create a AuthorDocumentController
+		// Create a AuthorDocumentController
 		//
 		AuthorDocumentFacadeFactory facadeFactory = new AuthorDocumentFacadeFactory();
 		InputSource[] cssInputSources = new InputSource[] { new InputSource(new StringReader("* {display: block;}")) };
 		StringReader reader = new StringReader(inputXML);
-    AuthorDocumentFacade facade = facadeFactory.createFacade( new StreamSource(reader),
-				cssInputSources, null, new File("."));
+		AuthorDocumentFacade facade = facadeFactory.createFacade(new StreamSource(reader), cssInputSources, null,
+				new File("."));
 		AuthorDocumentController controller = facade.getController();
-		
+
 		//
-		//Create mocks.
+		// Create mocks.
 		//
 		WSEditor wsEditor = Mockito.mock(WSEditor.class);
 		WSAuthorEditorPage wsAuthorEditorPage = Mockito.mock(WSAuthorEditorPage.class);
@@ -90,19 +97,19 @@ public abstract class AuthorTestCase extends TestCase{
 		Mockito.when(wsEditor.getCurrentPage()).thenReturn(wsAuthorEditorPage);
 		Mockito.when(wsAuthorEditorPage.getDocumentController()).thenReturn(controller);
 
-		//Create the DitaUpdater
-		DitaUpdater ditaUpdater = new DitaUpdater(){
+		// Create the DitaUpdater
+		DitaUpdater ditaUpdater = new DitaUpdater() {
 			@Override
 			protected String getAuthorName() {
 				return AUTHOR_NAME;
 			}
 		};
-		
+
 		//
-		//Call the updateProlog method
+		// Call the updateProlog method
 		//
 		ditaUpdater.updateProlog(wsEditor, isNewDocument);
-		
+
 		//
 		// Check result:
 		//
@@ -111,17 +118,15 @@ public abstract class AuthorTestCase extends TestCase{
 		String toXML = controller.serializeFragmentToXML(fragment);
 
 		String expected = XmlPrettyPrinterUtil.indent(expectedXML).replaceAll(" +", " ");
-    String actual = XmlPrettyPrinterUtil.indent(toXML).replaceAll(" +", " ");
-    
-    expected = expected.replaceAll(" <", "<");
-    actual = actual.replaceAll(" <", "<");
-    
-    expected = expected.replaceAll("> ", ">");
-    actual = actual.replaceAll("> ", ">");
- 
-    
-    assertEquals("The updated content is wrong", expected, actual);
+		String actual = XmlPrettyPrinterUtil.indent(toXML).replaceAll(" +", " ");
+
+		expected = expected.replaceAll(" <", "<");
+		actual = actual.replaceAll(" <", "<");
+
+		expected = expected.replaceAll("> ", ">");
+		actual = actual.replaceAll("> ", ">");
+
+		assertEquals("The updated content is wrong", expected, actual);
 	}
-	
 
 }

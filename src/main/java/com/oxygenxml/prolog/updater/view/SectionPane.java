@@ -10,39 +10,41 @@ import javax.swing.JPanel;
 import javax.swing.JSeparator;
 
 /**
- * Section pane(JLabel + JSeparator). 
+ * Section pane(JLabel + JSeparator).
  *
  */
-public class SectionPane extends JPanel{
+public class SectionPane extends JPanel {
 
-  /**
-   * Default serial version.
-   */
-  private static final long serialVersionUID = 1L;
+	/**
+	 * Default serial version.
+	 */
+	private static final long serialVersionUID = 1L;
 
-  /**
-   * Constructor.
-   * @param title The title of the section pane.
-   */
-  public SectionPane(String title) {
-    super(new GridBagLayout());
+	/**
+	 * Constructor.
+	 * 
+	 * @param title
+	 *          The title of the section pane.
+	 */
+	public SectionPane(String title) {
+		super(new GridBagLayout());
 
-    GridBagConstraints c = new GridBagConstraints();
-    // Add the label.
-    c.gridx = 0;
-    c.gridy = 0;
-    c.anchor = GridBagConstraints.WEST;
-    c.insets = new Insets(20, 0, 5, 5);
-    JLabel titleLabel = new JLabel(title);
-    titleLabel.setFont(titleLabel.getFont().deriveFont(Font.BOLD));
-    add(titleLabel, c);
-    
-    // Add the separator.
-    c.gridx ++;
-    c.fill = GridBagConstraints.HORIZONTAL;
-    c.anchor = GridBagConstraints.WEST;
-    c.weightx = 1;
-    c.insets.right = 0;
-    add(new JSeparator(), c);
-  }
+		GridBagConstraints c = new GridBagConstraints();
+		// Add the label.
+		c.gridx = 0;
+		c.gridy = 0;
+		c.anchor = GridBagConstraints.WEST;
+		c.insets = new Insets(20, 0, 5, 5);
+		JLabel titleLabel = new JLabel(title);
+		titleLabel.setFont(titleLabel.getFont().deriveFont(Font.BOLD));
+		add(titleLabel, c);
+
+		// Add the separator.
+		c.gridx++;
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.anchor = GridBagConstraints.WEST;
+		c.weightx = 1;
+		c.insets.right = 0;
+		add(new JSeparator(), c);
+	}
 }

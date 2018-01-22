@@ -35,19 +35,17 @@ public class PrologUpdaterExtensionTest extends TestCase {
 			}
 		}).when(ditaUpdater).updateProlog((WSEditor) Mockito.anyObject(), Mockito.anyBoolean());
 
+		//
+		// The plugin
+		//
+		PrologUpdaterExtension extension = new PrologUpdaterExtension() {
 
-		//
-		// The plugin 
-		//
-		PrologUpdaterExtension extension = new PrologUpdaterExtension(){
-			
 			@Override
 			protected DitaUpdater createDitaUpdater() {
 				return ditaUpdater;
-			}			
+			}
 		};
-		
-		
+
 		// Mock the editor access.
 		final WSEditorListener[] editorListeners = new WSEditorListener[1];
 		final WSEditor editorAccess = Mockito.mock(WSEditor.class);
@@ -57,7 +55,6 @@ public class PrologUpdaterExtensionTest extends TestCase {
 				return null;
 			}
 		}).when(editorAccess).addEditorListener((WSEditorListener) Mockito.anyObject());
-
 
 		// Mock the workspace.
 		final WSEditorChangeListener[] workspaceListeners = new WSEditorChangeListener[1];
@@ -77,7 +74,7 @@ public class PrologUpdaterExtensionTest extends TestCase {
 
 		assertNull(workspaceListeners[0]);
 		extension.applicationStarted(workspace);
-		assertNotNull(" 'applicationStarted' method should be called.",workspaceListeners[0]);
+		assertNotNull(" 'applicationStarted' method should be called.", workspaceListeners[0]);
 
 		// Check that the listener reacts to editorOpened event.
 		assertNull(editorListeners[0]);
@@ -88,7 +85,7 @@ public class PrologUpdaterExtensionTest extends TestCase {
 		editorListeners[0].editorAboutToBeSavedVeto(0);
 		editorListeners[0].editorSaved(0);
 		assertTrue(" 'editorSaved' method should be called.", doUpdateProlog[0]);
-		
+
 	}
 
 }
