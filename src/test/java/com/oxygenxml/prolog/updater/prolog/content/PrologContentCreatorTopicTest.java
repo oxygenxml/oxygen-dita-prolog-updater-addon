@@ -260,7 +260,6 @@ public class PrologContentCreatorTopicTest extends TestCase {
 		// Get the prolog when document isn't new.
 		prologFragment = prologContentCreator.getPrologFragment(false, DocumentType.TOPIC);
 		assertEquals("The fragment is not generated according to options.",
-				"The fragment is not generated according to options.", "The fragment is not generated according to options.",
 				"<prolog><critdates><!--name--><revised modified=\"2017-12-04\"/></critdates></prolog>", prologFragment);
 
 		// Check the generated prolog fragment.
