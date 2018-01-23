@@ -21,7 +21,7 @@ The following options can be set for DITA topics or maps (or both):
 
 - **Author**: Specifies the name of the author. By default, it is the system user name.
 - **Enable automatic prolog update on save**: When this option is selected, the prolog is updated anytime the document is saved.
-- **Set the creator name**: When this option is selected, the author is set as the document's *creator* in the prolog when the document is saved. This option is only applicable for new documents.
-- **Set the created date**: When this option is selected, a *created date* is added to the prolog when the document is saved. This option is only applicable for new documents.
-- **Update the contributor names**: When this option is selected, the author is set as a *contributor* in the prolog when the document is saved. This option is only applicable for already existing documents.
-- **Update the revised dates**: When this option is selected, a *revised date* is added to the prolog when the document is saved. This option is only applicable for already existing documents. 
+- **Set creator name**: When this option is selected, the author is set as the document's *creator* in the prolog when the document is saved. This option is only applicable for new documents.
+- **Set created date**: When this option is selected, a *created date* is added to the prolog when the document is saved. This option is only applicable for new documents.
+- **Update contributor names**: When this option is selected, the author is set as a *contributor* in the prolog when the document is saved. This option is only applicable for already existing documents.
+- **Update revised dates**: When this option is selected, a *revised date* is added to the prolog when the document is saved. This option is only applicable for already existing documents. 

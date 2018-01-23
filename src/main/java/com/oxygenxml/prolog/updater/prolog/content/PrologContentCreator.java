@@ -22,6 +22,11 @@ import ro.sync.exml.workspace.api.options.WSOptionsStorage;
 public class PrologContentCreator {
 
 	/**
+	 * Date pattern.
+	 */
+	public static final String DATE_PATTERN = "yyyy/MM/dd";
+	
+	/**
 	 * XML fragment for author that has type creator.
 	 */
 	private StringBuilder creatorFragment;
@@ -45,6 +50,7 @@ public class PrologContentCreator {
 	 * The local date in format "yyyy/MM/dd".
 	 */
 	private String localDate;
+	
 	/**
 	 * The name of the author
 	 */
@@ -304,7 +310,7 @@ public class PrologContentCreator {
 	 * @return The local date in String format.
 	 */
 	protected String createLocalDate() {
-		return new SimpleDateFormat(XMLFragmentUtils.DATE_PATTERN).format(new Date());
+		return new SimpleDateFormat(DATE_PATTERN).format(new Date());
 	}
 
 	/**

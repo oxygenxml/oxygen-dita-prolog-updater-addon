@@ -6,10 +6,6 @@ package com.oxygenxml.prolog.updater.utils;
  * @author adrian_sorop
  */
 public class XMLFragmentUtils {
-	/**
-	 * Date pattern.
-	 */
-	public static final String DATE_PATTERN = "yyyy/MM/dd";
 
 	/**
 	 * Private constructor. Avoid instantiation.
@@ -25,15 +21,14 @@ public class XMLFragmentUtils {
 	 * @return The critdates element with the date.
 	 */
 	public static String createCritdateTag(String date) {
-		if (date == null) {
-			return null;
-		} else {
+		if (date != null) {
 			StringBuilder sb = new StringBuilder();
 			sb.append("<critdates>");
 			sb.append(date);
 			sb.append("</critdates>");
 			return sb.toString();
 		}
+		return null;
 	}
 
 	/**

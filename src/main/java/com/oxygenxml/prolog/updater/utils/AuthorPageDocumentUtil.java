@@ -170,9 +170,7 @@ public class AuthorPageDocumentUtil {
 			}
 
 			try {
-				if (caretOffset != -1) {
-					position = controller.createPositionInContent(caretOffset);
-				}
+				position = controller.createPositionInContent(caretOffset);
 			} catch (BadLocationException e) {
 				logger.debug(e.getMessage(), e);
 			}
@@ -220,16 +218,16 @@ public class AuthorPageDocumentUtil {
 			if (page instanceof WSAuthorEditorPage) {
 				caretOffset = ((WSAuthorEditorPage) page).getCaretOffset();
 			}
-			if (caretOffset != -1) {
-				try {
-					pos = documentController.createPositionInContent(caretOffset);
-				} catch (BadLocationException e) {
-					logger.debug(e.getMessage(), e);
-				}
+			try {
+				pos = documentController.createPositionInContent(caretOffset);
+			} catch (BadLocationException e) {
+				logger.debug(e.getMessage(), e);
 			}
 
+			// Insert the fragment.
 			documentController.insertXMLFragmentSchemaAware(xmlFragment, xPath, position);
 
+			// Restore the caret position.
 			if (pos != null) {
 				((WSAuthorEditorPage) page).setCaretPosition(pos.getOffset());
 			}

@@ -36,22 +36,22 @@ public class Tags {
 	public static final String ENABLE_UPDATE_ON_SAVE = "prolog.updater.enable.on.save";
 
 	/**
-	 * en: Set the creator name
+	 * en: Set creator name
 	 */
 	public static final String SET_CREATOR = "prolog.updater.set.creator";
 
 	/**
-	 * en: Set the created date
+	 * en: Set created date
 	 */
 	public static final String SET_CREATED_DATE = "prolog.updater.set.created.date";
 
 	/**
-	 * en: Update the contributor names
+	 * en: Update contributor names
 	 */
 	public static final String UPDATE_CONTRIBUTOR = "prolog.updater.update.contributor";
 
 	/**
-	 * en: Update the revised dates
+	 * en: Update revised dates
 	 */
 	public static final String UPDATE_REVISED_DATES = "prolog.updater.update.revised.dates";
 

@@ -112,7 +112,7 @@ public class TextPageDocumentUtil {
 					// Pretty print moves to next line. We don't want that.
 					if (fragment.endsWith("\r\n")) {
 						fragment = fragment.substring(0, fragment.length() - 2);
-					} else if (fragment.endsWith("\n") || fragment.endsWith("\r\n") || fragment.endsWith("\r")) {
+					} else if (fragment.endsWith("\n") || fragment.endsWith("\r")) {
 						fragment = fragment.substring(0, fragment.length() - 1);
 					}
 				} catch (PrettyPrintException e) {

@@ -44,35 +44,35 @@
 	</key>
 	<key value="prolog.updater.set.creator">
 		<comment>The text from the check box which set the creator</comment>
-		<val lang="en_US">Set the creator name</val>
-		<val lang="de_DE">Set the creator name</val>
-		<val lang="fr_FR">Set the creator name</val>
-		<val lang="ja_JP">Set the creator name</val>
-		<val lang="nl_NL">Set the creator name</val>
+		<val lang="en_US">Set creator name</val>
+		<val lang="de_DE">Set creator name</val>
+		<val lang="fr_FR">Set creator name</val>
+		<val lang="ja_JP">Set creator name</val>
+		<val lang="nl_NL">Set creator name</val>
 	</key>
 	<key value="prolog.updater.set.created.date">
 		<comment>The text from the check box which set the created date</comment>
-		<val lang="en_US">Set the created date</val>
-		<val lang="de_DE">Set the created date</val>
-		<val lang="fr_FR">Set the created date</val>
-		<val lang="ja_JP">Set the created date</val>
-		<val lang="nl_NL">Set the created date</val>
+		<val lang="en_US">Set created date</val>
+		<val lang="de_DE">Set created date</val>
+		<val lang="fr_FR">Set created date</val>
+		<val lang="ja_JP">Set created date</val>
+		<val lang="nl_NL">Set created date</val>
 	</key>
 	<key value="prolog.updater.update.contributor">
 		<comment>The text from the check box which set the contributor</comment>
-		<val lang="en_US">Update the contributor names</val>
-		<val lang="de_DE">Update the contributor names</val>
-		<val lang="fr_FR">Update the contributor names</val>
-		<val lang="ja_JP">Update the contributor names</val>
-		<val lang="nl_NL">Update the contributor names</val>
+		<val lang="en_US">Update contributor names</val>
+		<val lang="de_DE">Update contributor names</val>
+		<val lang="fr_FR">Update contributor names</val>
+		<val lang="ja_JP">Update contributor names</val>
+		<val lang="nl_NL">Update contributor names</val>
 	</key>
 	<key value="prolog.updater.update.revised.dates">
 		<comment>The text from the check box which set the revised date</comment>
-		<val lang="en_US">Update the revised dates</val>
-		<val lang="de_DE">Update the revised dates</val>
-		<val lang="fr_FR">Update the revised dates</val>
-		<val lang="ja_JP">Update the revised dates</val>
-		<val lang="nl_NL">Update the revised dates</val>
+		<val lang="en_US">Update revised dates</val>
+		<val lang="de_DE">Update revised dates</val>
+		<val lang="fr_FR">Update revised dates</val>
+		<val lang="ja_JP">Update revised dates</val>
+		<val lang="nl_NL">Update revised dates</val>
 	</key>
 	
 	<key value="prolog.updater.error.message">

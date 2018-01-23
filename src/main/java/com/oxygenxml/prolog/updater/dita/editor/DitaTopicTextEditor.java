@@ -35,7 +35,7 @@ public class DitaTopicTextEditor implements DitaEditor {
 	/**
 	 * Text document controller
 	 */
-	TextDocumentController documentController;
+	private TextDocumentController documentController;
 
 	/**
 	 * The page from Workspace text editor.
