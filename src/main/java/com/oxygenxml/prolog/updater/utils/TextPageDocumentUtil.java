@@ -190,42 +190,69 @@ public class TextPageDocumentUtil {
 
 		// Get the XmlSchemaManager.
 		WSTextXMLSchemaManager schemaManager = page.getXMLSchemaManager();
+		if (schemaManager != null) {
+			
+			// Get all child of root topic.
+			WSXMLTextNodeRange[] topicChild = page.findElementsByXPath(ElementXPathUtils.getRootChildXpath(documentType));
+			int childNo = topicChild.length;
+			// Iterate over topic child
+			for (int j = 0; j < childNo; j++) {
+				WSXMLTextNodeRange currentNode = topicChild[j];
+				// Get the offset of next line.
+				WhatElementsCanGoHereContext currentContext = null;
+				try {
+					int offset = page.getOffsetOfLineEnd(currentNode.getEndLine());
+					currentContext = schemaManager.createWhatElementsCanGoHereContext(offset);
+				} catch (BadLocationException e) {
+					logger.debug(e.getMessage(), e);
+				}
 
-		// Get all child of root topic.
-		WSXMLTextNodeRange[] topicChild = page.findElementsByXPath(ElementXPathUtils.getRootChildXpath(documentType));
-
-		int childNo = topicChild.length;
-		// Iterate over topic child
-		loop: for (int j = 0; j < childNo; j++) {
-			WSXMLTextNodeRange currentNode = topicChild[j];
-			// Get the offset of next line.
-			WhatElementsCanGoHereContext currentContext = null;
-			try {
-				int offset = page.getOffsetOfLineEnd(currentNode.getEndLine());
-				currentContext = schemaManager.createWhatElementsCanGoHereContext(offset);
-			} catch (BadLocationException e) {
-				logger.debug(e.getMessage(), e);
-			}
-			if (currentContext != null) {
-				// Analyze if current context can contain the prolog element.
-				List<CIElement> possible = schemaManager.whatElementsCanGoHere(currentContext);
-				if (possible != null) {
-					// Iterate over possible elements.
-					int size = possible.size();
-					for (int i = 0; i < size; i++) {
-						CIElement ciElement = possible.get(i);
-						if (ciElement.getName().equals(XmlElementsUtils.getPrologName(documentType))) {
-							toReturn = currentContext;
-							if (i == 0) {
-								// if prolog element is first in possible elements list. STOP.
-								break loop;
-							}
-						}
+				Boolean contextForProlog = analyzeContextForElement(
+						XmlElementsUtils.getPrologName(documentType),
+						currentContext,
+						schemaManager);
+				if (contextForProlog != null) {
+					toReturn = currentContext;
+					if (contextForProlog) {
+						break;
 					}
 				}
 			}
 		}
 		return toReturn;
 	}
-
+	
+	/**
+	 * Analyze if the given context can contains the given element.
+	 * @param element The name of the element to search.
+	 * @param context Context to analyze
+	 * @param schemaManager The schema manager from author mode.
+	 * @return <code>null</code> If the context can't contain the given element, 
+	 * 					<code>false</code> if the context can contain the given element, but it's not the best position.
+	 * 					<code>true</code> if the context can contains the given element and this is the best position.
+	 */
+	private static Boolean analyzeContextForElement(String element, WhatElementsCanGoHereContext context, WSTextXMLSchemaManager schemaManager) {
+		Boolean toReturn = null;
+		if (context != null) {
+			// Analyze if current context can contain the prolog element.
+			List<CIElement> possible = schemaManager.whatElementsCanGoHere(context);
+			if (possible != null) {
+				// Iterate over possible elements.
+				int size = possible.size();
+				for (int j = 0; j < size; j++) {
+					CIElement ciElement = possible.get(j);
+					if (ciElement.getName().equals(element)) {
+						// the context can contain the given element.
+						toReturn = false;
+						if (j == 0) {
+							// if prolog element is first in possible elements list(This is the best position).
+							toReturn = true;
+						}
+					}
+				}
+			}
+		
+		}
+		return toReturn;
+	}
 }

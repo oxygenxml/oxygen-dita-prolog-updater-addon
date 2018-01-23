@@ -3,13 +3,12 @@ package com.oxygenxml.prolog.updater.dita.editor;
 import org.apache.log4j.Logger;
 
 import com.oxygenxml.prolog.updater.prolog.content.PrologContentCreator;
-import com.oxygenxml.prolog.updater.utils.TextPageDocumentUtil;
-import com.oxygenxml.prolog.updater.utils.XMLFragmentUtils;
 import com.oxygenxml.prolog.updater.utils.ElementXPathConstants;
 import com.oxygenxml.prolog.updater.utils.ElementXPathUtils;
+import com.oxygenxml.prolog.updater.utils.TextPageDocumentUtil;
+import com.oxygenxml.prolog.updater.utils.XMLFragmentUtils;
 
 import ro.sync.exml.editor.xmleditor.operations.context.RelativeInsertPosition;
-import ro.sync.exml.workspace.api.editor.page.text.xml.TextDocumentController;
 import ro.sync.exml.workspace.api.editor.page.text.xml.TextOperationException;
 import ro.sync.exml.workspace.api.editor.page.text.xml.WSXMLTextEditorPage;
 import ro.sync.exml.workspace.api.editor.page.text.xml.WSXMLTextNodeRange;
@@ -32,10 +31,6 @@ public class DitaTopicTextEditor implements DitaEditor {
 	 * Contains all elements from prolog.
 	 */
 	private PrologContentCreator prologCreator;
-	/**
-	 * Text document controller
-	 */
-	private TextDocumentController documentController;
 
 	/**
 	 * The page from Workspace text editor.
@@ -58,7 +53,6 @@ public class DitaTopicTextEditor implements DitaEditor {
 	 */
 	public DitaTopicTextEditor(WSXMLTextEditorPage wsEditorPage, PrologContentCreator prologCreator) {
 		this.wsTextEditorPage = wsEditorPage;
-		this.documentController = wsTextEditorPage.getDocumentController();
 
 		try {
 			WSXMLTextNodeRange[] mapRoot = wsTextEditorPage.findElementsByXPath(ElementXPathConstants.ROOT_MAP_XPATH);

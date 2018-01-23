@@ -96,4 +96,10 @@ public class ElementXPathConstants {
 	 */
 	public static final String ROOT_MAP_CHILD = ROOT_MAP_XPATH + "/*";
 
+	/**
+	 * Private constructor.
+	 */
+  private ElementXPathConstants() {
+    throw new IllegalStateException("Utility class");
+  }
 }
