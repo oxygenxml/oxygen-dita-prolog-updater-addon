@@ -92,7 +92,7 @@ public class PrologOptionPage extends JPanel {
 	/**
 	 * Left indent for check boxes.
 	 */
-	private static final int LEFT_INDENT = 25;
+	private int leftIndent = 0;
 
 	/**
 	 * Constructor.
@@ -116,6 +116,8 @@ public class PrologOptionPage extends JPanel {
 		mapUpdateContributor = new JCheckBox(messages.getMessage(Tags.UPDATE_CONTRIBUTOR));
 		mapUpdateRevised = new JCheckBox(messages.getMessage(Tags.UPDATE_REVISED_DATES));
 
+		leftIndent = new JCheckBox().getPreferredSize().width;
+		
 		GridBagConstraints constr = new GridBagConstraints();
 		constr.gridx = 0;
 		constr.gridy = 0;
@@ -126,7 +128,7 @@ public class PrologOptionPage extends JPanel {
 		constr.gridx++;
 		constr.weightx = 1;
 		constr.fill = GridBagConstraints.HORIZONTAL;
-		constr.insets.left = LEFT_INDENT;
+		constr.insets.left = leftIndent;
 		// Author field
 		add(authorTextField, constr);
 
@@ -143,7 +145,7 @@ public class PrologOptionPage extends JPanel {
 		add(topicEnableUpdate, constr);
 
 		constr.gridy++;
-		constr.insets.left = LEFT_INDENT;
+		constr.insets.left = leftIndent;
 		add(topicSetCreator, constr);
 
 		constr.gridy++;
@@ -166,7 +168,7 @@ public class PrologOptionPage extends JPanel {
 		add(mapEnableUpdate, constr);
 
 		constr.gridy++;
-		constr.insets.left = LEFT_INDENT;
+		constr.insets.left = leftIndent;
 		add(mapSetCreator, constr);
 
 		constr.gridy++;
