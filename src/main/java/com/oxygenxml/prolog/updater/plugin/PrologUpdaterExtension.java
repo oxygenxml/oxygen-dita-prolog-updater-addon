@@ -4,7 +4,7 @@ import java.net.URL;
 
 import javax.swing.JComponent;
 
-import com.oxygenxml.prolog.updater.DitaUpdater;
+import com.oxygenxml.prolog.updater.DitaPrologUpdater;
 import com.oxygenxml.prolog.updater.view.PrologOptionPage;
 
 import ro.sync.exml.plugin.option.OptionPagePluginExtension;
@@ -38,9 +38,9 @@ public class PrologUpdaterExtension extends OptionPagePluginExtension implements
 	 */
 	public void applicationStarted(final StandalonePluginWorkspace workspace) {
 		// Create a XmlUpdater
-		final DitaUpdater xmlUpdater = createDitaUpdater();
+		final DitaPrologUpdater xmlUpdater = createDitaUpdater();
 
-		// Add an WSEditorChangeListener on the DITA_MAPS_EDITING_AREA
+		// Add n WSEditorChangeListener on the main editing area
 		workspace.addEditorChangeListener(new WSEditorChangeListener() {
 			@Override
 			public void editorOpened(URL editorLocation) {
@@ -77,7 +77,7 @@ public class PrologUpdaterExtension extends OptionPagePluginExtension implements
 			}
 		}, PluginWorkspace.MAIN_EDITING_AREA);
 
-		// Add an WSEditorChangeListener on the MAIN_EDITING_AREA
+		// Add a WSEditorChangeListener on the DITA Maps Manager
 		workspace.addEditorChangeListener(new WSEditorChangeListener() {
 			@Override
 			public void editorOpened(URL editorLocation) {
@@ -118,14 +118,16 @@ public class PrologUpdaterExtension extends OptionPagePluginExtension implements
 	 * 
 	 * @return a new instance.
 	 */
-	protected DitaUpdater createDitaUpdater() {
-		return new DitaUpdater();
+	protected DitaPrologUpdater createDitaUpdater() {
+		return new DitaPrologUpdater();
 	}
 
 	/**
-	 * Get the name of the current opened document.
+	 * Get the name of the given editor's document type.
+	 * 
 	 * @param wsEditor Access to workspace editor.
-	 * @return Name of the current document opened or null
+	 * 
+	 * @return The name of the given editor's document type, or <code>null</code>
 	 *  if the editor does not have an XML content type.
 	 */
 	protected String getDocumentTypeName(WSEditor wsEditor) {

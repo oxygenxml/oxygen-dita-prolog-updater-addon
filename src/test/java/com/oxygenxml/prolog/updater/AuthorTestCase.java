@@ -98,7 +98,7 @@ public abstract class AuthorTestCase extends TestCase {
 		Mockito.when(wsAuthorEditorPage.getDocumentController()).thenReturn(controller);
 
 		// Create the DitaUpdater
-		DitaUpdater ditaUpdater = new DitaUpdater() {
+		DitaPrologUpdater ditaUpdater = new DitaPrologUpdater() {
 			@Override
 			protected String getAuthorName() {
 				return AUTHOR_NAME;

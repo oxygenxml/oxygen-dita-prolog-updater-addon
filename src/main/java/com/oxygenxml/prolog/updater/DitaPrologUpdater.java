@@ -1,6 +1,7 @@
 package com.oxygenxml.prolog.updater;
 
 import java.net.URL;
+
 import com.oxygenxml.prolog.updater.dita.editor.DitaEditor;
 import com.oxygenxml.prolog.updater.dita.editor.DitaTopicAuthorEditor;
 import com.oxygenxml.prolog.updater.dita.editor.DitaTopicTextEditor;
@@ -28,7 +29,7 @@ import ro.sync.exml.workspace.api.standalone.StandalonePluginWorkspace;
  * 
  * @author cosmin_duna
  */
-public class DitaUpdater {
+public class DitaPrologUpdater {
 	/**
 	 * Unknown user name value.
 	 */

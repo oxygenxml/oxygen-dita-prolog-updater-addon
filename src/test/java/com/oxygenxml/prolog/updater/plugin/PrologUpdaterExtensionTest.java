@@ -8,7 +8,7 @@ import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
-import com.oxygenxml.prolog.updater.DitaUpdater;
+import com.oxygenxml.prolog.updater.DitaPrologUpdater;
 
 import junit.framework.TestCase;
 import ro.sync.exml.workspace.api.editor.WSEditor;
@@ -27,7 +27,7 @@ public class PrologUpdaterExtensionTest extends TestCase {
 
 		// Mock the XML Updater.
 		final boolean[] doUpdateProlog = new boolean[1];
-		final DitaUpdater ditaUpdater = Mockito.mock(DitaUpdater.class);
+		final DitaPrologUpdater ditaUpdater = Mockito.mock(DitaPrologUpdater.class);
 		Mockito.doAnswer(new Answer<Object>() {
 			public Object answer(InvocationOnMock invocation) {
 				doUpdateProlog[0] = true;
@@ -41,7 +41,7 @@ public class PrologUpdaterExtensionTest extends TestCase {
 		PrologUpdaterExtension extension = new PrologUpdaterExtension() {
 
 			@Override
-			protected DitaUpdater createDitaUpdater() {
+			protected DitaPrologUpdater createDitaUpdater() {
 				return ditaUpdater;
 			}
 			
