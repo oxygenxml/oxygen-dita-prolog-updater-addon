@@ -11,6 +11,7 @@ import ro.sync.exml.plugin.option.OptionPagePluginExtension;
 import ro.sync.exml.plugin.workspace.WorkspaceAccessPluginExtension;
 import ro.sync.exml.workspace.api.PluginWorkspace;
 import ro.sync.exml.workspace.api.editor.WSEditor;
+import ro.sync.exml.workspace.api.editor.documenttype.DocumentTypeInformation;
 import ro.sync.exml.workspace.api.listeners.WSEditorChangeListener;
 import ro.sync.exml.workspace.api.listeners.WSEditorListener;
 import ro.sync.exml.workspace.api.standalone.StandalonePluginWorkspace;
@@ -28,73 +29,86 @@ public class PrologUpdaterExtension extends OptionPagePluginExtension implements
 	private PrologOptionPage prologOptionPage = null;
 
 	/**
+	 * The name of the DITA type.
+	 */
+	private static final String DITA_TYPE_NAME = "dita";
+	
+	/**
 	 * @see ro.sync.exml.plugin.workspace.WorkspaceAccessPluginExtension#applicationStarted(ro.sync.exml.workspace.api.standalone.StandalonePluginWorkspace)
 	 */
 	public void applicationStarted(final StandalonePluginWorkspace workspace) {
 		// Create a XmlUpdater
 		final DitaUpdater xmlUpdater = createDitaUpdater();
 
-		// Add an WSEditorChangeListener
+		// Add an WSEditorChangeListener on the DITA_MAPS_EDITING_AREA
 		workspace.addEditorChangeListener(new WSEditorChangeListener() {
 			@Override
 			public void editorOpened(URL editorLocation) {
 				final WSEditor editorAccess = workspace.getEditorAccess(editorLocation, PluginWorkspace.MAIN_EDITING_AREA);
-				// Add an WSEditorListener
-				editorAccess.addEditorListener(new WSEditorListener() {
-					private boolean wasNew = false;
-					private boolean wasSave = false;
+				
+				// Check the document type name.
+				String docTypeName = getDocumentTypeName(editorAccess);
+				if (docTypeName != null && docTypeName.toLowerCase().contains(DITA_TYPE_NAME)) {
+					// Add an WSEditorListener
+					editorAccess.addEditorListener(new WSEditorListener() {
+						private boolean wasNew = false;
+						private boolean wasSave = false;
 
-					@Override
-					public boolean editorAboutToBeSavedVeto(int operationType) {
-						if (editorAccess.isNewDocument() && !editorAccess.isModified()) {
-							editorAccess.setModified(true);
+						@Override
+						public boolean editorAboutToBeSavedVeto(int operationType) {
+							if (editorAccess.isNewDocument() && !editorAccess.isModified()) {
+								editorAccess.setModified(true);
+							}
+							wasNew = editorAccess.isNewDocument();
+							return true;
 						}
-						wasNew = editorAccess.isNewDocument();
-						return true;
-					}
 
-					@Override
-					public void editorSaved(int operationType) {
-						if (!wasSave) {
-							wasSave = true;
-							xmlUpdater.updateProlog(editorAccess, wasNew);
-							editorAccess.save();
-							wasSave = false;
+						@Override
+						public void editorSaved(int operationType) {
+							if (!wasSave) {
+								wasSave = true;
+								xmlUpdater.updateProlog(editorAccess, wasNew);
+								editorAccess.save();
+								wasSave = false;
+							}
 						}
-					}
-
-				});
-
+					});
+				}
 			}
 		}, PluginWorkspace.MAIN_EDITING_AREA);
 
+		// Add an WSEditorChangeListener on the MAIN_EDITING_AREA
 		workspace.addEditorChangeListener(new WSEditorChangeListener() {
-
 			@Override
 			public void editorOpened(URL editorLocation) {
 				final WSEditor editorAccess = workspace.getEditorAccess(editorLocation, PluginWorkspace.DITA_MAPS_EDITING_AREA);
-				// add an WSEditorListener
-				editorAccess.addEditorListener(new WSEditorListener() {
-					private boolean wasNew = false;
-					private boolean wasSave = false;
+				
+				// Check the document type name.
+				String docTypeName = getDocumentTypeName(editorAccess);
+				if (docTypeName != null && docTypeName.toLowerCase().contains(DITA_TYPE_NAME)) {
+					// Add an WSEditorListener
+					editorAccess.addEditorListener(new WSEditorListener() {
+						private boolean wasNew = false;
+						private boolean wasSave = false;
 
-					@Override
-					public boolean editorAboutToBeSavedVeto(int operationType) {
-						wasNew = editorAccess.isNewDocument();
-						return true;
-					}
-
-					@Override
-					public void editorSaved(int operationType) {
-						if (!wasSave) {
-							wasSave = true;
-							xmlUpdater.updateProlog(editorAccess, wasNew);
-							editorAccess.save();
-							wasSave = false;
+						@Override
+						public boolean editorAboutToBeSavedVeto(int operationType) {
+							wasNew = editorAccess.isNewDocument();
+							return true;
 						}
-						super.editorSaved(operationType);
-					}
-				});
+
+						@Override
+						public void editorSaved(int operationType) {
+							if (!wasSave) {
+								wasSave = true;
+								xmlUpdater.updateProlog(editorAccess, wasNew);
+								editorAccess.save();
+								wasSave = false;
+							}
+							super.editorSaved(operationType);
+						}
+					});
+				}
 			}
 		}, PluginWorkspace.DITA_MAPS_EDITING_AREA);
 	}
@@ -108,6 +122,21 @@ public class PrologUpdaterExtension extends OptionPagePluginExtension implements
 		return new DitaUpdater();
 	}
 
+	/**
+	 * Get the name of the current opened document.
+	 * @param wsEditor Access to workspace editor.
+	 * @return Name of the current document opened or null
+	 *  if the editor does not have an XML content type.
+	 */
+	protected String getDocumentTypeName(WSEditor wsEditor) {
+		String toReturn = null;
+		DocumentTypeInformation documentTypeInformation = wsEditor.getDocumentTypeInformation();
+		if(documentTypeInformation != null) {
+			toReturn = documentTypeInformation.getName();
+		}
+		return toReturn;
+	}
+	
 	/**
 	 * Notified before the editors are closed and the application exits
 	 * 

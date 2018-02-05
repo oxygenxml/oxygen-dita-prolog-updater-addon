@@ -44,6 +44,11 @@ public class PrologUpdaterExtensionTest extends TestCase {
 			protected DitaUpdater createDitaUpdater() {
 				return ditaUpdater;
 			}
+			
+			@Override
+			protected String getDocumentTypeName(WSEditor wsEditor) {
+				return "dita";
+			}
 		};
 
 		// Mock the editor access.
@@ -88,4 +93,59 @@ public class PrologUpdaterExtensionTest extends TestCase {
 
 	}
 
+	
+	/**
+	 * We are testing that a editor listener is not installed 
+	 * on the editor when is open a "DocBook file."
+	 */
+	@Test
+	public void testNoInstallingListener() throws Exception {
+		//
+		// The plugin
+		//
+		PrologUpdaterExtension extension = new PrologUpdaterExtension() {
+
+			@Override
+			protected String getDocumentTypeName(WSEditor wsEditor) {
+				return "DocBook";
+			}
+		};
+
+		// Mock the editor access.
+		final WSEditorListener[] editorListeners = new WSEditorListener[1];
+		final WSEditor editorAccess = Mockito.mock(WSEditor.class);
+		Mockito.doAnswer(new Answer<Object>() {
+			public Object answer(InvocationOnMock invocation) {
+				editorListeners[0] = (WSEditorListener) invocation.getArguments()[0];
+				return null;
+			}
+		}).when(editorAccess).addEditorListener((WSEditorListener) Mockito.anyObject());
+
+		
+		// Mock the workspace.
+		final WSEditorChangeListener[] workspaceListeners = new WSEditorChangeListener[1];
+		StandalonePluginWorkspace workspace = Mockito.mock(StandalonePluginWorkspace.class);
+		Mockito.doAnswer(new Answer<Object>() {
+			public Object answer(InvocationOnMock invocation) {
+				workspaceListeners[0] = (WSEditorChangeListener) invocation.getArguments()[0];
+				return null;
+			}
+		}).when(workspace).addEditorChangeListener((WSEditorChangeListener) Mockito.anyObject(), Mockito.anyInt());
+
+		Mockito.when(workspace.getEditorAccess((URL) Mockito.anyObject(), Mockito.anyInt())).then(new Answer<Object>() {
+			public Object answer(InvocationOnMock invocation) {
+				return editorAccess;
+			}
+		});
+
+		assertNull(workspaceListeners[0]);
+		extension.applicationStarted(workspace);
+		assertNotNull(" 'applicationStarted' method should be called.", workspaceListeners[0]);
+
+		// Check that the listener reacts to editorOpened event.
+		assertNull(editorListeners[0]);
+		workspaceListeners[0].editorOpened(new File("test/dummy.xml").toURI().toURL());
+		assertNull(" 'editorOpened' method shouldn't be called.", editorListeners[0]);
+
+	}
 }
