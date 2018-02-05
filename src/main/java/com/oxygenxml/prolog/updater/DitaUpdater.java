@@ -1,13 +1,16 @@
 package com.oxygenxml.prolog.updater;
 
+import java.net.URL;
 import com.oxygenxml.prolog.updater.dita.editor.DitaEditor;
 import com.oxygenxml.prolog.updater.dita.editor.DitaTopicAuthorEditor;
 import com.oxygenxml.prolog.updater.dita.editor.DitaTopicTextEditor;
+import com.oxygenxml.prolog.updater.plugin.PrologUpdaterPlugin;
 import com.oxygenxml.prolog.updater.prolog.content.PrologContentCreator;
 import com.oxygenxml.prolog.updater.tags.OptionKeys;
 import com.oxygenxml.prolog.updater.tags.Tags;
 import com.oxygenxml.prolog.updater.utils.AWTUtil;
 
+import ro.sync.document.DocumentPositionedInfo;
 import ro.sync.exml.workspace.api.PluginResourceBundle;
 import ro.sync.exml.workspace.api.PluginWorkspaceProvider;
 import ro.sync.exml.workspace.api.editor.WSEditor;
@@ -16,6 +19,8 @@ import ro.sync.exml.workspace.api.editor.page.author.WSAuthorEditorPage;
 import ro.sync.exml.workspace.api.editor.page.ditamap.WSDITAMapEditorPage;
 import ro.sync.exml.workspace.api.editor.page.text.xml.WSXMLTextEditorPage;
 import ro.sync.exml.workspace.api.options.WSOptionsStorage;
+import ro.sync.exml.workspace.api.results.ResultsManager;
+import ro.sync.exml.workspace.api.results.ResultsManager.ResultType;
 import ro.sync.exml.workspace.api.standalone.StandalonePluginWorkspace;
 
 /**
@@ -39,7 +44,7 @@ public class DitaUpdater {
 	 * @param wsEditor
 	 *          Workspace editor.
 	 */
-	public void updateProlog(WSEditor wsEditor, final boolean isNewDocument) {
+	public void updateProlog(final WSEditor wsEditor, final boolean isNewDocument) {
 		// get the currentPage
 		WSEditorPage currentPage = wsEditor.getCurrentPage();
 
@@ -69,7 +74,7 @@ public class DitaUpdater {
 				if (ditaEditor[0] != null) {
 					boolean wasUpdated = ditaEditor[0].updateProlog(isNewDocument);
 					if (!wasUpdated) {
-						showErrorMessage();
+						showWarnMessage(wsEditor);
 					}
 				}
 			}
@@ -95,12 +100,36 @@ public class DitaUpdater {
 		return toReturn;
 	}
 
-	private void showErrorMessage() {
+	/**
+	 * Show a warning message("The prolog wasn't updated") in results manager.
+	 * @param wsEditor The workspace editor access.
+	 */
+	private void showWarnMessage(WSEditor wsEditor) {
 		StandalonePluginWorkspace pluginWorkspace = (StandalonePluginWorkspace) PluginWorkspaceProvider
 				.getPluginWorkspace();
 		if (pluginWorkspace != null) {
+
+			final ResultsManager resultsManager = pluginWorkspace.getResultsManager();
 			PluginResourceBundle messages = pluginWorkspace.getResourceBundle();
-			pluginWorkspace.showErrorMessage(messages.getMessage(Tags.ERROR_MESSAGE));
+			if(resultsManager != null && messages != null) {
+				// Get the message that will be showed.
+				final String message = messages.getMessage(Tags.ERROR_MESSAGE);
+				final URL editorLocation = wsEditor.getEditorLocation();
+				
+				// Add the message in results manager.
+				DocumentPositionedInfo result = null;
+				if (editorLocation != null) {
+					result = new DocumentPositionedInfo(DocumentPositionedInfo.SEVERITY_WARN, message, editorLocation.toString());
+				} else {
+					result = new DocumentPositionedInfo(DocumentPositionedInfo.SEVERITY_WARN, message);
+				}
+
+				resultsManager.addResult(PrologUpdaterPlugin.getInstance().getDescriptor().getName(),
+						result,
+						ResultType.PROBLEM,
+						false,
+						false);
+			}
 		}
 	}
 }
