@@ -54,6 +54,8 @@ public class DitaTopicUpdateTextModeTest extends TestCase {
 				.thenReturn(new WSXMLTextNodeRange[0]);
 		Mockito.when(wsTextEditorPage.findElementsByXPath(ElementXPathConstants.ROOT_BOOKMAP_XPATH))
 				.thenReturn(new WSXMLTextNodeRange[0]);
+		Mockito.when(wsTextEditorPage.findElementsByXPath(ElementXPathConstants.ROOT_SUBJECT_SCHEMA_XPATH))
+		.thenReturn(new WSXMLTextNodeRange[0]);
 
 		// Mock the TextDocumentController
 		textDocumentController = Mockito.mock(TextDocumentController.class);

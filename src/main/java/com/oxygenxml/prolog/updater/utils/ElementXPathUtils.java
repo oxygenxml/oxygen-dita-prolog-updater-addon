@@ -14,12 +14,20 @@ public class ElementXPathUtils {
 	 * 
 	 * @param documentType
 	 *          The document type( {@link DocumentType#TOPIC},
-	 *          {@link DocumentType#MAP} or {@link DocumentType#BOOKMAP} ).
+	 *          {@link DocumentType#MAP}, {@link DocumentType#BOOKMAP} 
+	 *          or {@link DocumentType#SUBJECT_SCHEME} ).
 	 * @return The XPath of prolog element
 	 */
 	public static String getPrologXpath(DocumentType documentType) {
-		return documentType.equals(DocumentType.TOPIC) ? ElementXPathConstants.PROLOG_XPATH
-				: ElementXPathConstants.TOPICMETA_XPATH;
+		String toRet = ElementXPathConstants.TOPICMETA_XPATH;
+		
+		if(DocumentType.TOPIC.equals(documentType)) {
+			toRet = ElementXPathConstants.PROLOG_XPATH;
+		} else if(DocumentType.SUBJECT_SCHEME.equals(documentType)) {
+			toRet = ElementXPathConstants.TOPICMETA_SUBJECT_SCHEMA_XPATH;
+		}
+
+		return toRet;
 	}
 
 	/**
@@ -27,7 +35,8 @@ public class ElementXPathUtils {
 	 * 
 	 * @param documentType
 	 *          The document type( {@link DocumentType#TOPIC},
-	 *          {@link DocumentType#MAP} or {@link DocumentType#BOOKMAP} ).
+	 *          {@link DocumentType#MAP}, {@link DocumentType#BOOKMAP} 
+	 *          or {@link DocumentType#SUBJECT_SCHEME} ).
 	 * @return The XPath of the root element.
 	 */
 	public static String getRootXpath(DocumentType documentType) {
@@ -40,7 +49,8 @@ public class ElementXPathUtils {
 	 * 
 	 * @param documentType
 	 *          The document type( {@link DocumentType#TOPIC},
-	 *          {@link DocumentType#MAP} or {@link DocumentType#BOOKMAP} ).
+	 *          {@link DocumentType#MAP}, {@link DocumentType#BOOKMAP} 
+	 *          or {@link DocumentType#SUBJECT_SCHEME} ).
 	 * @return The XPath of the child of the root element.
 	 */
 	public static String getRootChildXpath(DocumentType documentType) {
@@ -53,7 +63,8 @@ public class ElementXPathUtils {
 	 * 
 	 * @param documentType
 	 *          The document type( {@link DocumentType#TOPIC},
-	 *          {@link DocumentType#MAP} or {@link DocumentType#BOOKMAP} ).
+	 *          {@link DocumentType#MAP}, {@link DocumentType#BOOKMAP} 
+	 *          or {@link DocumentType#SUBJECT_SCHEME} ).
 	 * @return The XPath of the author element.
 	 */
 	public static String getAuthorXpath(DocumentType documentType) {
@@ -66,7 +77,8 @@ public class ElementXPathUtils {
 	 * 
 	 * @param documentType
 	 *          The document type( {@link DocumentType#TOPIC},
-	 *          {@link DocumentType#MAP} or {@link DocumentType#BOOKMAP} ).
+	 *          {@link DocumentType#MAP}, {@link DocumentType#BOOKMAP} 
+	 *          or {@link DocumentType#SUBJECT_SCHEME} ).
 	 * @return The XPath of last the author element.
 	 */
 	public static String getLastAuthorXpath(DocumentType documentType) {
@@ -79,7 +91,8 @@ public class ElementXPathUtils {
 	 * 
 	 * @param documentType
 	 *          The document type( {@link DocumentType#TOPIC},
-	 *          {@link DocumentType#MAP} or {@link DocumentType#BOOKMAP} ).
+	 *          {@link DocumentType#MAP}, {@link DocumentType#BOOKMAP} 
+	 *          or {@link DocumentType#SUBJECT_SCHEME} ).
 	 * @return The XPath of last the creator element.
 	 */
 	public static String getAuthorCreatorXpath(DocumentType documentType) {
@@ -92,7 +105,8 @@ public class ElementXPathUtils {
 	 * 
 	 * @param documentType
 	 *          The document type( {@link DocumentType#TOPIC},
-	 *          {@link DocumentType#MAP} or {@link DocumentType#BOOKMAP} ).
+	 *          {@link DocumentType#MAP}, {@link DocumentType#BOOKMAP} 
+	 *          or {@link DocumentType#SUBJECT_SCHEME} ).
 	 * @return The XPath of last the critdates element.
 	 */
 
@@ -106,7 +120,8 @@ public class ElementXPathUtils {
 	 * 
 	 * @param documentType
 	 *          The document type( {@link DocumentType#TOPIC},
-	 *          {@link DocumentType#MAP} or {@link DocumentType#BOOKMAP} ).
+	 *          {@link DocumentType#MAP}, {@link DocumentType#BOOKMAP} 
+	 *          or {@link DocumentType#SUBJECT_SCHEME} ).
 	 * @return The XPath of last the created element.
 	 */
 

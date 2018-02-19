@@ -17,5 +17,9 @@ public enum DocumentType {
 	/**
 	 * DITA Bookmap.
 	 */
-	BOOKMAP
+	BOOKMAP, 
+	/**
+	 * DITA subjectScheme
+	 */
+	SUBJECT_SCHEME
 }

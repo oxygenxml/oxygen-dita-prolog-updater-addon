@@ -46,10 +46,10 @@ public class DitaTopicAuthorEditor implements DitaEditor {
 	private AuthorDocumentController documentController;
 
 	/**
-	 * The document type( {@link DocumentType#TOPIC}, {@link DocumentType#MAP} or
-	 * {@link DocumentType#BOOKMAP} ).
+	 * The document type( {@link DocumentType#TOPIC}, {@link DocumentType#MAP},
+	 *  {@link DocumentType#BOOKMAP} or {@link DocumentType#SUBJECT_SCHEME}
 	 */
-	private DocumentType documentType = DocumentType.TOPIC;
+	private DocumentType documentType;
 
 	/**
 	 * The page from WsEditor.
@@ -74,18 +74,12 @@ public class DitaTopicAuthorEditor implements DitaEditor {
 		}
 
 		if (documentController != null) {
-			AuthorElement rootElement = documentController.getAuthorDocumentNode().getRootElement();
-			AttrValue classValue = rootElement.getAttribute(XmlElementsConstants.CLASS);
-			if (classValue != null && classValue.getValue().contains(" map/map ")) {
-				documentType = DocumentType.MAP;
-			}
-			if (classValue != null && classValue.getValue().contains(" bookmap/bookmap ")) {
-				documentType = DocumentType.BOOKMAP;
-			}
+			documentType = getDocumentType();
 
 			prologCreator = prologContentCreator;
 		}
 	}
+
 
 	/**
 	 * Update the prolog in DITA topic document(author mode) according to given
@@ -105,8 +99,9 @@ public class DitaTopicAuthorEditor implements DitaEditor {
 
 			if (rootElement != null) {
 				// Get the prolog element.
-				AuthorElement prolog = AuthorPageDocumentUtil.findElementByClass(rootElement,
-						XmlElementsUtils.getPrologClass(documentType));
+				AuthorElement prolog = null;
+				prolog = getPrologElement(rootElement);
+				
 				try {
 					if (prolog != null) {
 						// Prolog element exists; edit this element.
@@ -124,6 +119,37 @@ public class DitaTopicAuthorEditor implements DitaEditor {
 		}
 
 		return toReturn;
+	}
+
+
+	/**
+	 * Get the prolog element from given root element. 
+	 * @param rootElement The root element where the prolog will be search as child.
+	 * @return The prolog element or <code>null</code> if this wasn't found.
+	 */
+	private AuthorElement getPrologElement(AuthorElement rootElement) {
+		AuthorElement prolog = null;
+		
+		List<AuthorElement> possiblePrologElements = AuthorPageDocumentUtil.findElementsByClass(rootElement,
+				XmlElementsUtils.getPrologClass(documentType));
+		
+		// EXM-40992 - The subject schema DITA Map contains 2 elements with "map/topicmeta" class's value.
+		// In this case, we should find the element with 'topicmeta' name. 
+		if(DocumentType.SUBJECT_SCHEME.equals(documentType)){
+			int size = possiblePrologElements.size();
+			for (int i = 0; i < size; i++) {
+				AuthorElement currentElement = possiblePrologElements.get(i);
+				if(XmlElementsConstants.TOPICMETA_NAME.equals(currentElement.getName())) {
+					prolog = currentElement;
+					break;
+				}
+			}
+		} else {
+			if(!possiblePrologElements.isEmpty()) {
+				prolog = possiblePrologElements.get(0);
+			}
+		}
+		return prolog;
 	}
 
 	/**
@@ -326,5 +352,30 @@ public class DitaTopicAuthorEditor implements DitaEditor {
 		}
 
 		AuthorPageDocumentUtil.insertFragmentSchemaAware(page, documentController, fragment, offset);
+	}
+
+	/**
+	 * Get the document type of the current document.
+	 * @return The document type of the current document 
+	 * ( {@link DocumentType#TOPIC}, {@link DocumentType#MAP}, 
+	 * {@link DocumentType#BOOKMAP} or {@link DocumentType#SUBJECT_SCHEME} ).
+	 */
+	private DocumentType getDocumentType() {
+		DocumentType docType = DocumentType.TOPIC;
+		AuthorElement rootElement = documentController.getAuthorDocumentNode().getRootElement();
+		AttrValue classValue = rootElement.getAttribute(XmlElementsConstants.CLASS);
+
+		if(classValue != null) {
+			String value = classValue.getValue();
+			if (value.contains(" map/map ")) {
+				docType = DocumentType.MAP;
+			}
+			if (value.contains(" bookmap/bookmap ")) {
+				docType = DocumentType.BOOKMAP;
+			} else if (value.contains(" subjectScheme/subjectScheme ")) {
+				docType = DocumentType.SUBJECT_SCHEME;
+			}
+		}
+		return docType;
 	}
 }

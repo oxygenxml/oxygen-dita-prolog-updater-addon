@@ -54,18 +54,7 @@ public class DitaTopicTextEditor implements DitaEditor {
 	public DitaTopicTextEditor(WSXMLTextEditorPage wsEditorPage, PrologContentCreator prologCreator) {
 		this.wsTextEditorPage = wsEditorPage;
 
-		try {
-			WSXMLTextNodeRange[] mapRoot = wsTextEditorPage.findElementsByXPath(ElementXPathConstants.ROOT_MAP_XPATH);
-			if (mapRoot.length != 0) {
-				documentType = DocumentType.MAP;
-			}
-			WSXMLTextNodeRange[] bookmapRoot = wsTextEditorPage.findElementsByXPath(ElementXPathConstants.ROOT_BOOKMAP_XPATH);
-			if (bookmapRoot.length != 0) {
-				documentType = DocumentType.BOOKMAP;
-			}
-		} catch (XPathException e) {
-			logger.debug(e, e.getCause());
-		}
+		documentType = getDocumentType();
 
 		this.prologCreator = prologCreator;
 	}
@@ -270,6 +259,37 @@ public class DitaTopicTextEditor implements DitaEditor {
 						ElementXPathUtils.getLastAuthorXpath(documentType), RelativeInsertPosition.INSERT_LOCATION_AFTER);
 			}
 		}
+	}
+
+	/**
+	 * Get the document type of the current document.
+	 * @return The document type of the current document 
+	 * ( {@link DocumentType#TOPIC}, {@link DocumentType#MAP}, 
+	 * {@link DocumentType#BOOKMAP} or {@link DocumentType#SUBJECT_SCHEME} ).
+	 */
+	private DocumentType getDocumentType() {
+		DocumentType docType = DocumentType.TOPIC;
+		
+		try {
+			WSXMLTextNodeRange[] mapRoot = wsTextEditorPage.findElementsByXPath(ElementXPathConstants.ROOT_MAP_XPATH);
+			if (mapRoot.length != 0) {
+				docType = DocumentType.MAP;
+			}
+			WSXMLTextNodeRange[] bookmapRoot = wsTextEditorPage.findElementsByXPath(ElementXPathConstants.ROOT_BOOKMAP_XPATH);
+			if (bookmapRoot.length != 0) {
+				docType = DocumentType.BOOKMAP;
+			} else {
+				WSXMLTextNodeRange[] subjectSchemaRoot = wsTextEditorPage.findElementsByXPath(
+						ElementXPathConstants.ROOT_SUBJECT_SCHEMA_XPATH);
+				if(subjectSchemaRoot.length != 0) {
+					docType = DocumentType.SUBJECT_SCHEME;
+				}
+			}
+		} catch (XPathException e) {
+			logger.debug(e, e.getCause());
+		}
+		
+		return docType;
 	}
 
 }

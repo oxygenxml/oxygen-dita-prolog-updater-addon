@@ -13,7 +13,8 @@ public class XmlElementsUtils {
 	 * 
 	 * @param documentType
 	 *          The document type( {@link DocumentType#TOPIC},
-	 *          {@link DocumentType#MAP} or {@link DocumentType#BOOKMAP} ).
+	 *          {@link DocumentType#MAP}, {@link DocumentType#BOOKMAP} or
+	 *           {@link DocumentType#SUBJECT_SCHEME} ).
 	 * @return The class's value of prolog element
 	 */
 	public static String getPrologClass(DocumentType documentType) {
@@ -26,12 +27,14 @@ public class XmlElementsUtils {
 	 * 
 	 * @param documentType
 	 *          The document type( {@link DocumentType#TOPIC},
-	 *          {@link DocumentType#MAP} or {@link DocumentType#BOOKMAP} ).
+	 *          {@link DocumentType#MAP}, {@link DocumentType#BOOKMAP} or 
+	 *          {@link DocumentType#SUBJECT_SCHEME} ).
 	 * @return The name of prolog element
 	 */
 	public static String getPrologName(DocumentType documentType) {
 		String name = XmlElementsConstants.PROLOG_NAME;
-		if (documentType.equals(DocumentType.MAP)) {
+		if (documentType.equals(DocumentType.MAP) || 
+				documentType.equals(DocumentType.SUBJECT_SCHEME)) {
 			name = XmlElementsConstants.TOPICMETA_NAME;
 		} else if (documentType.equals(DocumentType.BOOKMAP)) {
 			name = XmlElementsConstants.BOOKMETA_NAME;

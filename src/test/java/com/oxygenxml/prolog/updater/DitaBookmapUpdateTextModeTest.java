@@ -57,7 +57,9 @@ public class DitaBookmapUpdateTextModeTest extends TestCase {
 		Mockito.when(wsTextEditorPage.findElementsByXPath(ElementXPathConstants.ROOT_MAP_XPATH))
 				.thenReturn(new WSXMLTextNodeRange[1]);
 		Mockito.when(wsTextEditorPage.findElementsByXPath(ElementXPathConstants.ROOT_BOOKMAP_XPATH))
-				.thenReturn(new WSXMLTextNodeRange[1]);
+				.thenReturn(new WSXMLTextNodeRange[0]);
+		Mockito.when(wsTextEditorPage.findElementsByXPath(ElementXPathConstants.ROOT_SUBJECT_SCHEMA_XPATH))
+		.thenReturn(new WSXMLTextNodeRange[0]);
 
 		// Mock the TextDocumentController
 		textDocumentController = Mockito.mock(TextDocumentController.class);

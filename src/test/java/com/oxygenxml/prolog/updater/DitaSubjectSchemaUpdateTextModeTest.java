@@ -25,12 +25,13 @@ import ro.sync.exml.workspace.api.editor.page.text.xml.XPathException;
 /**
  * Test the topicMeta update from Text mode in DITA map.
  */
-public class DitaMapUpdateTextModeTest extends TestCase {
+public class DitaSubjectSchemaUpdateTextModeTest extends TestCase {
 
 	/**
 	 * The name of the author.
 	 */
 	static final String AUTHOR_NAME = "test";
+
 	/**
 	 * The page from wsEditor
 	 */
@@ -56,9 +57,7 @@ public class DitaMapUpdateTextModeTest extends TestCase {
 		Mockito.when(wsTextEditorPage.findElementsByXPath(ElementXPathConstants.ROOT_MAP_XPATH))
 				.thenReturn(new WSXMLTextNodeRange[1]);
 		Mockito.when(wsTextEditorPage.findElementsByXPath(ElementXPathConstants.ROOT_BOOKMAP_XPATH))
-				.thenReturn(new WSXMLTextNodeRange[0]);
-		Mockito.when(wsTextEditorPage.findElementsByXPath(ElementXPathConstants.ROOT_SUBJECT_SCHEMA_XPATH))
-		.thenReturn(new WSXMLTextNodeRange[0]);
+				.thenReturn(new WSXMLTextNodeRange[1]);
 
 		// Mock the TextDocumentController
 		textDocumentController = Mockito.mock(TextDocumentController.class);
@@ -95,6 +94,7 @@ public class DitaMapUpdateTextModeTest extends TestCase {
 
 		ditaTopicTextEditor.updateProlog(true);
 
+		// Verify if the insertXMLFragment was called for 2 times.
 		Mockito.verify(textDocumentController, Mockito.times(2)).insertXMLFragment(Mockito.anyString(), Mockito.anyString(),
 				Mockito.any(RelativeInsertPosition.class));
 		Mockito.reset(textDocumentController);
@@ -125,6 +125,7 @@ public class DitaMapUpdateTextModeTest extends TestCase {
 
 		ditaTopicTextEditor.updateProlog(true);
 
+		// Verify if the insertXMLFragment was called 1 time.
 		Mockito.verify(textDocumentController, Mockito.times(1)).insertXMLFragment(Mockito.anyString(), Mockito.anyString(),
 				Mockito.any(RelativeInsertPosition.class));
 		Mockito.reset(textDocumentController);
@@ -160,6 +161,7 @@ public class DitaMapUpdateTextModeTest extends TestCase {
 
 		ditaTopicTextEditor.updateProlog(true);
 
+		// Verify if the insertXMLFragment was called one time.
 		Mockito.verify(textDocumentController, Mockito.times(1)).insertXMLFragment(Mockito.anyString(), Mockito.anyString(),
 				Mockito.any(RelativeInsertPosition.class));
 		Mockito.reset(textDocumentController);
@@ -192,6 +194,7 @@ public class DitaMapUpdateTextModeTest extends TestCase {
 
 		ditaTopicTextEditor.updateProlog(true);
 
+		// Verify if the insertXMLFragment wasn't called.
 		Mockito.verify(textDocumentController, Mockito.times(0)).insertXMLFragment(Mockito.anyString(), Mockito.anyString(),
 				Mockito.any(RelativeInsertPosition.class));
 		Mockito.reset(textDocumentController);

@@ -20,6 +20,13 @@ public class ElementXPathConstants {
 	 * XPath expression for topicMeta element(prolog element in DITA map).
 	 */
 	public static final String TOPICMETA_XPATH = "//*[contains(@class,' map/topicmeta ')]";
+	
+	/**
+	 * XPath expression for topicMeta element in subject schema DITA map.
+	 * EXM-40992 - Subject schema contains two element('topicmeta' and 'subjectHeadMeta') 
+	 * with class's value 'map/topicmeta'. The xPath should be more restrictive. 
+	 */
+	public static final String TOPICMETA_SUBJECT_SCHEMA_XPATH = "//topicmeta[contains(@class,' map/topicmeta ')]";
 
 	/**
 	 * Xpath expression for critdates element.
@@ -81,6 +88,11 @@ public class ElementXPathConstants {
 	 */
 	public static final String ROOT_BOOKMAP_XPATH = "/*[1][contains(@class,' bookmap/bookmap ')]";
 
+	/**
+	 * XPath for subjectSchema root.
+	 */
+	public static final String ROOT_SUBJECT_SCHEMA_XPATH = "/*[1][contains(@class,' subjectScheme/subjectScheme ')]";
+	
 	/**
 	 * XPath for topic root.
 	 */

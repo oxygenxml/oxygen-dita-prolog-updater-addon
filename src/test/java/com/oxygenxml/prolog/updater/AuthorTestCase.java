@@ -13,6 +13,7 @@ import org.mockito.Mockito;
 import org.w3c.css.sac.InputSource;
 import org.xml.sax.SAXException;
 
+import com.oxygenxml.prolog.updater.DitaPrologUpdater;
 import junit.framework.TestCase;
 import ro.sync.ecss.css.csstopdf.facade.AuthorDocumentFacade;
 import ro.sync.ecss.css.csstopdf.facade.AuthorDocumentFacadeFactory;
