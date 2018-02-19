@@ -1,27 +1,20 @@
 package com.oxygenxml.prolog.updater;
 
-import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import javax.swing.text.BadLocationException;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
-
-import org.xml.sax.SAXException;
-
-public class DitaSubjectSchemaUpdaterAuthorModeTest extends AuthorTestCase{
+/**
+ * Test the topic meta information update in the Author mode for DITA maps.
+ */
+public class DitaSubjectSchemaUpdaterAuthorModeTest extends AuthorTestCase {
 
 	/**
-	 * Test if the topicmeta is correct added after save operation on DITA Subject Schema in Author mode.
-	 * @throws IOException
-	 * @throws SAXException
-	 * @throws BadLocationException
-	 * @throws ParserConfigurationException 
-	 * @throws TransformerException 
+	 * Test if the topicmeta is added correctly after saving a DITA Subject Schema in Author mode.
+	 * 
+	 * @throws Exception
 	 */
-	public void testAddProlog() throws IOException, SAXException, BadLocationException, ParserConfigurationException, TransformerException {
+	public void testAddProlog() throws Exception {
 
 		//Get the local date
 		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");

@@ -99,8 +99,7 @@ public class DitaTopicAuthorEditor implements DitaEditor {
 
 			if (rootElement != null) {
 				// Get the prolog element.
-				AuthorElement prolog = null;
-				prolog = getPrologElement(rootElement);
+				AuthorElement prolog = getPrologElement(rootElement);
 				
 				try {
 					if (prolog != null) {
@@ -124,8 +123,10 @@ public class DitaTopicAuthorEditor implements DitaEditor {
 
 	/**
 	 * Get the prolog element from given root element. 
-	 * @param rootElement The root element where the prolog will be search as child.
-	 * @return The prolog element or <code>null</code> if this wasn't found.
+	 * 
+	 * @param rootElement The root element where the prolog will be searched for.
+	 * 
+	 * @return The prolog element or <code>null</code> if it wasn't found.
 	 */
 	private AuthorElement getPrologElement(AuthorElement rootElement) {
 		AuthorElement prolog = null;
@@ -133,8 +134,8 @@ public class DitaTopicAuthorEditor implements DitaEditor {
 		List<AuthorElement> possiblePrologElements = AuthorPageDocumentUtil.findElementsByClass(rootElement,
 				XmlElementsUtils.getPrologClass(documentType));
 		
-		// EXM-40992 - The subject schema DITA Map contains 2 elements with "map/topicmeta" class's value.
-		// In this case, we should find the element with 'topicmeta' name. 
+		// EXM-40992 - a subject scheme map contains 2 elements with "map/topicmeta" as the class's value.
+		// In this case, we should find the element having 'topicmeta' as name. 
 		if(DocumentType.SUBJECT_SCHEME.equals(documentType)){
 			int size = possiblePrologElements.size();
 			for (int i = 0; i < size; i++) {

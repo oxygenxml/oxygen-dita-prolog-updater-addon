@@ -1,12 +1,7 @@
 package com.oxygenxml.prolog.updater;
 
-import java.io.IOException;
-
-import javax.swing.text.BadLocationException;
-
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.xml.sax.SAXException;
 
 import com.oxygenxml.prolog.updater.dita.editor.DitaTopicTextEditor;
 import com.oxygenxml.prolog.updater.dita.editor.DocumentType;
@@ -23,15 +18,14 @@ import ro.sync.exml.workspace.api.editor.page.text.xml.WSXMLTextNodeRange;
 import ro.sync.exml.workspace.api.editor.page.text.xml.XPathException;
 
 /**
- * Test the topicMeta update from Text mode in DITA map.
+ * Test the topic meta-information update in the Text mode for DITA maps.
  */
 public class DitaSubjectSchemaUpdateTextModeTest extends TestCase {
 
 	/**
 	 * The name of the author.
 	 */
-	static final String AUTHOR_NAME = "test";
-
+	private static final String AUTHOR_NAME = "test";
 	/**
 	 * The page from wsEditor
 	 */
@@ -72,16 +66,14 @@ public class DitaSubjectSchemaUpdateTextModeTest extends TestCase {
 
 	/**
 	 * <p>
-	 * <b>Description:</b>Check if insertXMLFragment is call when the prolog
-	 * element is found, but it's empty(doesn't contain author or critdates).
+	 * <b>Description:</b> Check if insertXMLFragment() is called when the prolog
+	 * element is found but it's empty (doesn't contain "author" or "critdates").
 	 * </p>
 	 * 
-	 * @throws IOException
-	 * @throws SAXException
-	 * @throws BadLocationException
+	 * @throws Exception
 	 */
 	@Test
-	public void testUpdateProlog() throws TextOperationException, XPathException {
+	public void testUpdateProlog() throws Exception {
 
 		Mockito.when(wsTextEditorPage.findElementsByXPath(ElementXPathConstants.TOPICMETA_XPATH))
 				.thenReturn(new WSXMLTextNodeRange[1]);
@@ -102,14 +94,14 @@ public class DitaSubjectSchemaUpdateTextModeTest extends TestCase {
 
 	/**
 	 * <p>
-	 * <b>Description:</b> Check if insertXMLFragment is call when the prolog tag
+	 * <b>Description:</b> Check if "insertXMLFragment()" is called when the prolog tag
 	 * is found and it contains the creator.
 	 * </p>
 	 *
 	 * @throws Exception
 	 */
 	@Test
-	public void testUpdateAuthor() throws XPathException, TextOperationException {
+	public void testUpdateAuthor() throws Exception {
 
 		Mockito.when(wsTextEditorPage.findElementsByXPath(ElementXPathConstants.TOPICMETA_XPATH))
 				.thenReturn(new WSXMLTextNodeRange[1]);
@@ -133,8 +125,8 @@ public class DitaSubjectSchemaUpdateTextModeTest extends TestCase {
 
 	/**
 	 * <p>
-	 * <b>Description:</b> Check if insertXMLFragment is call when the prolog tag
-	 * is found and it contains the critdates.
+	 * <b>Description:</b> Check if "insertXMLFragment()" is called when the prolog tag
+	 * is found and it contains "critdates".
 	 * </p>
 	 *
 	 * @throws Exception
@@ -169,8 +161,8 @@ public class DitaSubjectSchemaUpdateTextModeTest extends TestCase {
 
 	/**
 	 * <p>
-	 * <b>Description:</b> Check if insertXMLFragment is not call when the prolog
-	 * contains the creator and critdates
+	 * <b>Description:</b> Check if "insertXMLFragment()" is not called when the prolog
+	 * contains the "creator" and "critdates" elements.
 	 * </p>
 	 *
 	 * @throws Exception
