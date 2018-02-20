@@ -8,8 +8,6 @@ import javax.swing.text.Position;
 
 import org.apache.log4j.Logger;
 
-import com.oxygenxml.prolog.updater.dita.editor.DocumentType;
-
 import ro.sync.contentcompletion.xml.CIElement;
 import ro.sync.contentcompletion.xml.ContextElement;
 import ro.sync.contentcompletion.xml.WhatElementsCanGoHereContext;
@@ -236,32 +234,33 @@ public class AuthorPageDocumentUtil {
 	}
 
 	/**
-	 * Find a possible xPath where prolog element can be inserted.
+	 * Find a possible xPath where given element can be inserted after.
 	 * 
 	 * @param documentController
 	 *          The author document controller.
-	 * @param documentType
-	 *          The type of the document ( {@link DocumentType#TOPIC},
-	 *          {@link DocumentType#MAP} or {@link DocumentType#BOOKMAP} ).
-	 * @return A xPath where to insert the prolog node or <code>null</code>.
+	 * @param parentXpath The parent xPath of the element.  
+	 * @param parentElement The parent of the element to find context. 
+	 * @return A xPath where to insert the given element node or 
+	 * <code>null</code> if the element should be inserted as first child in parrentXpath.
 	 * 
 	 * @throws BadLocationException
 	 * @throws XPathException
 	 */
-	public static String findPrologXPath(AuthorDocumentController controller, DocumentType documentType) {
+	public static String findElementXPath(AuthorDocumentController controller, String elementName,
+			String parentXpath, AuthorElement parentElement) {
 		String toReturn = null;
 		ContextElement nodeToInsertAfter = null;
 
 		// Find the context where prolog element can be inserted.
 		WhatElementsCanGoHereContext context;
-		context = findPrologContext(controller, documentType);
+		context = findElementContext(controller, elementName, parentElement);
 		if (context != null) {
 			List<ContextElement> previous = context.getPreviousSiblingElements();
 			if (previous != null && !previous.isEmpty()) {
 				// Get the previous sibling.
 				nodeToInsertAfter = previous.get(previous.size() - 1);
 				// Generate the XPath.
-				toReturn = ElementXPathUtils.getRootXpath(documentType) + "/" + nodeToInsertAfter.getQName();
+				toReturn = parentXpath + "/" + nodeToInsertAfter.getQName();
 			}
 		}
 		return toReturn;
@@ -272,33 +271,40 @@ public class AuthorPageDocumentUtil {
 	 * 
 	 * @param controller
 	 *          The controller for author document.
-	 * @param documentType
-	 *          The type of the document ( {@link DocumentType#TOPIC},
-	 *          {@link DocumentType#MAP} or {@link DocumentType#BOOKMAP} ).
-	 * @return A context where prolog element can go or <code>null</code>.
+	 * @param elementName The name of the element to find context.
+	 * @param parentElement The parent of the element to find context. 
+	 * @return A context where given element can go or <code>null</code>.
 	 */
-	private static WhatElementsCanGoHereContext findPrologContext(AuthorDocumentController controller,
-			DocumentType documentType) {
+	private static WhatElementsCanGoHereContext findElementContext(AuthorDocumentController controller,
+			String elementName, AuthorElement parentElement) {
 		WhatElementsCanGoHereContext toReturn = null;
 
 		// Get the AuthorSchemaManager.
-		AuthorSchemaManager schemaManager = controller.getAuthorSchemaManager();
+		AuthorSchemaManager schemaManager = null;
+		try {
+			schemaManager = controller.getAuthorSchemaManager();
+		} catch (Exception e) {
+			//Do nothing. (for TC) 
+		}
+		
 		if (schemaManager != null) {
-			AuthorElement rootElement = controller.getAuthorDocumentNode().getRootElement();
-			List<AuthorNode> childNodes = rootElement.getContentNodes();
+			List<AuthorNode> childNodes = parentElement.getContentNodes();
 			int nodesSize = childNodes.size();
-
+			
 			for (int i = 0; i < nodesSize; i++) {
-				int offset = childNodes.get(i).getEndOffset();
+				AuthorNode authorNode = childNodes.get(i);
+				
+				int offset = authorNode.getEndOffset();
+				
 				WhatElementsCanGoHereContext currentContext = null;
 				try {
-					currentContext = schemaManager.createWhatElementsCanGoHereContext(offset);
+					currentContext = schemaManager.createWhatElementsCanGoHereContext(offset + 1);
 				} catch (BadLocationException e) {
 					logger.warn(e, e.getCause());
 				}
 				
 				Boolean contextForProlog = analyzeContextForElement(
-						XmlElementsUtils.getPrologName(documentType),
+						elementName,
 						currentContext,
 						schemaManager);
 				if (contextForProlog != null) {
@@ -335,7 +341,7 @@ public class AuthorPageDocumentUtil {
 						// the context can contain the given element.
 						toReturn = false;
 						if (j == 0) {
-							// if prolog element is first in possible elements list(This is the best position).
+							// if given element is first in possible elements list(This is the best position).
 							toReturn = true;
 						}
 					}

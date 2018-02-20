@@ -148,18 +148,18 @@ public class TextPageDocumentUtil {
 	 * @param documentType
 	 *          The type of the document ( {@link DocumentType#TOPIC},
 	 *          {@link DocumentType#MAP} or {@link DocumentType#BOOKMAP} ).
-	 * @param  parrentXpath The xPath of parent of the element.       
+	 * @param  parentXpath The xPath of parent of the element.       
 	 * @return A xPath where to insert the element node or 
 	 * <code>null</code> if the element should be inserted as first child in parrentXpath.
 	 * 
 	 */
-	public static String findElementXPath(WSXMLTextEditorPage page, String elementName, String parrentXpath, DocumentType documentType) {
+	public static String findElementXPath(WSXMLTextEditorPage page, String elementName, String parentXpath, DocumentType documentType) {
 		String toReturn = null;
 		ContextElement nodeToInsertAfter = null;
 
 		// Find the context where prolog element can be inserted.
 		try {
-			WhatElementsCanGoHereContext context = findElementContext(page, elementName, parrentXpath, documentType);
+			WhatElementsCanGoHereContext context = findElementContext(page, elementName, parentXpath, documentType);
 			
 			if (context != null) {
 				List<ContextElement> previous = context.getPreviousSiblingElements();
@@ -167,7 +167,7 @@ public class TextPageDocumentUtil {
 					// Get the previous sibling.
 					nodeToInsertAfter = previous.get(previous.size() - 1);
 					// Generate the XPath.
-					toReturn = parrentXpath + "/" + nodeToInsertAfter.getQName();
+					toReturn = parentXpath + "/" + nodeToInsertAfter.getQName();
 				}
 			}
 		} catch (XPathException e) {
@@ -183,7 +183,7 @@ public class TextPageDocumentUtil {
 	 * @param page
 	 *          Workspace text editor page.
 	 * @param elementName The name of the element to find context.
-	 * @param  parrentXpath The xPath of parent of the element.       
+	 * @param  parentXpath The xPath of parent of the element.       
 	 * @param documentType
 	 *          The type of the document ( {@link DocumentType#TOPIC},
 	 *          {@link DocumentType#MAP} or {@link DocumentType#BOOKMAP} ).
@@ -191,7 +191,7 @@ public class TextPageDocumentUtil {
 	 * @throws XPathException
 	 *           If prolog context can't be found.
 	 */
-	private static WhatElementsCanGoHereContext findElementContext(WSXMLTextEditorPage page, String elementName, String parrentXpath, DocumentType documentType)
+	private static WhatElementsCanGoHereContext findElementContext(WSXMLTextEditorPage page, String elementName, String parentXpath, DocumentType documentType)
 			throws XPathException {
 		WhatElementsCanGoHereContext toReturn = null;
 
@@ -200,7 +200,7 @@ public class TextPageDocumentUtil {
 		if (schemaManager != null) {
 			
 			// Get all child of root topic.
-			WSXMLTextNodeRange[] topicChild = page.findElementsByXPath(parrentXpath + "/*" ); 
+			WSXMLTextNodeRange[] topicChild = page.findElementsByXPath(parentXpath + "/*" ); 
 			int childNo = topicChild.length;
 			
 			// Iterate over topic child

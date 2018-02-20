@@ -162,8 +162,15 @@ public class DitaTopicAuthorEditor implements DitaEditor {
 	 *           If the prolog could not be added.
 	 */
 	private void addProlog(boolean isNewDocument) throws AuthorOperationException {
+		
 		String prologFragment = prologCreator.getPrologFragment(isNewDocument, documentType);
-		String prologXpath = AuthorPageDocumentUtil.findPrologXPath(documentController, documentType);
+		AuthorElement rootElement = documentController.getAuthorDocumentNode().getRootElement();
+		String prologXpath = AuthorPageDocumentUtil.findElementXPath(
+				documentController,
+				XmlElementsUtils.getPrologName(documentType),
+				ElementXPathUtils.getRootXpath(documentType),
+				rootElement
+				);
 
 		if (prologXpath != null) {
 			AuthorPageDocumentUtil.insertFragmentSchemaAware(page, documentController, prologFragment, prologXpath,
@@ -227,19 +234,32 @@ public class DitaTopicAuthorEditor implements DitaEditor {
 	 *           If the element could not be added.
 	 */
 	private void addCritdates(AuthorElement prolog, boolean isNewDocument) throws AuthorOperationException {
-		int offset = -1;
 		String fragment = null;
-		List<AuthorElement> authors = AuthorPageDocumentUtil.findElementsByClass(prolog,
-				XmlElementsConstants.PROLOG_AUTHOR_ELEMENT_CLASS);
-		// Create an element here.
+		
+		// Search for a valid position to insert critdates element.
+		String xPath = AuthorPageDocumentUtil.findElementXPath(documentController,
+				XmlElementsConstants.CRITDATES_NAME,
+				ElementXPathUtils.getPrologXpath(documentType),
+				prolog);
+
 		fragment = XMLFragmentUtils.createCritdateTag(prologCreator.getDateFragment(isNewDocument, documentType));
-		if (authors.isEmpty()) {
-			offset = prolog.getEndOffset();
+		
+		if(xPath != null) {
+			AuthorPageDocumentUtil.insertFragmentSchemaAware(page, documentController,
+					fragment, xPath, AuthorConstants.POSITION_AFTER);
 		} else {
-			AuthorElement lastAuthorElement = authors.get(authors.size() - 1);
-			offset = lastAuthorElement.getEndOffset() + 1;
+			int offset = -1;
+			List<AuthorElement> authors = AuthorPageDocumentUtil.findElementsByClass(prolog,
+					XmlElementsConstants.PROLOG_AUTHOR_ELEMENT_CLASS);
+			if (authors.isEmpty()) {
+				offset = prolog.getEndOffset();
+			} else {
+				AuthorElement lastAuthorElement = authors.get(authors.size() - 1);
+				offset = lastAuthorElement.getEndOffset() + 1;
+			}
+			// Create an element here.
+			AuthorPageDocumentUtil.insertFragmentSchemaAware(page, documentController, fragment, offset);
 		}
-		AuthorPageDocumentUtil.insertFragmentSchemaAware(page, documentController, fragment, offset);
 	}
 
 	/**
@@ -338,6 +358,12 @@ public class DitaTopicAuthorEditor implements DitaEditor {
 		// Search for author with given type.
 		boolean hasAuthor = AuthorPageDocumentUtil.hasAuthor(authors, type, prologCreator.getAuthor());
 
+		// Search for a xPath to insert the author element (in DMM the fragment is not inserted schema aware)
+		String xPath = AuthorPageDocumentUtil.findElementXPath(documentController,
+				XmlElementsConstants.AUTHOR_NAME,
+				ElementXPathUtils.getPrologXpath(documentType),
+				prolog);
+
 		String fragment = null;
 		int offset = prolog.getStartOffset() + 1;
 
@@ -351,8 +377,15 @@ public class DitaTopicAuthorEditor implements DitaEditor {
 		} else if (!hasAuthor && XmlElementsConstants.CREATOR_TYPE.equals(type)) {
 			fragment = prologCreator.getCreatorFragment(documentType);
 		}
-
-		AuthorPageDocumentUtil.insertFragmentSchemaAware(page, documentController, fragment, offset);
+		
+		if(xPath != null) {
+			AuthorPageDocumentUtil.insertFragmentSchemaAware(page, documentController,
+					fragment,
+					xPath,
+					AuthorConstants.POSITION_AFTER);
+		} else {
+			AuthorPageDocumentUtil.insertFragmentSchemaAware(page, documentController, fragment, offset);
+		}
 	}
 
 	/**
