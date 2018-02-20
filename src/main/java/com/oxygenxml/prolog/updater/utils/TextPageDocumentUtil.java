@@ -140,43 +140,50 @@ public class TextPageDocumentUtil {
 	}
 
 	/**
-	 * Find a possible xPath where prolog element can be inserted.
+	 * Find a possible xPath where given element can be inserted after. 
 	 * 
 	 * @param page
 	 *          The page from the WsEditor.
+	 * @param elementName The name of element to find xPath.         
 	 * @param documentType
 	 *          The type of the document ( {@link DocumentType#TOPIC},
 	 *          {@link DocumentType#MAP} or {@link DocumentType#BOOKMAP} ).
-	 * @return A xPath where to insert the prolog node or <code>null</code>.
+	 * @param  parrentXpath The xPath of parent of the element.       
+	 * @return A xPath where to insert the element node or 
+	 * <code>null</code> if the element should be inserted as first child in parrentXpath.
 	 * 
 	 */
-	public static String findPrologXPath(WSXMLTextEditorPage page, DocumentType documentType) {
+	public static String findElementXPath(WSXMLTextEditorPage page, String elementName, String parrentXpath, DocumentType documentType) {
 		String toReturn = null;
 		ContextElement nodeToInsertAfter = null;
 
 		// Find the context where prolog element can be inserted.
 		try {
-			WhatElementsCanGoHereContext context = findPrologContext(page, documentType);
+			WhatElementsCanGoHereContext context = findElementContext(page, elementName, parrentXpath, documentType);
+			
 			if (context != null) {
 				List<ContextElement> previous = context.getPreviousSiblingElements();
 				if (previous != null && !previous.isEmpty()) {
 					// Get the previous sibling.
 					nodeToInsertAfter = previous.get(previous.size() - 1);
 					// Generate the XPath.
-					toReturn = ElementXPathUtils.getRootXpath(documentType) + "/" + nodeToInsertAfter.getQName();
+					toReturn = parrentXpath + "/" + nodeToInsertAfter.getQName();
 				}
 			}
 		} catch (XPathException e) {
 			logger.warn(e, e.getCause());
 		}
+		
 		return toReturn;
 	}
 
 	/**
-	 * Find a possible context where prolog element can be inserted.
+	 * Find a possible context where given element can be inserted.
 	 * 
 	 * @param page
 	 *          Workspace text editor page.
+	 * @param elementName The name of the element to find context.
+	 * @param  parrentXpath The xPath of parent of the element.       
 	 * @param documentType
 	 *          The type of the document ( {@link DocumentType#TOPIC},
 	 *          {@link DocumentType#MAP} or {@link DocumentType#BOOKMAP} ).
@@ -184,7 +191,7 @@ public class TextPageDocumentUtil {
 	 * @throws XPathException
 	 *           If prolog context can't be found.
 	 */
-	private static WhatElementsCanGoHereContext findPrologContext(WSXMLTextEditorPage page, DocumentType documentType)
+	private static WhatElementsCanGoHereContext findElementContext(WSXMLTextEditorPage page, String elementName, String parrentXpath, DocumentType documentType)
 			throws XPathException {
 		WhatElementsCanGoHereContext toReturn = null;
 
@@ -193,11 +200,13 @@ public class TextPageDocumentUtil {
 		if (schemaManager != null) {
 			
 			// Get all child of root topic.
-			WSXMLTextNodeRange[] topicChild = page.findElementsByXPath(ElementXPathUtils.getRootChildXpath(documentType));
+			WSXMLTextNodeRange[] topicChild = page.findElementsByXPath(parrentXpath + "/*" ); 
 			int childNo = topicChild.length;
+			
 			// Iterate over topic child
 			for (int j = 0; j < childNo; j++) {
 				WSXMLTextNodeRange currentNode = topicChild[j];
+				
 				// Get the offset of next line.
 				WhatElementsCanGoHereContext currentContext = null;
 				try {
@@ -207,13 +216,13 @@ public class TextPageDocumentUtil {
 					logger.debug(e.getMessage(), e);
 				}
 
-				Boolean contextForProlog = analyzeContextForElement(
-						XmlElementsUtils.getPrologName(documentType),
+				Boolean contextForElement = analyzeContextForElement(
+						elementName,
 						currentContext,
 						schemaManager);
-				if (contextForProlog != null) {
+				if (contextForElement != null) {
 					toReturn = currentContext;
-					if (contextForProlog) {
+					if (contextForElement) {
 						break;
 					}
 				}

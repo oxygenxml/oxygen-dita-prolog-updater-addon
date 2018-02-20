@@ -7,6 +7,8 @@ import com.oxygenxml.prolog.updater.utils.ElementXPathConstants;
 import com.oxygenxml.prolog.updater.utils.ElementXPathUtils;
 import com.oxygenxml.prolog.updater.utils.TextPageDocumentUtil;
 import com.oxygenxml.prolog.updater.utils.XMLFragmentUtils;
+import com.oxygenxml.prolog.updater.utils.XmlElementsConstants;
+import com.oxygenxml.prolog.updater.utils.XmlElementsUtils;
 
 import ro.sync.exml.editor.xmleditor.operations.context.RelativeInsertPosition;
 import ro.sync.exml.workspace.api.editor.page.text.xml.TextOperationException;
@@ -106,7 +108,12 @@ public class DitaTopicTextEditor implements DitaEditor {
 	 */
 	private void addProlog(boolean isNewDocument) throws TextOperationException {
 		// Search for a possible prolog xpath.
-		String xp = TextPageDocumentUtil.findPrologXPath(wsTextEditorPage, documentType);
+		String xp = TextPageDocumentUtil.findElementXPath(
+				wsTextEditorPage, 
+				XmlElementsUtils.getPrologName(documentType),
+				ElementXPathUtils.getRootXpath(documentType),
+				documentType);
+		
 		if (xp != null) {
 			TextPageDocumentUtil.insertXmlFragment(wsTextEditorPage,
 					prologCreator.getPrologFragment(isNewDocument, documentType), xp,
@@ -135,18 +142,43 @@ public class DitaTopicTextEditor implements DitaEditor {
 				.findElementsByXPath(ElementXPathUtils.getCritdatesXpath(documentType));
 
 		if (critdateElements.length == 0) {
-			// The critdates doesn't exist.
-			// Add the cridates xml fragment
-			String dateFragment = prologCreator.getDateFragment(isNewDocument, documentType);
-			String toAdd = XMLFragmentUtils.createCritdateTag(dateFragment);
-			TextPageDocumentUtil.insertXmlFragment(wsTextEditorPage, toAdd,
-					ElementXPathUtils.getLastAuthorXpath(documentType), RelativeInsertPosition.INSERT_LOCATION_AFTER);
+			//The critdates element doesn't exit.
+			// Add the element.
+			addCritdates(isNewDocument);
 
 		} else {
 			// The critdates element exists.
 			// Edit the element.
 			editCritdates(isNewDocument);
 		}
+	}
+
+	/**
+	 * Add the critdates element.
+	 * 
+	 * @param isNewDocument
+	 *          <code>true</code> if document is new
+	 * @throws TextOperationException
+	 *           If the element could not be added.
+	 *
+	 */
+	private void addCritdates(boolean isNewDocument) throws TextOperationException {
+		// Search for a Xpath where to insert the critdates element.
+		String xpath = TextPageDocumentUtil.findElementXPath(wsTextEditorPage,
+				XmlElementsConstants.CRITDATES_NAME, 
+				ElementXPathUtils.getPrologXpath(documentType),
+				documentType);
+		
+		if(xpath == null) {
+			xpath = ElementXPathUtils.getLastAuthorXpath(documentType);
+		}
+		
+		String dateFragment = prologCreator.getDateFragment(isNewDocument, documentType);
+		String toAdd = XMLFragmentUtils.createCritdateTag(dateFragment);
+		
+		// Add the cridates xml fragment
+		TextPageDocumentUtil.insertXmlFragment(wsTextEditorPage, toAdd,
+				xpath, RelativeInsertPosition.INSERT_LOCATION_AFTER);
 	}
 
 	/**
@@ -205,16 +237,46 @@ public class DitaTopicTextEditor implements DitaEditor {
 		Object[] authorElements = wsTextEditorPage.findElementsByXPath(ElementXPathUtils.getAuthorXpath(documentType));
 		int authorElementSize = authorElements.length;
 
+		// if the author elements doesn't exist
 		if (authorElementSize == 0) {
-			// if the author elements doesn't exist
-			// add author xml fragment
-			TextPageDocumentUtil.insertXmlFragment(wsTextEditorPage,
-					prologCreator.getPrologAuthorElement(isNewDocument, documentType),
-					ElementXPathUtils.getPrologXpath(documentType), RelativeInsertPosition.INSERT_LOCATION_AS_FIRST_CHILD);
+			// The author element doesn't exist.
+			// Add this element.
+			addAuthor(isNewDocument);
 		} else {
 			// The author element exists.
 			// Edit the author element.
 			editAuthor(isNewDocument);
+		}
+	}
+
+	/**
+	 * Add the author element.
+	 * 
+	 * @param isNewDocument
+	 *          <code>true</code> if document is new
+	 * @throws TextOperationException
+	 *           If the element could not be added.
+	 *
+	 */
+	private void addAuthor(boolean isNewDocument) throws TextOperationException {
+		// Search for a xPath where to insert the author element.
+		String xpath = TextPageDocumentUtil.findElementXPath(wsTextEditorPage,
+				XmlElementsConstants.AUTHOR_NAME, 
+				ElementXPathUtils.getPrologXpath(documentType),
+				documentType);
+		
+		// add author xml fragment
+		if(xpath != null) {
+			TextPageDocumentUtil.insertXmlFragment(wsTextEditorPage,
+					prologCreator.getPrologAuthorElement(isNewDocument, documentType),
+					xpath,
+					RelativeInsertPosition.INSERT_LOCATION_AFTER);
+		} else {
+			TextPageDocumentUtil.insertXmlFragment(
+					wsTextEditorPage,
+					prologCreator.getPrologAuthorElement(isNewDocument, documentType),
+					ElementXPathUtils.getPrologXpath(documentType), 
+					RelativeInsertPosition.INSERT_LOCATION_AS_FIRST_CHILD);
 		}
 	}
 
@@ -242,7 +304,7 @@ public class DitaTopicTextEditor implements DitaEditor {
 				// there aren't creator author elements in prolog
 				// add the creator author xml fragment
 				TextPageDocumentUtil.insertXmlFragment(wsTextEditorPage, prologCreator.getCreatorFragment(documentType),
-						ElementXPathUtils.getPrologXpath(documentType), RelativeInsertPosition.INSERT_LOCATION_AS_FIRST_CHILD);
+						ElementXPathUtils.getLastAuthorXpath(documentType), RelativeInsertPosition.INSERT_LOCATION_AFTER);
 			}
 
 		} else {

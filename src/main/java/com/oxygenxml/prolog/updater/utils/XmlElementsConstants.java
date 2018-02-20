@@ -30,6 +30,16 @@ public class XmlElementsConstants {
 	public static final String TOPICMETA_NAME = "topicmeta";
 
 	/**
+	 * Name of author element.
+	 */
+	public static final String AUTHOR_NAME = "author";
+
+	/**
+	 * Name of critdates element.
+	 */
+	public static final String CRITDATES_NAME = "critdates";
+	
+	/**
 	 * Name of bookmeta element.
 	 */
 	public static final String BOOKMETA_NAME = "bookmeta";
