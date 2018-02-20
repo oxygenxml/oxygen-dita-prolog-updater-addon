@@ -7,26 +7,21 @@ package com.oxygenxml.prolog.updater.utils;
 public class ElementXPathConstants {
 
 	/**
-	 * XPath for topic body.
-	 */
-	public static final String TOPIC_BODY = "//*[contains(@class,' topic/body ')]";
-
-	/**
 	 * XPath expression for Prolog element.
 	 */
-	public static final String PROLOG_XPATH = "//*[contains(@class,' topic/prolog ')]";
+	public static final String PROLOG_XPATH = "/*/*[contains(@class,' topic/prolog ')]";
 
 	/**
 	 * XPath expression for topicMeta element(prolog element in DITA map).
 	 */
-	public static final String TOPICMETA_XPATH = "//*[contains(@class,' map/topicmeta ')]";
+	public static final String TOPICMETA_XPATH = "/*/*[contains(@class,' map/topicmeta ')]";
 	
 	/**
 	 * XPath expression for topicMeta element in subject schema DITA map.
 	 * EXM-40992 - Subject schema contains two element('topicmeta' and 'subjectHeadMeta') 
 	 * with class's value 'map/topicmeta'. The xPath should be more restrictive. 
 	 */
-	public static final String TOPICMETA_SUBJECT_SCHEMA_XPATH = "//topicmeta[contains(@class,' map/topicmeta ')]";
+	public static final String TOPICMETA_SUBJECT_SCHEMA_XPATH = "/*/topicmeta[contains(@class,' map/topicmeta ')]";
 
 	/**
 	 * Xpath expression for critdates element.
