@@ -10,8 +10,6 @@ import javax.swing.text.Position;
 
 import org.apache.log4j.Logger;
 
-import com.oxygenxml.prolog.updater.dita.editor.DocumentType;
-
 import ro.sync.contentcompletion.xml.CIElement;
 import ro.sync.contentcompletion.xml.ContextElement;
 import ro.sync.contentcompletion.xml.WhatElementsCanGoHereContext;
@@ -140,26 +138,23 @@ public class TextPageDocumentUtil {
 	}
 
 	/**
-	 * Find a possible xPath where given element can be inserted after. 
+	 * Find a possible XPath expression where the given element can be inserted 
+	 * (after the element returned by the XPath expression). 
 	 * 
-	 * @param page
-	 *          The page from the WsEditor.
-	 * @param elementName The name of element to find xPath.         
-	 * @param documentType
-	 *          The type of the document ( {@link DocumentType#TOPIC},
-	 *          {@link DocumentType#MAP} or {@link DocumentType#BOOKMAP} ).
-	 * @param  parentXpath The xPath of parent of the element.       
-	 * @return A xPath where to insert the element node or 
-	 * <code>null</code> if the element should be inserted as first child in parrentXpath.
-	 * 
+	 * @param page          The page from the WsEditor.
+	 * @param elementName   The name of element we want to insert.         
+	 * @param parentXpath  The XPath expression corresponding to the parent of the element.
+	 *        
+	 * @return An XPath expression where to insert the element or 
+	 * 		       <code>null</code> if the element should be inserted as first child in parrentXpath.
 	 */
-	public static String findElementXPath(WSXMLTextEditorPage page, String elementName, String parentXpath, DocumentType documentType) {
+	public static String findElementXPath(WSXMLTextEditorPage page, String elementName, String parentXpath) {
 		String toReturn = null;
 		ContextElement nodeToInsertAfter = null;
 
 		// Find the context where prolog element can be inserted.
 		try {
-			WhatElementsCanGoHereContext context = findElementContext(page, elementName, parentXpath, documentType);
+			WhatElementsCanGoHereContext context = findElementContext(page, elementName, parentXpath);
 			
 			if (context != null) {
 				List<ContextElement> previous = context.getPreviousSiblingElements();
@@ -178,20 +173,17 @@ public class TextPageDocumentUtil {
 	}
 
 	/**
-	 * Find a possible context where given element can be inserted.
+	 * Find a possible context where the given element can be inserted.
 	 * 
-	 * @param page
-	 *          Workspace text editor page.
-	 * @param elementName The name of the element to find context.
-	 * @param  parentXpath The xPath of parent of the element.       
-	 * @param documentType
-	 *          The type of the document ( {@link DocumentType#TOPIC},
-	 *          {@link DocumentType#MAP} or {@link DocumentType#BOOKMAP} ).
-	 * @return A context where prolog element can go or <code>null</code>.
-	 * @throws XPathException
-	 *           If prolog context can't be found.
+	 * @param page         Workspace text editor page.
+	 * @param elementName  The name of the element to insert.
+	 * @param parentXpath  The xPath of parent of the element.
+	 *        
+	 * @return A context where the given element can go or <code>null</code>.
+	 * 
+	 * @throws XPathException  If prolog context can't be found.
 	 */
-	private static WhatElementsCanGoHereContext findElementContext(WSXMLTextEditorPage page, String elementName, String parentXpath, DocumentType documentType)
+	private static WhatElementsCanGoHereContext findElementContext(WSXMLTextEditorPage page, String elementName, String parentXpath)
 			throws XPathException {
 		WhatElementsCanGoHereContext toReturn = null;
 

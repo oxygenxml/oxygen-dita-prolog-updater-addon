@@ -111,8 +111,7 @@ public class DitaTopicTextEditor implements DitaEditor {
 		String xp = TextPageDocumentUtil.findElementXPath(
 				wsTextEditorPage, 
 				XmlElementsUtils.getPrologName(documentType),
-				ElementXPathUtils.getRootXpath(documentType),
-				documentType);
+				ElementXPathUtils.getRootXpath(documentType));
 		
 		if (xp != null) {
 			TextPageDocumentUtil.insertXmlFragment(wsTextEditorPage,
@@ -166,8 +165,7 @@ public class DitaTopicTextEditor implements DitaEditor {
 		// Search for a Xpath where to insert the critdates element.
 		String xpath = TextPageDocumentUtil.findElementXPath(wsTextEditorPage,
 				XmlElementsConstants.CRITDATES_NAME, 
-				ElementXPathUtils.getPrologXpath(documentType),
-				documentType);
+				ElementXPathUtils.getPrologXpath(documentType));
 		
 		if(xpath == null) {
 			xpath = ElementXPathUtils.getLastAuthorXpath(documentType);
@@ -262,8 +260,7 @@ public class DitaTopicTextEditor implements DitaEditor {
 		// Search for a xPath where to insert the author element.
 		String xpath = TextPageDocumentUtil.findElementXPath(wsTextEditorPage,
 				XmlElementsConstants.AUTHOR_NAME, 
-				ElementXPathUtils.getPrologXpath(documentType),
-				documentType);
+				ElementXPathUtils.getPrologXpath(documentType));
 		
 		// add author xml fragment
 		if(xpath != null) {
