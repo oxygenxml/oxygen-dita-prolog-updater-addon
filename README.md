@@ -25,3 +25,9 @@ The following options can be set for DITA topics or maps (or both):
 - **Set created date**: When this option is selected, a *created date* is added to the prolog when the document is saved. This option is only applicable for new documents.
 - **Update contributor names**: When this option is selected, the author is set as a *contributor* in the prolog when the document is saved. This option is only applicable for already existing documents.
 - **Update revised dates**: When this option is selected, a *revised date* is added to the prolog when the document is saved. This option is only applicable for already existing documents. 
+
+Copyright and License
+---------------------
+Copyright 2018 Syncro Soft SRL.
+
+This project is licensed under [Apache License 2.0](https://github.com/oxygenxml/oxygen-dita-prolog-updater/blob/master/LICENSE)
