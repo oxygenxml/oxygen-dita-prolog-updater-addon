@@ -19,6 +19,11 @@ public class OptionKeys {
 	public static final String AUTHOR_NAME = "prolog.updater.author.name";
 
 	/**
+	 * Option for the date format in prolog updater.
+	 */
+	public static final String DATE_FORMAT = "prolog.updater.date.format";
+	
+	/**
 	 * Option to enable the prolog updater for topics.
 	 */
 	public static final String TOPIC_ENABLE_UPDATE_ON_SAVE = "prolog.updater.enable.on.save.topic";

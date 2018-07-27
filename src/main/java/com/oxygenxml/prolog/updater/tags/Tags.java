@@ -21,6 +21,11 @@ public class Tags {
 	public static final String AUTHOR = "prolog.updater.author.name";
 
 	/**
+	 * en: Date format
+	 */
+	public static final String DATE_FORMAT = "prolog.updater.date.format";
+
+	/**
 	 * en: DITA topic
 	 */
 	public static final String DITA_TOPIC = "prolog.updater.dita.topic";

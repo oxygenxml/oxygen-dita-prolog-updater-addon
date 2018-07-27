@@ -24,7 +24,7 @@ public class DitaMapUpdaterAuthorTest extends AuthorTestCase{
 	public void testUpdateAuthorInProlog() throws IOException, SAXException, BadLocationException, ParserConfigurationException, TransformerException {
 
 		//Get the local date
-		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+		DateFormat dateFormat = new SimpleDateFormat(getDateFormat());
 		
 		Date date = new Date();
 		final String localDate = dateFormat.format(date);

@@ -55,7 +55,7 @@ public class PrologContentCreatorMapTest extends TestCase {
 	public void testUpdateDisable() {
 		Mockito.when(wsOptionsStorage.getOption(OptionKeys.MAP_ENABLE_UPDATE_ON_SAVE, Boolean.TRUE.toString()))
 				.thenReturn(Boolean.FALSE.toString());
-		PrologContentCreator prologContentCreator = new PrologContentCreator(AUTHOR_NAME);
+		PrologContentCreator prologContentCreator = new PrologContentCreator(AUTHOR_NAME, null);
 
 		// Get the prolog according to settings when document is new.
 		String prologFragment = prologContentCreator.getPrologFragment(true, DocumentType.MAP);
@@ -91,7 +91,7 @@ public class PrologContentCreatorMapTest extends TestCase {
 		Mockito.when(wsOptionsStorage.getOption(OptionKeys.MAP_UPDATE_REVISED_DATES, Boolean.TRUE.toString()))
 				.thenReturn(Boolean.FALSE.toString());
 
-		PrologContentCreator prologContentCreator = new PrologContentCreator(AUTHOR_NAME);
+		PrologContentCreator prologContentCreator = new PrologContentCreator(AUTHOR_NAME, null);
 
 		// Get the prolog in new document.
 		String prologFragment = prologContentCreator.getPrologFragment(true, DocumentType.MAP);
@@ -128,7 +128,7 @@ public class PrologContentCreatorMapTest extends TestCase {
 				.thenReturn(Boolean.FALSE.toString());
 
 		// When MAP_SET_CREATOR is false
-		PrologContentCreator prologContentCreator = new PrologContentCreator(AUTHOR_NAME);
+		PrologContentCreator prologContentCreator = new PrologContentCreator(AUTHOR_NAME, null);
 
 		// Get the prolog in new document.
 		String prologFragment = prologContentCreator.getPrologFragment(true, DocumentType.MAP);
@@ -165,9 +165,9 @@ public class PrologContentCreatorMapTest extends TestCase {
 				.thenReturn(Boolean.FALSE.toString());
 
 		// When MAP_SET_CREATOR is false
-		PrologContentCreator prologContentCreator = new PrologContentCreator(AUTHOR_NAME) {
+		PrologContentCreator prologContentCreator = new PrologContentCreator(AUTHOR_NAME, null) {
 			@Override
-			protected String createLocalDate() {
+			protected String createLocalDate(String dateFormat) {
 				return LOCAL_DATE;
 			}
 		};
@@ -208,7 +208,7 @@ public class PrologContentCreatorMapTest extends TestCase {
 				.thenReturn(Boolean.FALSE.toString());
 
 		// When MAP_SET_CREATOR is false
-		PrologContentCreator prologContentCreator = new PrologContentCreator(AUTHOR_NAME);
+		PrologContentCreator prologContentCreator = new PrologContentCreator(AUTHOR_NAME, null);
 
 		// Get the prolog when document is new.
 		String prologFragment = prologContentCreator.getPrologFragment(true, DocumentType.MAP);
@@ -247,9 +247,9 @@ public class PrologContentCreatorMapTest extends TestCase {
 				.thenReturn(Boolean.TRUE.toString());
 
 		// When MAP_SET_CREATOR is false
-		PrologContentCreator prologContentCreator = new PrologContentCreator(AUTHOR_NAME) {
+		PrologContentCreator prologContentCreator = new PrologContentCreator(AUTHOR_NAME, null) {
 			@Override
-			protected String createLocalDate() {
+			protected String createLocalDate(String dateFormat) {
 				return LOCAL_DATE;
 			}
 		};

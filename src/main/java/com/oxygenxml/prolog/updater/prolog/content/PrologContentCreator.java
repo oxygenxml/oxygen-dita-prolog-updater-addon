@@ -20,12 +20,6 @@ import ro.sync.exml.workspace.api.options.WSOptionsStorage;
  *
  */
 public class PrologContentCreator {
-
-	/**
-	 * Date pattern.
-	 */
-	public static final String DATE_PATTERN = "yyyy/MM/dd";
-	
 	/**
 	 * XML fragment for author that has type creator.
 	 */
@@ -47,7 +41,7 @@ public class PrologContentCreator {
 	private StringBuilder revisedDateFragment;
 
 	/**
-	 * The local date in format "yyyy/MM/dd".
+	 * The local date in given format.
 	 */
 	private String localDate;
 	
@@ -109,11 +103,12 @@ public class PrologContentCreator {
 	/**
 	 * Constructor.
 	 * 
-	 * @param author
-	 *          The name of the author.
+	 * @param author      The name of the author.
+	 * @param dateFormat 	The format of the date.
 	 */
-	public PrologContentCreator(String author) {
+	public PrologContentCreator(String author, String dateFormat) {
 		this.authorName = author;
+
 		if (authorName != null) {
 			// Creator
 			creatorFragment = XMLFragmentUtils.createAuthorFragment(authorName, XmlElementsConstants.CREATOR_TYPE);
@@ -121,7 +116,7 @@ public class PrologContentCreator {
 			contributorXML = XMLFragmentUtils.createAuthorFragment(authorName, XmlElementsConstants.CONTRIBUTOR_TYPE);
 
 			// Generate current date in a specified format.
-			localDate = createLocalDate();
+			localDate = createLocalDate(dateFormat);
 			// Generate the created date element.
 			createdDateXML = XMLFragmentUtils.createGeneralXmlFragment("created", "date", localDate);
 
@@ -307,10 +302,18 @@ public class PrologContentCreator {
 	/**
 	 * Create the local date.
 	 * 
+	 * @param dataFormat The format of the date.
+	 * 
 	 * @return The local date in String format.
 	 */
-	protected String createLocalDate() {
-		return new SimpleDateFormat(DATE_PATTERN).format(new Date());
+	protected String createLocalDate(String dataFormat) {
+		SimpleDateFormat simpleDateFormat = null;
+		try {
+			simpleDateFormat = new SimpleDateFormat(dataFormat);
+		} catch (Exception e) {
+			simpleDateFormat = new SimpleDateFormat(DateFormats.DEFAULT_DATE_PATTERN);
+		}
+		return simpleDateFormat.format(new Date());
 	}
 
 	/**

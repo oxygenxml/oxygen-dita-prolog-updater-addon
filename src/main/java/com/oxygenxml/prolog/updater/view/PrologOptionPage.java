@@ -6,10 +6,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import com.oxygenxml.prolog.updater.prolog.content.DateFormats;
 import com.oxygenxml.prolog.updater.tags.OptionKeys;
 import com.oxygenxml.prolog.updater.tags.Tags;
 
@@ -75,6 +77,11 @@ public class PrologOptionPage extends JPanel {
 	private JCheckBox mapUpdateRevised;
 
 	/**
+	 * Combo for select the date format.
+	 */
+	private JComboBox<String> dateFormatCombo;
+		
+	/**
 	 * Default value for check boxes in boolean format
 	 */
 	private static final boolean CHECK_SELECTED_DEFAULT_BOOLEAN = true;
@@ -117,6 +124,9 @@ public class PrologOptionPage extends JPanel {
 		mapUpdateRevised = new JCheckBox(messages.getMessage(Tags.UPDATE_REVISED_DATES));
 
 		leftIndent = new JCheckBox().getPreferredSize().width;
+
+		dateFormatCombo = new JComboBox<String>(DateFormats.DATE_PATTERNS);
+		dateFormatCombo.setEditable(true);
 		
 		GridBagConstraints constr = new GridBagConstraints();
 		constr.gridx = 0;
@@ -132,12 +142,27 @@ public class PrologOptionPage extends JPanel {
 		// Author field
 		add(authorTextField, constr);
 
+		constr.gridx = 0;
+		constr.gridy++;
+		constr.weightx = 0;
+		constr.insets.left = 0;
+		constr.insets.top = 5;
+		// Date format label
+		add(new JLabel(messages.getMessage(Tags.DATE_FORMAT) + ":"), constr);
+
+		constr.gridx++;
+		constr.weightx = 1;
+		constr.insets.left = leftIndent;
+		// Date format combo.
+		add(dateFormatCombo, constr);
+		
 		//
 		// DITA topic
 		//
 		constr.gridx = 0;
 		constr.gridy++;
 		constr.gridwidth = 2;
+		constr.insets.top = 0;
 		constr.insets.left = 0;
 		add(new SectionPane(messages.getMessage(Tags.DITA_TOPIC)), constr);
 
@@ -239,6 +264,8 @@ public class PrologOptionPage extends JPanel {
 		if (optionsStorage != null) {
 			// Save the author name.
 			optionsStorage.setOption(OptionKeys.AUTHOR_NAME, authorTextField.getText());
+			// Save the date format.
+			optionsStorage.setOption(OptionKeys.DATE_FORMAT, (String)dateFormatCombo.getSelectedItem());
 
 			// Save the state of check boxes from DITA topic.
 			optionsStorage.setOption(OptionKeys.TOPIC_ENABLE_UPDATE_ON_SAVE, String.valueOf(topicEnableUpdate.isSelected()));
@@ -267,6 +294,10 @@ public class PrologOptionPage extends JPanel {
 			// Load the author name.
 			value = optionsStorage.getOption(OptionKeys.AUTHOR_NAME, AUTHOR_DEFAULT);
 			authorTextField.setText(value);
+		
+			// Load the date format name.
+			value = optionsStorage.getOption(OptionKeys.DATE_FORMAT, DateFormats.DEFAULT_DATE_PATTERN);
+			dateFormatCombo.getModel().setSelectedItem(value);
 
 			// Load DITA topic state
 			value = optionsStorage.getOption(OptionKeys.TOPIC_ENABLE_UPDATE_ON_SAVE, CHECK_SELECTED_DEFAULT);

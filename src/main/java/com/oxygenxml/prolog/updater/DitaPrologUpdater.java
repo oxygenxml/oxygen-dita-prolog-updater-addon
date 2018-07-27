@@ -13,6 +13,7 @@ import com.oxygenxml.prolog.updater.utils.AWTUtil;
 
 import ro.sync.document.DocumentPositionedInfo;
 import ro.sync.exml.workspace.api.PluginResourceBundle;
+import ro.sync.exml.workspace.api.PluginWorkspace;
 import ro.sync.exml.workspace.api.PluginWorkspaceProvider;
 import ro.sync.exml.workspace.api.editor.WSEditor;
 import ro.sync.exml.workspace.api.editor.page.WSEditorPage;
@@ -50,7 +51,7 @@ public class DitaPrologUpdater {
 		WSEditorPage currentPage = wsEditor.getCurrentPage();
 
 		// create a PrologContentCreator
-		PrologContentCreator prologContentCreater = new PrologContentCreator(getAuthorName());
+		PrologContentCreator prologContentCreater = new PrologContentCreator(getAuthorName(), getDateFormat());
 
 		final DitaEditor[] ditaEditor = new DitaEditor[1];
 		if (currentPage instanceof WSAuthorEditorPage) {
@@ -101,6 +102,20 @@ public class DitaPrologUpdater {
 		return toReturn;
 	}
 
+	/**
+	 * @return The date format.
+	 */
+	protected String getDateFormat() {
+		String toReturn = null;
+
+		PluginWorkspace pluginWorkspace = PluginWorkspaceProvider.getPluginWorkspace();
+		if(pluginWorkspace != null) {
+			WSOptionsStorage optionsStorage = pluginWorkspace.getOptionsStorage();
+			toReturn = optionsStorage.getOption(OptionKeys.DATE_FORMAT, toReturn);
+		}
+		return toReturn;
+	}
+	
 	/**
 	 * Show a warning message("The prolog wasn't updated") in results manager.
 	 * @param wsEditor The workspace editor access.

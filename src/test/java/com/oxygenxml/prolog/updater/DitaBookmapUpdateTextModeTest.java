@@ -66,7 +66,7 @@ public class DitaBookmapUpdateTextModeTest extends TestCase {
 		Mockito.when(wsTextEditorPage.getDocumentController()).thenReturn(textDocumentController);
 
 		// Create prolog content creator
-		prologContentCreater = new PrologContentCreator(AUTHOR_NAME);
+		prologContentCreater = new PrologContentCreator(AUTHOR_NAME, null);
 
 		// Create ditaTopicTextEditor
 		ditaTopicTextEditor = new DitaTopicTextEditor(wsTextEditorPage, prologContentCreater);

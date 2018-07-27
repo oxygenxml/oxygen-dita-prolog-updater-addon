@@ -98,11 +98,17 @@ public abstract class AuthorTestCase extends TestCase {
 		Mockito.when(wsEditor.getCurrentPage()).thenReturn(wsAuthorEditorPage);
 		Mockito.when(wsAuthorEditorPage.getDocumentController()).thenReturn(controller);
 
+		final String  dateFormat = getDateFormat();
 		// Create the DitaUpdater
 		DitaPrologUpdater ditaUpdater = new DitaPrologUpdater() {
 			@Override
 			protected String getAuthorName() {
 				return AUTHOR_NAME;
+			}
+			
+			@Override
+			protected String getDateFormat() {
+				return dateFormat;
 			}
 		};
 
@@ -130,4 +136,11 @@ public abstract class AuthorTestCase extends TestCase {
 		assertEquals("The updated content is wrong", expected, actual);
 	}
 
+	/**
+	 * Get the date format for TCs
+	 * @return
+	 */
+	public String getDateFormat() {
+		return "YYYY-MM-dd";
+	}
 }

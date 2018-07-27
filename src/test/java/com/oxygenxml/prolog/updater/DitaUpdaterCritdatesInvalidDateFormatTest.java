@@ -11,8 +11,22 @@ import javax.xml.transform.TransformerException;
 
 import org.xml.sax.SAXException;
 
-public class DitaUpdaterCritdatesTest extends AuthorTestCase {
+import com.oxygenxml.prolog.updater.prolog.content.DateFormats;
 
+/**
+ * Test if the default format is used if the given date format is invalid.
+ * 
+ * @author cosmin_duna
+ *
+ */
+public class DitaUpdaterCritdatesInvalidDateFormatTest extends AuthorTestCase {
+
+	@Override
+	public String getDateFormat() {
+		// Set a invalid date format
+		return "invalidDateFormat";
+	}
+	
 	/**
 	 * Test if the critdates tag is correct modified after save operation.
 	 * @throws IOException
@@ -23,8 +37,8 @@ public class DitaUpdaterCritdatesTest extends AuthorTestCase {
 	 */
 	public void testUpdateProlog() throws IOException, SAXException, BadLocationException, ParserConfigurationException, TransformerException {
 
-		//Get the local date
-		DateFormat dateFormat = new SimpleDateFormat(getDateFormat());
+		//Get the local date, using the default date format.
+		DateFormat dateFormat = new SimpleDateFormat(DateFormats.DEFAULT_DATE_PATTERN);
 		Date date = new Date();
 		
 		final String localDate = dateFormat.format(date);

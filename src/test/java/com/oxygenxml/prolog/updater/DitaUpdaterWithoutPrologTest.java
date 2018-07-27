@@ -24,7 +24,7 @@ public class DitaUpdaterWithoutPrologTest extends AuthorTestCase{
 	public void testAddProlog() throws IOException, SAXException, BadLocationException, ParserConfigurationException, TransformerException {
 
 		//Get the local date
-		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+		DateFormat dateFormat = new SimpleDateFormat(getDateFormat());
 		Date date = new Date();
 		
 		final String localDate = dateFormat.format(date);

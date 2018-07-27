@@ -15,7 +15,14 @@
 		<val lang="ja_JP">Author</val>
 		<val lang="nl_NL">Author</val>
 	</key>
-	
+	<key value="prolog.updater.date.format">
+		<comment>The date format</comment>
+		<val lang="en_US">Date format</val>
+		<val lang="de_DE">Date format</val>
+		<val lang="fr_FR">Date format</val>
+		<val lang="ja_JP">Date format</val>
+		<val lang="nl_NL">Date format</val>
+	</key>
 	<key value="prolog.updater.dita.topic">
 		<comment>The label for the dita topic section.</comment>
 		<val lang="en_US">Topic</val>

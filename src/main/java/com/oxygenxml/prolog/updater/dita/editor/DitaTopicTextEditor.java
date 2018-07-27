@@ -207,9 +207,11 @@ public class DitaTopicTextEditor implements DitaEditor {
 			// it's not a new document
 			// search for revised elements that have local date as modified and have
 			// contributor as comment
-			Object[] revisedElements = wsTextEditorPage.findElementsByXPath(
-					ElementXPathUtils.getCritdatesXpath(documentType) + "/revised[@modified = '" + prologCreator.getLocalDate()
-							+ "']/" + "preceding-sibling::node()[2][.='" + prologCreator.getAuthor() + "']");
+			StringBuilder xPathBuilder = new StringBuilder();
+			xPathBuilder.append(ElementXPathUtils.getCritdatesXpath(documentType));
+			xPathBuilder.append("/revised[@modified = '" ).append(prologCreator.getLocalDate()).append("']/");
+			xPathBuilder.append("preceding-sibling::node()[2][.='").append(prologCreator.getAuthor()).append("']");
+			Object[] revisedElements = wsTextEditorPage.findElementsByXPath(xPathBuilder.toString());
 
 			// if the element wasn't found
 			if (revisedElements.length == 0) {
