@@ -20,7 +20,7 @@ To configure the update options, go to **Options->Preferences->Plugins->DITA Pro
 The following options can be set for DITA topics or maps (or both):
 
 - **Author**: Specifies the name of the author. By default, it is the system user name.
-- **Date format**: Specifies the format by which the date is added in *created* or *revised* element. If added format is invalid, *yyyy/MM/dd* is used.
+- **Date format**: Specifies the format for the date added in the *created date* or *revised date* elements. If the specified format is invalid, *yyyy/MM/dd* is used as a fallback.
 - **Enable automatic prolog update on save**: When this option is selected, the prolog is updated anytime the document is saved.
 - **Set creator name**: When this option is selected, the author is set as the document's *creator* in the prolog when the document is saved. This option is only applicable for new documents.
 - **Set created date**: When this option is selected, a *created date* is added to the prolog when the document is saved. This option is only applicable for new documents.
