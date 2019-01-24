@@ -7,7 +7,7 @@
  name="DITA Prolog Updater"
  description="Oxygen XML plugin that updates the prolog section of a DITA topic/map."
  version="${project.version}"
- vendor="oXygen XML"
+ vendor="Syncro Soft"
  class="com.oxygenxml.prolog.updater.plugin.PrologUpdaterPlugin"
  classLoaderType="preferReferencedResources">
  
