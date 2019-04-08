@@ -330,22 +330,22 @@ public class PrologContentCreator {
 			updateMapProlog = Boolean.parseBoolean(value);
 
 			value = optionsStorage.getOption(OptionKeys.TOPIC_SET_CREATOR, String.valueOf(true));
-			setTopicCreator = Boolean.parseBoolean(value);
+			setTopicCreator = Boolean.parseBoolean(value) && updateTopicProlog;
 			value = optionsStorage.getOption(OptionKeys.MAP_SET_CREATOR, String.valueOf(true));
-			setMapCreator = Boolean.parseBoolean(value);
+			setMapCreator = Boolean.parseBoolean(value) && updateMapProlog;
 			value = optionsStorage.getOption(OptionKeys.TOPIC_UPDATE_CONTRIBUTOR, String.valueOf(true));
-			updateTopicContributor = Boolean.parseBoolean(value);
+			updateTopicContributor = Boolean.parseBoolean(value) && updateTopicProlog;
 			value = optionsStorage.getOption(OptionKeys.MAP_UPDATE_CONTRIBUTOR, String.valueOf(true));
-			updateMapContributor = Boolean.parseBoolean(value);
+			updateMapContributor = Boolean.parseBoolean(value) && updateMapProlog;
 
 			value = optionsStorage.getOption(OptionKeys.TOPIC_SET_CREATED_DATE, String.valueOf(true));
-			setTopicCreatedDate = Boolean.parseBoolean(value);
+			setTopicCreatedDate = Boolean.parseBoolean(value) && updateTopicProlog;
 			value = optionsStorage.getOption(OptionKeys.MAP_SET_CREATED_DATE, String.valueOf(true));
-			setMapCreatedDate = Boolean.parseBoolean(value);
+			setMapCreatedDate = Boolean.parseBoolean(value) && updateMapProlog;
 			value = optionsStorage.getOption(OptionKeys.TOPIC_UPDATE_REVISED_DATES, String.valueOf(true));
-			updateTopicRevisedDate = Boolean.parseBoolean(value);
+			updateTopicRevisedDate = Boolean.parseBoolean(value) && updateTopicProlog;
 			value = optionsStorage.getOption(OptionKeys.MAP_UPDATE_REVISED_DATES, String.valueOf(true));
-			updateMapRevisedDate = Boolean.parseBoolean(value);
+			updateMapRevisedDate = Boolean.parseBoolean(value) && updateMapProlog;
 		}
 	}
 }

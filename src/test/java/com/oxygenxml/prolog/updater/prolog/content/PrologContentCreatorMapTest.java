@@ -266,4 +266,50 @@ public class PrologContentCreatorMapTest extends TestCase {
 				"<topicmeta><critdates><!--name--><revised modified=\"2017-12-04\"/></critdates></topicmeta>", prologFragment);
 
 	}
+	
+	/**
+	 * <p>
+	 * <b>Description:</b> Test the functionality when MAP_ENABLE_UPDATE_ON_SAVE
+	 * option is false and other options are set to true.
+	 * </p>
+	 *
+	 */
+	@PrepareForTest({ PluginWorkspaceProvider.class })
+	@Test
+	public void testUpdateDisable_EXM_43284() {
+		Mockito.when(wsOptionsStorage.getOption(OptionKeys.MAP_ENABLE_UPDATE_ON_SAVE, Boolean.TRUE.toString()))
+		.thenReturn(Boolean.FALSE.toString());
+		Mockito.when(wsOptionsStorage.getOption(OptionKeys.MAP_SET_CREATOR, Boolean.TRUE.toString()))
+		.thenReturn(Boolean.TRUE.toString());
+		Mockito.when(wsOptionsStorage.getOption(OptionKeys.MAP_SET_CREATED_DATE, Boolean.TRUE.toString()))
+		.thenReturn(Boolean.TRUE.toString());
+		Mockito.when(wsOptionsStorage.getOption(OptionKeys.MAP_UPDATE_CONTRIBUTOR, Boolean.TRUE.toString()))
+		.thenReturn(Boolean.TRUE.toString());
+		Mockito.when(wsOptionsStorage.getOption(OptionKeys.MAP_UPDATE_REVISED_DATES, Boolean.TRUE.toString()))
+		.thenReturn(Boolean.TRUE.toString());
+
+		PrologContentCreator prologContentCreator = new PrologContentCreator(AUTHOR_NAME, "name");
+
+		// Get the prolog according to settings when document is new.
+		String prologFragment = prologContentCreator.getPrologFragment(true, DocumentType.MAP);
+		// The prolog fragment is not generated.
+		assertNull("The fragment shouldn't be generated.", prologFragment);
+
+		// Get the prolog according to settings when document isn't new.
+		prologFragment = prologContentCreator.getPrologFragment(false, DocumentType.MAP);
+		// The prolog fragment is not generated.
+		assertNull("The fragment shouldn't be generated.", prologFragment);
+
+		// Check the author element from the prolog
+		String prologAuthorElement = prologContentCreator.getPrologAuthorElement(true, DocumentType.MAP);
+		assertNull("The fragment shouldn't be generated.", prologAuthorElement);
+		prologAuthorElement = prologContentCreator.getPrologAuthorElement(false, DocumentType.MAP);
+		assertNull("The fragment shouldn't be generated.", prologAuthorElement);
+
+		// Check the date element from the prolog
+		String dateFragment = prologContentCreator.getDateFragment(true, DocumentType.MAP);
+		assertNull("The fragment shouldn't be generated.", dateFragment);
+		dateFragment = prologContentCreator.getDateFragment(false, DocumentType.TOPIC);
+		assertNull("The fragment shouldn't be generated.", dateFragment);
+	}
 }
