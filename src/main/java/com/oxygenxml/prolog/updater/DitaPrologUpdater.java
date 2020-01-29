@@ -51,7 +51,7 @@ public class DitaPrologUpdater {
 		WSEditorPage currentPage = wsEditor.getCurrentPage();
 
 		// create a PrologContentCreator
-		PrologContentCreator prologContentCreater = new PrologContentCreator(getAuthorName(), getDateFormat());
+		PrologContentCreator prologContentCreater = new PrologContentCreator(getAuthorName(), getDateFormat(), getMaxNoOfRevisedElements());
 
 		final DitaEditor[] ditaEditor = new DitaEditor[1];
 		if (currentPage instanceof WSAuthorEditorPage) {
@@ -117,6 +117,24 @@ public class DitaPrologUpdater {
 	}
 	
 	/**
+	 * Get the maximum number of allowed revised elements.
+	 * @return
+	 */
+	protected int getMaxNoOfRevisedElements() {
+    int max = -1;
+    PluginWorkspace pluginWorkspace = PluginWorkspaceProvider.getPluginWorkspace();
+    if(pluginWorkspace != null) {
+      WSOptionsStorage optionsStorage = pluginWorkspace.getOptionsStorage();
+      String shouldLimit =  optionsStorage.getOption(OptionKeys.LIMIT_REVISED_ELEMENTS, String.valueOf(false));
+      if(Boolean.valueOf(shouldLimit)) {
+        String value = optionsStorage.getOption(OptionKeys.MAX_REVISED_ELEMENTS, String.valueOf(-1));
+        max = Integer.valueOf(value);
+      }
+    }
+    return max;
+  }
+
+  /**
 	 * Show a warning message("The prolog wasn't updated") in results manager.
 	 * @param wsEditor The workspace editor access.
 	 */

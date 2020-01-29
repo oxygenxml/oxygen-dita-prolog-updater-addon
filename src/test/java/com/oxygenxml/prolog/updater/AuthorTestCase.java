@@ -38,6 +38,11 @@ public abstract class AuthorTestCase extends TestCase {
 	final static String AUTHOR_NAME = "test";
 
 	/**
+	 * The maximum number of revised elements.
+	 */
+	int maxNoOfRevisedElements = -1;
+	
+	/**
 	 * The relative path to catalogs.
 	 */
 	private static final String CATALOG = "config/catalogs/catalog.xml";
@@ -109,6 +114,11 @@ public abstract class AuthorTestCase extends TestCase {
 			@Override
 			protected String getDateFormat() {
 				return dateFormat;
+			}
+			
+			@Override
+			protected int getMaxNoOfRevisedElements() {
+			  return maxNoOfRevisedElements;
 			}
 		};
 

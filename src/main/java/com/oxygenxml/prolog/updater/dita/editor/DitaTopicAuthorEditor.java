@@ -3,6 +3,7 @@ package com.oxygenxml.prolog.updater.dita.editor;
 import java.util.List;
 
 import javax.swing.text.BadLocationException;
+import javax.swing.text.Position;
 
 import org.apache.log4j.Logger;
 
@@ -101,6 +102,7 @@ public class DitaTopicAuthorEditor implements DitaEditor {
 				// Get the prolog element.
 				AuthorElement prolog = getPrologElement(rootElement);
 				
+				documentController.beginCompoundEdit();
 				try {
 					if (prolog != null) {
 						// Prolog element exists; edit this element.
@@ -111,7 +113,9 @@ public class DitaTopicAuthorEditor implements DitaEditor {
 					}
 				} catch (AuthorOperationException e) {
 					toReturn = false;
-				}
+				} finally {
+				  documentController.endCompoundEdit();
+        }
 			}
 		} else {
 			toReturn = false;
@@ -334,8 +338,58 @@ public class DitaTopicAuthorEditor implements DitaEditor {
 			}
 			// Now insert it.
 			AuthorPageDocumentUtil.insertFragmentSchemaAware(page, documentController, fragment, offset);
+			deleteExtraRevisedElements(critdatesElement);
 		}
 	}
+
+	 /**
+   * Delete the first revised elements if the number of them is greater than allowed number.
+   * 
+   * @param critdatesElement The parent of revised elements.
+   */
+  private void deleteExtraRevisedElements(AuthorElement critdatesElement) {
+    int noOfAllowedElements = prologCreator.getMaxNoOfRevisedElement();
+    if(noOfAllowedElements != -1) {
+      List<AuthorElement> allRevisedElements = AuthorPageDocumentUtil.findElementsByClass(
+          critdatesElement, XmlElementsConstants.REVISED_DATE_ELEMENT_CLASS);
+      int noOfElements = allRevisedElements.size();
+    
+      // Get the caret position
+      Position caretPosition = null;
+      if (page instanceof WSAuthorEditorPage) {
+        try {
+          caretPosition = documentController.createPositionInContent(
+              ((WSAuthorEditorPage)page).getCaretOffset());
+        } catch (BadLocationException e) {
+          logger.error(e, e);
+        }
+      }
+      
+      if(noOfElements > noOfAllowedElements) {
+        int nuOfElementToDelete = noOfElements - noOfAllowedElements;
+        for (int i = 0; i < nuOfElementToDelete; i++) {
+          AuthorElement currentRevised = allRevisedElements.get(i);
+          // Get the previous node
+          try {
+            AuthorNode previousSibling = documentController.getNodeAtOffset(currentRevised.getStartOffset() - 1);
+            // We will delete the previous sibling if it's a comment
+            if (previousSibling.getType() == AuthorNode.NODE_TYPE_COMMENT) {
+              documentController.deleteNode(previousSibling);
+            }
+          } catch (BadLocationException e) {
+            logger.debug(e.getMessage(), e);
+          }
+          // Delete the revised element.
+          documentController.deleteNode(currentRevised);
+        }
+        
+        // Restore the caret position
+        if(caretPosition != null) {
+          ((WSAuthorEditorPage)page).setCaretPosition(caretPosition.getOffset());
+        }
+      }
+    }
+  }
 
 	/**
 	 * Update the document adding the names of the authors.

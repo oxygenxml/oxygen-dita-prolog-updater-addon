@@ -101,14 +101,31 @@ public class PrologContentCreator {
 	private boolean updateMapRevisedDate = true;
 
 	/**
+	 * The maximum number of revised elements
+	 */
+  private int maxNoOfRevised = -1;
+
+  /**
+   * Constructor.
+   * 
+   * @param author      The name of the author.
+   * @param dateFormat  The format of the date.
+   */
+  public PrologContentCreator(String author, String dateFormat) {
+    this(author, dateFormat, -1);
+  }
+  
+	/**
 	 * Constructor.
 	 * 
 	 * @param author      The name of the author.
 	 * @param dateFormat 	The format of the date.
+	 * @param maxNoOfRevisedElements The maximum allowed number of revised elements.
 	 */
-	public PrologContentCreator(String author, String dateFormat) {
+	public PrologContentCreator(String author, String dateFormat, int maxNoOfRevisedElements) {
 		this.authorName = author;
-
+		this.maxNoOfRevised = maxNoOfRevisedElements;
+		
 		if (authorName != null) {
 			// Creator
 			creatorFragment = XMLFragmentUtils.createAuthorFragment(authorName, XmlElementsConstants.CREATOR_TYPE);
@@ -299,6 +316,14 @@ public class PrologContentCreator {
 		return isNewDocument ? getCreatedDateFragment(documentType) : getRevisedDateFragment(documentType);
 	}
 
+	/**
+	 * The maximum number of allowed revised elements.
+	 * @return
+	 */
+	public int getMaxNoOfRevisedElement() {
+	  return maxNoOfRevised;
+	}
+	
 	/**
 	 * Create the local date.
 	 * 

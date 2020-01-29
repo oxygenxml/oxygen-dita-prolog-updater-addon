@@ -1,5 +1,7 @@
 package com.oxygenxml.prolog.updater.dita.editor;
 
+import javax.swing.text.BadLocationException;
+
 import org.apache.log4j.Logger;
 
 import com.oxygenxml.prolog.updater.prolog.content.PrologContentCreator;
@@ -74,6 +76,7 @@ public class DitaTopicTextEditor implements DitaEditor {
 		boolean toReturn = true;
 		// get the prolog element
 		WSXMLTextNodeRange[] prologs;
+		wsTextEditorPage.beginCompoundUndoableEdit();
 		try {
 			prologs = wsTextEditorPage.findElementsByXPath(ElementXPathUtils.getPrologXpath(documentType));
 			// The document doesn't have a prolog element
@@ -92,7 +95,9 @@ public class DitaTopicTextEditor implements DitaEditor {
 			toReturn = false;
 		} catch (TextOperationException e) {
 			toReturn = false;
-		}
+		} finally {
+      wsTextEditorPage.endCompoundUndoableEdit();
+    }
 
 		return toReturn;
 	}
@@ -205,23 +210,97 @@ public class DitaTopicTextEditor implements DitaEditor {
 			}
 		} else {
 			// it's not a new document
-			// search for revised elements that have local date as modified and have
-			// contributor as comment
-			StringBuilder xPathBuilder = new StringBuilder();
-			xPathBuilder.append(ElementXPathUtils.getCritdatesXpath(documentType));
-			xPathBuilder.append("/revised[@modified = '" ).append(prologCreator.getLocalDate()).append("']/");
-			xPathBuilder.append("preceding-sibling::node()[2][.='").append(prologCreator.getAuthor()).append("']");
-			Object[] revisedElements = wsTextEditorPage.findElementsByXPath(xPathBuilder.toString());
-
-			// if the element wasn't found
-			if (revisedElements.length == 0) {
-				// add revised xml fragament
-				TextPageDocumentUtil.insertXmlFragment(wsTextEditorPage, prologCreator.getRevisedDateFragment(documentType),
-						ElementXPathUtils.getCritdatesXpath(documentType), RelativeInsertPosition.INSERT_LOCATION_AS_LAST_CHILD);
-			}
+		  addRevisedElement();
 		}
 	}
 
+	/**
+   * Add the revised element if it doesn't exits.
+   * 
+	 * @throws XPathException 
+	 * @throws TextOperationException 
+   */
+  private void addRevisedElement() throws XPathException, TextOperationException{
+    // Search for revised elements that have local date as modified and
+    // contributor as comment
+    StringBuilder xPathBuilder = new StringBuilder();
+    xPathBuilder.append(ElementXPathUtils.getCritdatesXpath(documentType));
+    xPathBuilder.append("/revised[@modified = '" ).append(prologCreator.getLocalDate()).append("']/");
+    xPathBuilder.append("preceding-sibling::node()[2][.='").append(prologCreator.getAuthor()).append("']");
+    Object[] revisedElements = wsTextEditorPage.findElementsByXPath(xPathBuilder.toString());
+
+    // if the element wasn't found
+    if (revisedElements.length == 0) {
+      // add revised xml fragament
+      TextPageDocumentUtil.insertXmlFragment(wsTextEditorPage, prologCreator.getRevisedDateFragment(documentType),
+          ElementXPathUtils.getCritdatesXpath(documentType), RelativeInsertPosition.INSERT_LOCATION_AS_LAST_CHILD);
+      
+      deleteExtraRevisedElements();
+    }
+  }
+
+  /**
+   * Delete the first revised elements if the number of them is greater than allowed number.
+   * 
+   * @throws XPathException
+   */
+  private void deleteExtraRevisedElements() throws XPathException {
+    int noOfAllowedElements = prologCreator.getMaxNoOfRevisedElement();
+    if(noOfAllowedElements != -1) {
+      WSXMLTextNodeRange[] allRevisedElements = wsTextEditorPage.findElementsByXPath(
+          ElementXPathUtils.getCritdatesXpath(documentType) + "/revised");
+      
+      int noOfElements = allRevisedElements.length;
+      if(noOfElements > noOfAllowedElements) {
+        int nuOfElementToDelete = noOfElements - noOfAllowedElements;
+        // We will delete some revised elements
+        for (int i = 0; i < nuOfElementToDelete; i++) {
+          WSXMLTextNodeRange currentElementRange = allRevisedElements[i];
+          deleteRevisedElement(currentElementRange);
+        }
+      }
+    }
+  }
+
+  /**
+   * Delete the revised element with the given range.
+   * 
+   * @param revisedElementRange The range of revised element to delete.
+   */
+  private void deleteRevisedElement(WSXMLTextNodeRange revisedElementRange) {
+    try {
+      int startLineOffset = wsTextEditorPage.getOffsetOfLineStart(revisedElementRange.getStartLine());
+      
+      // We will calculate the offset where we start to delete and the length
+      int startOffsetToDelete = startLineOffset + (revisedElementRange.getStartColumn() - 1);
+      int lengthToDelete =  revisedElementRange.getEndColumn() - revisedElementRange.getStartColumn();
+      
+      // Check the text before revised element. This will be deleted if it's whitespace.
+      String testFromStart = wsTextEditorPage.getDocument().getText(
+          startLineOffset, revisedElementRange.getStartColumn() - 1);
+      if(testFromStart.trim().isEmpty()) {
+        startOffsetToDelete = startLineOffset - 1;
+        lengthToDelete += testFromStart.length() + 1;
+
+        // In this case we can have a comment above with the author. We also want to delete it.
+        int aboveLineStartOffset = wsTextEditorPage.getOffsetOfLineStart(revisedElementRange.getStartLine() - 1);
+        int aboveLineEndOffset = wsTextEditorPage.getOffsetOfLineEnd(revisedElementRange.getStartLine() - 1);
+        String aboveLineContet = wsTextEditorPage.getDocument().getText(
+            aboveLineStartOffset, aboveLineEndOffset - aboveLineStartOffset);
+
+        if(aboveLineContet.trim().startsWith("<!--") && aboveLineContet.trim().endsWith("-->")) {
+          startOffsetToDelete = aboveLineStartOffset;
+          lengthToDelete += aboveLineContet.length();
+        }
+      }
+      
+      wsTextEditorPage.getDocument().remove(startOffsetToDelete, lengthToDelete);
+    } catch (BadLocationException e) {
+     logger.debug(e, e);
+    }
+  }
+
+	
 	/**
 	 * Update the author elements of prolog.
 	 * 

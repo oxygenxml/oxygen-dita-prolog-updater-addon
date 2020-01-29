@@ -41,6 +41,14 @@
 		<val lang="nl_NL">Map</val>
 	</key>
 
+    <key value="prolog.updater.limit.revised.dates.to">
+		<comment>The text from check box which enable to limit the added revised dates</comment>
+		<val lang="en_US">Limit the number of revised dates to</val>
+		<val lang="de_DE">Limit the number of revised dates to</val>
+		<val lang="fr_FR">Limit the number of revised dates to</val>
+		<val lang="ja_JP">Limit the number of revised dates to</val>
+		<val lang="nl_NL">Limit the number of revised dates to</val>
+	</key>
 	<key value="prolog.updater.enable.on.save">
 		<comment>The text from check box which enable the prolog update</comment>
 		<val lang="en_US">Enable automatic prolog update on save</val>

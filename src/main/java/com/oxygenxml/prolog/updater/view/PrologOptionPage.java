@@ -80,6 +80,16 @@ public class PrologOptionPage extends JPanel {
 	 * Combo for select the date format.
 	 */
 	private JComboBox<String> dateFormatCombo;
+	
+	/**
+	 * CheckBox for limit the number of revised elemets.
+	 */
+	private JCheckBox limitNoOfRevisedElements;
+
+	/**
+	 * Combo for select the maximum number of revised elements.
+	 */
+	private JComboBox<Integer> maxRevisedElements;
 		
 	/**
 	 * Default value for check boxes in boolean format
@@ -127,6 +137,18 @@ public class PrologOptionPage extends JPanel {
 
 		dateFormatCombo = new JComboBox<String>(DateFormats.DATE_PATTERNS);
 		dateFormatCombo.setEditable(true);
+
+		maxRevisedElements = new JComboBox<Integer>(new Integer[] { 
+		    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 16, 18, 20, 25, 30, 35, 40, 45, 50});
+		maxRevisedElements.setEditable(false);
+
+		limitNoOfRevisedElements = new JCheckBox(messages.getMessage(Tags.LIMIT_REVISED_DATES_TO) + ":");
+		limitNoOfRevisedElements.addActionListener(new ActionListener() {
+		  @Override
+		  public void actionPerformed(ActionEvent e) {
+		    maxRevisedElements.setEnabled(limitNoOfRevisedElements.isSelected());
+		  }
+		});
 		
 		GridBagConstraints constr = new GridBagConstraints();
 		constr.gridx = 0;
@@ -156,6 +178,20 @@ public class PrologOptionPage extends JPanel {
 		// Date format combo.
 		add(dateFormatCombo, constr);
 		
+		constr.gridx = 0;
+		constr.gridy++;
+		constr.weightx = 0;
+		constr.insets.left = 0;
+		constr.insets.top = 5;
+		// Limit the number of revised elements checkbox.
+		add(limitNoOfRevisedElements, constr);
+
+    constr.gridx++;
+    constr.weightx = 1;
+    constr.insets.left = leftIndent;
+    // Max number of revised element combo.
+    add(maxRevisedElements, constr);
+
 		//
 		// DITA topic
 		//
@@ -266,7 +302,10 @@ public class PrologOptionPage extends JPanel {
 			optionsStorage.setOption(OptionKeys.AUTHOR_NAME, authorTextField.getText());
 			// Save the date format.
 			optionsStorage.setOption(OptionKeys.DATE_FORMAT, (String)dateFormatCombo.getSelectedItem());
-
+			
+			optionsStorage.setOption(OptionKeys.LIMIT_REVISED_ELEMENTS, String.valueOf(limitNoOfRevisedElements.isSelected()));
+			optionsStorage.setOption(OptionKeys.MAX_REVISED_ELEMENTS, String.valueOf(maxRevisedElements.getSelectedItem()));
+			
 			// Save the state of check boxes from DITA topic.
 			optionsStorage.setOption(OptionKeys.TOPIC_ENABLE_UPDATE_ON_SAVE, String.valueOf(topicEnableUpdate.isSelected()));
 			optionsStorage.setOption(OptionKeys.TOPIC_SET_CREATOR, String.valueOf(topicSetCreator.isSelected()));
@@ -298,6 +337,14 @@ public class PrologOptionPage extends JPanel {
 			// Load the date format name.
 			value = optionsStorage.getOption(OptionKeys.DATE_FORMAT, DateFormats.DEFAULT_DATE_PATTERN);
 			dateFormatCombo.getModel().setSelectedItem(value);
+			
+			optionsStorage.getOption(OptionKeys.LIMIT_REVISED_ELEMENTS, String.valueOf(false));
+			limitNoOfRevisedElements.setSelected(Boolean.valueOf(value));
+			maxRevisedElements.setEnabled(Boolean.valueOf(value));
+			
+			 //Load the maximum number of revised elements.
+			value = optionsStorage.getOption(OptionKeys.MAX_REVISED_ELEMENTS, String.valueOf(5));
+			maxRevisedElements.setSelectedItem(Integer.valueOf(value));
 
 			// Load DITA topic state
 			value = optionsStorage.getOption(OptionKeys.TOPIC_ENABLE_UPDATE_ON_SAVE, CHECK_SELECTED_DEFAULT);
@@ -342,6 +389,12 @@ public class PrologOptionPage extends JPanel {
 		// Restore the textField with the author name.
 		authorTextField.setText(AUTHOR_DEFAULT);
 
+    limitNoOfRevisedElements.setSelected(false);
+    maxRevisedElements.setEnabled(false);
+    
+     //Load the maximum number of revised elements.
+    maxRevisedElements.setSelectedItem(5);
+		
 		// Restore the DITA topic check boxes.
 		topicEnableUpdate.setSelected(CHECK_SELECTED_DEFAULT_BOOLEAN);
 		toggleTopicChecks(CHECK_SELECTED_DEFAULT_BOOLEAN);

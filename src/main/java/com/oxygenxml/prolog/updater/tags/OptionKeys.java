@@ -23,6 +23,16 @@ public class OptionKeys {
 	 */
 	public static final String DATE_FORMAT = "prolog.updater.date.format";
 	
+  /**
+   * Option for limit the revised elements.
+   */
+  public static final String LIMIT_REVISED_ELEMENTS = "limit.revised.elements";
+  
+	/**
+   * Option for the maximum number of revised elements.
+   */
+  public static final String MAX_REVISED_ELEMENTS = "max.revised.elements";
+  
 	/**
 	 * Option to enable the prolog updater for topics.
 	 */

@@ -65,4 +65,9 @@ public class Tags {
 	 */
 	public static final String ERROR_MESSAGE = "prolog.updater.error.message";
 
+	/**
+	 * en: Limit the number of revised dates to
+	 */
+  public static final String LIMIT_REVISED_DATES_TO = "prolog.updater.limit.revised.dates.to";
+
 }
