@@ -338,7 +338,7 @@ public class PrologOptionPage extends JPanel {
 			value = optionsStorage.getOption(OptionKeys.DATE_FORMAT, DateFormats.DEFAULT_DATE_PATTERN);
 			dateFormatCombo.getModel().setSelectedItem(value);
 			
-			optionsStorage.getOption(OptionKeys.LIMIT_REVISED_ELEMENTS, String.valueOf(false));
+			value = optionsStorage.getOption(OptionKeys.LIMIT_REVISED_ELEMENTS, String.valueOf(false));
 			limitNoOfRevisedElements.setSelected(Boolean.valueOf(value));
 			maxRevisedElements.setEnabled(Boolean.valueOf(value));
 			

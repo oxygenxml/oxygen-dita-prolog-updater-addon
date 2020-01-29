@@ -254,7 +254,7 @@ public class DitaTopicTextEditor implements DitaEditor {
       if(noOfElements > noOfAllowedElements) {
         int nuOfElementToDelete = noOfElements - noOfAllowedElements;
         // We will delete some revised elements
-        for (int i = 0; i < nuOfElementToDelete; i++) {
+        for (int i = nuOfElementToDelete - 1; i >= 0; i--) {
           WSXMLTextNodeRange currentElementRange = allRevisedElements[i];
           deleteRevisedElement(currentElementRange);
         }
