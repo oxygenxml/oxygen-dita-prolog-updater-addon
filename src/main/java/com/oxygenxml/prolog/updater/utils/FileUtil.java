@@ -42,6 +42,8 @@ public class FileUtil {
       if (creationTime != null && lastModifiedTime != null) {
         long creationTimeToSeconds = creationTime.to(TimeUnit.SECONDS);
         long lastModTimeToSeconds = lastModifiedTime.to(TimeUnit.SECONDS);
+        System.out.println("creationTimeToSeconds: " + creationTimeToSeconds);
+        System.out.println("lastModTimeToSeconds: " + lastModTimeToSeconds);
         if (creationTimeToSeconds == lastModTimeToSeconds 
             || creationTimeToSeconds == lastModTimeToSeconds - 1) {
           isNew = true;
