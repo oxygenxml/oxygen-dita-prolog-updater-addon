@@ -5,6 +5,7 @@ import java.net.URL;
 import javax.swing.JComponent;
 
 import com.oxygenxml.prolog.updater.DitaPrologUpdater;
+import com.oxygenxml.prolog.updater.utils.FileUtil;
 import com.oxygenxml.prolog.updater.view.PrologOptionPage;
 
 import ro.sync.exml.plugin.option.OptionPagePluginExtension;
@@ -43,7 +44,7 @@ public class PrologUpdaterExtension extends OptionPagePluginExtension implements
 		// Add n WSEditorChangeListener on the main editing area
 		workspace.addEditorChangeListener(new WSEditorChangeListener() {
 			@Override
-			public void editorOpened(URL editorLocation) {
+			public void editorOpened(final URL editorLocation) {
 				final WSEditor editorAccess = workspace.getEditorAccess(editorLocation, PluginWorkspace.MAIN_EDITING_AREA);
 				
 				// Check the document type name.
@@ -60,6 +61,10 @@ public class PrologUpdaterExtension extends OptionPagePluginExtension implements
 								editorAccess.setModified(true);
 							}
 							wasNew = editorAccess.isNewDocument();
+							if(!wasNew) {
+							  // Additional check
+							  wasNew = FileUtil.isNewFile(editorLocation);
+							}
 							return true;
 						}
 
@@ -80,7 +85,7 @@ public class PrologUpdaterExtension extends OptionPagePluginExtension implements
 		// Add a WSEditorChangeListener on the DITA Maps Manager
 		workspace.addEditorChangeListener(new WSEditorChangeListener() {
 			@Override
-			public void editorOpened(URL editorLocation) {
+			public void editorOpened(final URL editorLocation) {
 				final WSEditor editorAccess = workspace.getEditorAccess(editorLocation, PluginWorkspace.DITA_MAPS_EDITING_AREA);
 				
 				// Check the document type name.
@@ -94,6 +99,10 @@ public class PrologUpdaterExtension extends OptionPagePluginExtension implements
 						@Override
 						public boolean editorAboutToBeSavedVeto(int operationType) {
 							wasNew = editorAccess.isNewDocument();
+							 if(!wasNew) {
+	                // Additional check
+	                wasNew = FileUtil.isNewFile(editorLocation);
+	              }
 							return true;
 						}
 
