@@ -31,6 +31,7 @@ public class FileUtilTest extends TestCase{
     try {
       testFile.createNewFile();
       URL fileURL = testFile.toURI().toURL();
+      System.out.println("fileURL: " + fileURL.toExternalForm());
       assertTrue(FileUtil.isNewFile(fileURL));
       
       BasicFileAttributes attr = Files.readAttributes(testFile.toPath(), BasicFileAttributes.class);
