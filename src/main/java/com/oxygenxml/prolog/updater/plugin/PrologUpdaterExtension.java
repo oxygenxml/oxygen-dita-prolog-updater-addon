@@ -41,6 +41,12 @@ public class PrologUpdaterExtension extends OptionPagePluginExtension implements
 		// Create a XmlUpdater
 		final DitaPrologUpdater xmlUpdater = createDitaUpdater();
 
+		final boolean[] isWindowsOs = new boolean[1];
+		isWindowsOs[0] = false;
+		if(System.getProperty("os.name").startsWith("Windows")) {
+		  isWindowsOs[0] = true;
+		}
+		
 		// Add n WSEditorChangeListener on the main editing area
 		workspace.addEditorChangeListener(new WSEditorChangeListener() {
 			@Override
@@ -61,7 +67,7 @@ public class PrologUpdaterExtension extends OptionPagePluginExtension implements
 								editorAccess.setModified(true);
 							}
 							wasNew = editorAccess.isNewDocument();
-							if(!wasNew) {
+							if(!wasNew && isWindowsOs[0]) {
 							  // Additional check
 							  wasNew = FileUtil.isNewFile(editorLocation);
 							}
@@ -99,7 +105,7 @@ public class PrologUpdaterExtension extends OptionPagePluginExtension implements
 						@Override
 						public boolean editorAboutToBeSavedVeto(int operationType) {
 							wasNew = editorAccess.isNewDocument();
-							 if(!wasNew) {
+							 if(!wasNew && isWindowsOs[0]) {
 	                // Additional check
 	                wasNew = FileUtil.isNewFile(editorLocation);
 	              }

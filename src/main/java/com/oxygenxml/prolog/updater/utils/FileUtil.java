@@ -27,6 +27,7 @@ public class FileUtil {
   /**
    * Check if the given file is a new one,
    * verifying the creation time and the last modification time.
+   * ONLY for WINDOWS OS!
    * 
    * @param fileLocation The file location.
    * 
@@ -42,8 +43,6 @@ public class FileUtil {
       if (creationTime != null && lastModifiedTime != null) {
         long creationTimeToSeconds = creationTime.to(TimeUnit.SECONDS);
         long lastModTimeToSeconds = lastModifiedTime.to(TimeUnit.SECONDS);
-        System.out.println("creationTimeToSeconds: " + creationTimeToSeconds);
-        System.out.println("lastModTimeToSeconds: " + lastModTimeToSeconds);
         if (creationTimeToSeconds == lastModTimeToSeconds 
             || creationTimeToSeconds == lastModTimeToSeconds - 1) {
           isNew = true;
