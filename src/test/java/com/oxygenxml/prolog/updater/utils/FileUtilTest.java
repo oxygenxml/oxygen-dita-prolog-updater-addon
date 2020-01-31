@@ -25,7 +25,7 @@ public class FileUtilTest extends TestCase{
    *
    * @throws Exception If it fails.
    */ 
-  public void testIsNewFile() throws IOException {
+  public void testIsNewFile() throws Exception {
     File testFile = new File("test/test.dita");
     testFile.getParentFile().mkdir();
     try {
@@ -37,12 +37,14 @@ public class FileUtilTest extends TestCase{
       FileTime creationTime = attr.creationTime();
       // Add one second
       testFile.setLastModified(creationTime.toMillis() + 1000);
+      Thread.sleep(500);
       assertTrue("We consider that file is new when "
           + "creation time and last modification time differ with one second.", FileUtil.isNewFile(fileURL));
       
       // Add 60 seconds
       testFile.setLastModified(creationTime.toMillis() + 60000);
-      assertFalse("The file is't new.", FileUtil.isNewFile(fileURL));
+      Thread.sleep(500);
+      assertFalse("The file isn't new.", FileUtil.isNewFile(fileURL));
     } finally {
       testFile.delete();
       testFile.getParentFile().delete();
