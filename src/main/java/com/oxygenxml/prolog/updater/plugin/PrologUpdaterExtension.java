@@ -1,6 +1,8 @@
 package com.oxygenxml.prolog.updater.plugin;
 
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.JComponent;
 
@@ -35,41 +37,45 @@ public class PrologUpdaterExtension extends OptionPagePluginExtension implements
 	private static final String DITA_TYPE_NAME = "dita";
 	
 	/**
+	 * The new state of files opened in the main editor.
+	 */
+	private Map<String, Boolean> stateOfMainEditors = new HashMap<String, Boolean>(); 
+	
+	/**
+	 * The new state of files opened in the DMM editor.
+	 */
+	private Map<String, Boolean> stateOfDmmEditors = new HashMap<String, Boolean>(); 
+	
+	/**
 	 * @see ro.sync.exml.plugin.workspace.WorkspaceAccessPluginExtension#applicationStarted(ro.sync.exml.workspace.api.standalone.StandalonePluginWorkspace)
 	 */
 	public void applicationStarted(final StandalonePluginWorkspace workspace) {
 		// Create a XmlUpdater
 		final DitaPrologUpdater xmlUpdater = createDitaUpdater();
 
-		final boolean[] isWindowsOs = new boolean[1];
-		isWindowsOs[0] = false;
-		if(System.getProperty("os.name").startsWith("Windows")) {
-		  isWindowsOs[0] = true;
-		}
-		
 		// Add n WSEditorChangeListener on the main editing area
 		workspace.addEditorChangeListener(new WSEditorChangeListener() {
 			@Override
-			public void editorOpened(final URL editorLocation) {
-				final WSEditor editorAccess = workspace.getEditorAccess(editorLocation, PluginWorkspace.MAIN_EDITING_AREA);
+			public void editorOpened(URL editorLocation) {
+				final WSEditor editor = workspace.getEditorAccess(editorLocation, PluginWorkspace.MAIN_EDITING_AREA);
+				
+				boolean isNewDocument = editor.isNewDocument();
+				if (!isNewDocument) {
+				  isNewDocument = FileUtil.checkCurrentNewDocumentState(editorLocation);
+				}
+				stateOfMainEditors.put(editorLocation.toExternalForm(), isNewDocument);
 				
 				// Check the document type name.
-				String docTypeName = getDocumentTypeName(editorAccess);
+				String docTypeName = getDocumentTypeName(editor);
 				if (docTypeName != null && docTypeName.toLowerCase().contains(DITA_TYPE_NAME)) {
 					// Add an WSEditorListener
-					editorAccess.addEditorListener(new WSEditorListener() {
-						private boolean wasNew = false;
+					editor.addEditorListener(new WSEditorListener() {
 						private boolean wasSave = false;
 
 						@Override
 						public boolean editorAboutToBeSavedVeto(int operationType) {
-							if (editorAccess.isNewDocument() && !editorAccess.isModified()) {
-								editorAccess.setModified(true);
-							}
-							wasNew = editorAccess.isNewDocument();
-							if(!wasNew && isWindowsOs[0]) {
-							  // Additional check
-							  wasNew = FileUtil.isNewFile(editorLocation);
+							if (editor.isNewDocument() && !editor.isModified()) {
+								editor.setModified(true);
 							}
 							return true;
 						}
@@ -78,13 +84,23 @@ public class PrologUpdaterExtension extends OptionPagePluginExtension implements
 						public void editorSaved(int operationType) {
 							if (!wasSave) {
 								wasSave = true;
-								xmlUpdater.updateProlog(editorAccess, wasNew);
-								editorAccess.save();
+							  Boolean isNew = stateOfMainEditors.get(
+							      editor.getEditorLocation().toExternalForm());
+								
+							  xmlUpdater.updateProlog(
+								    editor,
+								    isNew != null ? isNew : Boolean.FALSE);
+								editor.save();
 								wasSave = false;
 							}
 						}
 					});
 				}
+			}
+			
+			@Override
+			public void editorClosed(URL editorLocation) {
+			  stateOfMainEditors.remove(editorLocation.toExternalForm());
 			}
 		}, PluginWorkspace.MAIN_EDITING_AREA);
 
@@ -92,31 +108,31 @@ public class PrologUpdaterExtension extends OptionPagePluginExtension implements
 		workspace.addEditorChangeListener(new WSEditorChangeListener() {
 			@Override
 			public void editorOpened(final URL editorLocation) {
-				final WSEditor editorAccess = workspace.getEditorAccess(editorLocation, PluginWorkspace.DITA_MAPS_EDITING_AREA);
+			  final WSEditor editorAccess = workspace.getEditorAccess(editorLocation, PluginWorkspace.DITA_MAPS_EDITING_AREA);
+				
+			  boolean isNewDocument = editorAccess.isNewDocument();
+				if (!isNewDocument) {
+				  isNewDocument = FileUtil.checkCurrentNewDocumentState(editorLocation);
+				}
+				stateOfDmmEditors.put(editorLocation.toExternalForm(), isNewDocument);
 				
 				// Check the document type name.
 				String docTypeName = getDocumentTypeName(editorAccess);
 				if (docTypeName != null && docTypeName.toLowerCase().contains(DITA_TYPE_NAME)) {
 					// Add an WSEditorListener
 					editorAccess.addEditorListener(new WSEditorListener() {
-						private boolean wasNew = false;
 						private boolean wasSave = false;
-
-						@Override
-						public boolean editorAboutToBeSavedVeto(int operationType) {
-							wasNew = editorAccess.isNewDocument();
-							 if(!wasNew && isWindowsOs[0]) {
-	                // Additional check
-	                wasNew = FileUtil.isNewFile(editorLocation);
-	              }
-							return true;
-						}
 
 						@Override
 						public void editorSaved(int operationType) {
 							if (!wasSave) {
 								wasSave = true;
-								xmlUpdater.updateProlog(editorAccess, wasNew);
+								Boolean isNew = stateOfDmmEditors.get(
+								    editorAccess.getEditorLocation().toExternalForm());
+                
+								xmlUpdater.updateProlog(
+								    editorAccess,
+								    isNew != null ? isNew : Boolean.FALSE);
 								editorAccess.save();
 								wasSave = false;
 							}
@@ -125,10 +141,15 @@ public class PrologUpdaterExtension extends OptionPagePluginExtension implements
 					});
 				}
 			}
+			
+			@Override
+			public void editorClosed(URL editorLocation) {
+			  stateOfDmmEditors.remove(editorLocation.toExternalForm());
+			}
 		}, PluginWorkspace.DITA_MAPS_EDITING_AREA);
 	}
 
-	/**
+  /**
 	 * Creates the updater.
 	 * 
 	 * @return a new instance.

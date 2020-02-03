@@ -32,18 +32,16 @@ public class FileUtilTest extends TestCase{
       if(System.getProperty("os.name").startsWith("Windows")) {
         testFile.createNewFile();
         URL fileURL = testFile.toURI().toURL();
-        assertTrue(FileUtil.isNewFile(fileURL));
-
-        BasicFileAttributes attr = Files.readAttributes(testFile.toPath(), BasicFileAttributes.class);
-        FileTime creationTime = attr.creationTime();
-        // Add one second
-        testFile.setLastModified(creationTime.toMillis() + 1000);
+        assertTrue(FileUtil.checkCurrentNewDocumentState(fileURL));
+        
+        // Sleep half second
+        Thread.sleep(500);
         assertTrue("We consider that file is new when "
-            + "creation time and last modification time differ with one second.", FileUtil.isNewFile(fileURL));
+            + "creation time and last modification time differ with one second.", FileUtil.checkCurrentNewDocumentState(fileURL));
 
-        // Add 60 seconds
-        testFile.setLastModified(creationTime.toMillis() + 60000);
-        assertFalse("The file isn't new.", FileUtil.isNewFile(fileURL));
+        // Sleep 2 seconds
+        Thread.sleep(2000);
+        assertFalse("The file isn't new.", FileUtil.checkCurrentNewDocumentState(fileURL));
       }
     } finally {
       testFile.delete();
