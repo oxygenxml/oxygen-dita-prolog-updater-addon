@@ -54,6 +54,8 @@ public class PrologUpdaterExtensionTest extends TestCase {
 		// Mock the editor access.
 		final WSEditorListener[] editorListeners = new WSEditorListener[1];
 		final WSEditor editorAccess = Mockito.mock(WSEditor.class);
+		Mockito.when(editorAccess.getEditorLocation()).thenReturn(new File("test.dita").toURI().toURL());
+		
 		Mockito.doAnswer(new Answer<Object>() {
 			public Object answer(InvocationOnMock invocation) {
 				editorListeners[0] = (WSEditorListener) invocation.getArguments()[0];
