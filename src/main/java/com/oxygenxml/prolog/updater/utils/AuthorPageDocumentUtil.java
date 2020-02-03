@@ -56,7 +56,7 @@ public class AuthorPageDocumentUtil {
 		List<AuthorNode> contentNodes = rootElement.getContentNodes();
 		if (contentNodes != null && !contentNodes.isEmpty()) {
 			for (AuthorNode authorNode : contentNodes) {
-				if (authorNode.getType() == AuthorElement.NODE_TYPE_ELEMENT) {
+				if (authorNode.getType() == AuthorNode.NODE_TYPE_ELEMENT) {
 					AuthorElement el = (AuthorElement) authorNode;
 					AttrValue clazz = el.getAttribute("class");
 					if (clazz != null && clazz.getValue() != null && clazz.getValue().contains(classValue)) {
@@ -82,7 +82,7 @@ public class AuthorPageDocumentUtil {
 		List<AuthorNode> contentNodes = rootElement.getContentNodes();
 		if (contentNodes != null && !contentNodes.isEmpty()) {
 			for (AuthorNode authorNode : contentNodes) {
-				if (authorNode.getType() == AuthorElement.NODE_TYPE_ELEMENT) {
+				if (authorNode.getType() == AuthorNode.NODE_TYPE_ELEMENT) {
 					AuthorElement el = (AuthorElement) authorNode;
 					AttrValue clazz = el.getAttribute("class");
 					if (clazz != null && clazz.getValue() != null && clazz.getValue().contains(classValue)) {
@@ -303,13 +303,13 @@ public class AuthorPageDocumentUtil {
 					logger.warn(e, e.getCause());
 				}
 				
-				Boolean contextForProlog = analyzeContextForElement(
+				Boolean isContextForProlog = analyzeContextForElement(
 						elementName,
 						currentContext,
 						schemaManager);
-				if (contextForProlog != null) {
+				if (isContextForProlog != null) {
 					toReturn = currentContext;
-					if (contextForProlog) {
+					if (Boolean.TRUE.equals(isContextForProlog)) {
 						break;
 					}
 				}

@@ -208,13 +208,13 @@ public class TextPageDocumentUtil {
 					logger.debug(e.getMessage(), e);
 				}
 
-				Boolean contextForElement = analyzeContextForElement(
+				Boolean isContextForElement = analyzeContextForElement(
 						elementName,
 						currentContext,
 						schemaManager);
-				if (contextForElement != null) {
+				if (isContextForElement != null) {
 					toReturn = currentContext;
-					if (contextForElement) {
+					if (Boolean.TRUE.equals(isContextForElement)) {
 						break;
 					}
 				}

@@ -126,7 +126,7 @@ public class DitaPrologUpdater {
     if(pluginWorkspace != null) {
       WSOptionsStorage optionsStorage = pluginWorkspace.getOptionsStorage();
       String shouldLimit =  optionsStorage.getOption(OptionKeys.LIMIT_REVISED_ELEMENTS, String.valueOf(false));
-      if(Boolean.valueOf(shouldLimit)) {
+      if(Boolean.TRUE.equals(Boolean.valueOf(shouldLimit))) {
         String value = optionsStorage.getOption(OptionKeys.MAX_REVISED_ELEMENTS, String.valueOf(-1));
         max = Integer.valueOf(value);
       }
