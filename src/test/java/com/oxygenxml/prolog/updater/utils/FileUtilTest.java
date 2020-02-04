@@ -26,20 +26,18 @@ public class FileUtilTest extends TestCase{
     File testFile = new File("test/test.dita");
     testFile.getParentFile().mkdir();
     try {
-      if(System.getProperty("os.name").startsWith("Windows")) {
-        testFile.createNewFile();
-        URL fileURL = testFile.toURI().toURL();
-        assertTrue(FileUtil.checkCurrentNewDocumentState(fileURL));
-        
-        // Sleep half second
-        Thread.sleep(500); // NOSONAR
-        assertTrue("We consider that file is new when "
-            + "creation time and last modification time differ with one second.", FileUtil.checkCurrentNewDocumentState(fileURL));
+    	testFile.createNewFile();
+    	URL fileURL = testFile.toURI().toURL();
+    	assertTrue(FileUtil.checkCurrentNewDocumentState(fileURL));
 
-        // Sleep 2 seconds
-        Thread.sleep(2000);  // NOSONAR
-        assertFalse("The file isn't new.", FileUtil.checkCurrentNewDocumentState(fileURL));
-      }
+    	// Sleep half second
+    	Thread.sleep(500); // NOSONAR
+    	assertTrue("We consider that file is new when "
+    			+ "creation time and last modification time differ with one second.", FileUtil.checkCurrentNewDocumentState(fileURL));
+
+    	// Sleep 2 seconds
+    	Thread.sleep(2000);  // NOSONAR
+    	assertFalse("The file isn't new.", FileUtil.checkCurrentNewDocumentState(fileURL));
     } finally {
       testFile.delete();
       testFile.getParentFile().delete();
