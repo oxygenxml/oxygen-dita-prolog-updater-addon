@@ -35,6 +35,6 @@ public class DateFormats {
 	/**
 	 * The default date pattern.
 	 */
-	public static final String DEFAULT_DATE_PATTERN = DATE_PATTERNS[0];
+	public static final String DEFAULT_DATE_PATTERN = DATE_PATTERNS[1];
 	
 }

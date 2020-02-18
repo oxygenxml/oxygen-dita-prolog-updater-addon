@@ -388,7 +388,10 @@ public class PrologOptionPage extends JPanel {
 	public void restoreDefault() {
 		// Restore the textField with the author name.
 		authorTextField.setText(AUTHOR_DEFAULT);
-
+	  
+		// Restore the date format.
+    dateFormatCombo.getModel().setSelectedItem(DateFormats.DEFAULT_DATE_PATTERN);
+		
     limitNoOfRevisedElements.setSelected(false);
     maxRevisedElements.setEnabled(false);
     
