@@ -70,28 +70,36 @@ public class PrologUpdaterExtension extends OptionPagePluginExtension implements
 				if (docTypeName != null && docTypeName.toLowerCase().contains(DITA_TYPE_NAME)) {
 					// Add an WSEditorListener
 					editor.addEditorListener(new WSEditorListener() {
-						private boolean wasSave = false;
-
+						private boolean wasSaved = false;
+						boolean wasSavedAnUntitle = false;
+						String oldUntitleLocation = "";
+						
 						@Override
 						public boolean editorAboutToBeSavedVeto(int operationType) {
 							if (editor.isNewDocument() && !editor.isModified()) {
 								editor.setModified(true);
 							}
+							wasSavedAnUntitle = editor.isNewDocument();
+							oldUntitleLocation = editor.getEditorLocation().toExternalForm();
 							return true;
 						}
-
+						
 						@Override
 						public void editorSaved(int operationType) {
-							if (!wasSave) {
-								wasSave = true;
-							  Boolean isNew = stateOfMainEditors.get(
-							      editor.getEditorLocation().toExternalForm());
+						  String editorLocation = editor.getEditorLocation().toExternalForm();
+							if (!wasSaved) {
+								wasSaved = true;
+								if (wasSavedAnUntitle) {
+								  stateOfMainEditors.remove(oldUntitleLocation);
+								  stateOfMainEditors.put(editorLocation, Boolean.TRUE);
+								}
 								
+                Boolean isNew = stateOfMainEditors.get(editorLocation);
 							  xmlUpdater.updateProlog(
 								    editor,
 								    isNew != null ? isNew : Boolean.FALSE);
 								editor.save();
-								wasSave = false;
+								wasSaved = false;
 							}
 						}
 					});
@@ -121,20 +129,33 @@ public class PrologUpdaterExtension extends OptionPagePluginExtension implements
 				if (docTypeName != null && docTypeName.toLowerCase().contains(DITA_TYPE_NAME)) {
 					// Add an WSEditorListener
 					editor.addEditorListener(new WSEditorListener() {
-						private boolean wasSave = false;
+						private boolean wasSaved = false;
+				    boolean wasSavedAnUntitle = false;
+            String oldUntitleLocation = "";
 
+            @Override
+            public boolean editorAboutToBeSavedVeto(int operationType) {
+              wasSavedAnUntitle = editor.isNewDocument();
+              oldUntitleLocation = editor.getEditorLocation().toExternalForm();
+              return true;
+            }
+            
 						@Override
 						public void editorSaved(int operationType) {
-							if (!wasSave) {
-								wasSave = true;
-								Boolean isNew = stateOfDmmEditors.get(
-								    editor.getEditorLocation().toExternalForm());
-                
+						  String editorLocation = editor.getEditorLocation().toExternalForm();
+							if (!wasSaved) {
+								wasSaved = true;
+								if (wasSavedAnUntitle) {
+								  stateOfDmmEditors.remove(oldUntitleLocation);
+								  stateOfDmmEditors.put(editorLocation, Boolean.TRUE);
+                }
+								
+                Boolean isNew = stateOfDmmEditors.get(editorLocation);
 								xmlUpdater.updateProlog(
 								    editor,
 								    isNew != null ? isNew : Boolean.FALSE);
 								editor.save();
-								wasSave = false;
+								wasSaved = false;
 							}
 							super.editorSaved(operationType);
 						}
