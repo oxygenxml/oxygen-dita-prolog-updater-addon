@@ -21,7 +21,7 @@ The following options can be set for DITA topics or maps (or both):
 
 - **Author**: Specifies the name of the author. By default, it is the system user name.
 - **Date format**: Specifies the format for the date added in the *created date* or *revised date* elements. If the specified format is invalid, *yyyy/MM/dd* is used as a fallback.
-- **Limit the number of revised dates to**: When this option is selected, everytime a *revised date* element is added to the prolog, the add-on will keep the configured limit of elements and will delete the old revised dates.
+- **Limit the number of revised dates to**: Specifies the number of revisions that will be kept. Anytime a *revised* element is added in the prolog section and the specified limit has been reached, the oldest *revised* element is deleted.
 - **Enable automatic prolog update on save**: When this option is selected, the prolog is updated anytime the document is saved.
 - **Set creator name**: When this option is selected, the author is set as the document's *creator* in the prolog when the document is saved. This option is only applicable for new documents.
 - **Set created date**: When this option is selected, a *created date* is added to the prolog when the document is saved. This option is only applicable for new documents.
