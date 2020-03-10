@@ -76,7 +76,6 @@ public class DitaTopicAuthorEditor implements DitaEditor {
 
 		if (documentController != null) {
 			documentType = getDocumentType();
-
 			prologCreator = prologContentCreator;
 		}
 	}
