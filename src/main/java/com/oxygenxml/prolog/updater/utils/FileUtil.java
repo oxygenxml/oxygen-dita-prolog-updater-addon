@@ -33,14 +33,16 @@ public class FileUtil {
    */
   public static boolean checkCurrentNewDocumentState(URL fileLocation) {
     boolean isNew = false;
-    File file = new File(fileLocation.getFile());
     try {
-      BasicFileAttributes attr = Files.readAttributes(file.toPath(), BasicFileAttributes.class);
-      FileTime creationFileTime = attr.creationTime();
-      long currentTimeMillis = System.currentTimeMillis();
-      if (creationFileTime != null &&
-          currentTimeMillis - creationFileTime.toMillis() < 2000) {
-        isNew = true;
+      if("file".equals(fileLocation.getProtocol())) {
+        File file = new File(fileLocation.getFile());
+        BasicFileAttributes attr = Files.readAttributes(file.toPath(), BasicFileAttributes.class);
+        FileTime creationFileTime = attr.creationTime();
+        long currentTimeMillis = System.currentTimeMillis();
+        if (creationFileTime != null &&
+            currentTimeMillis - creationFileTime.toMillis() < 2000) {
+          isNew = true;
+        }
       }
     } catch (IOException e) {
       // Ignore this
