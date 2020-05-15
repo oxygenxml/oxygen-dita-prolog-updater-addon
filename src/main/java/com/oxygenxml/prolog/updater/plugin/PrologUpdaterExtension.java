@@ -58,51 +58,52 @@ public class PrologUpdaterExtension extends OptionPagePluginExtension implements
 			@Override
 			public void editorOpened(URL editorLocation) {
 				final WSEditor editor = workspace.getEditorAccess(editorLocation, PluginWorkspace.MAIN_EDITING_AREA);
-				
-				boolean isNewDocument = editor.isNewDocument();
-				if (!isNewDocument) {
-				  isNewDocument = FileUtil.checkCurrentNewDocumentState(editorLocation);
-				}
-				stateOfMainEditors.put(editorLocation.toExternalForm(), isNewDocument);
-				
-				// Check the document type name.
-				String docTypeName = getDocumentTypeName(editor);
-				if (docTypeName != null && docTypeName.toLowerCase().contains(DITA_TYPE_NAME)) {
-					// Add an WSEditorListener
-					editor.addEditorListener(new WSEditorListener() {
-						private boolean wasSaved = false;
-						boolean wasSavedAnUntitle = false;
-						String oldUntitleLocation = "";
-						
-						@Override
-						public boolean editorAboutToBeSavedVeto(int operationType) {
-							if (editor.isNewDocument() && !editor.isModified()) {
-								editor.setModified(true);
-							}
-							wasSavedAnUntitle = editor.isNewDocument();
-							oldUntitleLocation = editor.getEditorLocation().toExternalForm();
-							return true;
-						}
-						
-						@Override
-						public void editorSaved(int operationType) {
-						  String editorLocation = editor.getEditorLocation().toExternalForm();
-							if (!wasSaved) {
-								wasSaved = true;
-								if (wasSavedAnUntitle) {
-								  stateOfMainEditors.remove(oldUntitleLocation);
-								  stateOfMainEditors.put(editorLocation, Boolean.TRUE);
-								}
-								
-                Boolean isNew = stateOfMainEditors.get(editorLocation);
-							  xmlUpdater.updateProlog(
-								    editor,
-								    isNew != null ? isNew : Boolean.FALSE);
-								editor.save();
-								wasSaved = false;
-							}
-						}
-					});
+				if(editor != null) {
+				  boolean isNewDocument = editor.isNewDocument();
+				  if (!isNewDocument) {
+				    isNewDocument = FileUtil.checkCurrentNewDocumentState(editorLocation);
+				  }
+				  stateOfMainEditors.put(editorLocation.toExternalForm(), isNewDocument);
+
+				  // Check the document type name.
+				  String docTypeName = getDocumentTypeName(editor);
+				  if (docTypeName != null && docTypeName.toLowerCase().contains(DITA_TYPE_NAME)) {
+				    // Add an WSEditorListener
+				    editor.addEditorListener(new WSEditorListener() {
+				      private boolean wasSaved = false;
+				      boolean wasSavedAnUntitle = false;
+				      String oldUntitleLocation = "";
+
+				      @Override
+				      public boolean editorAboutToBeSavedVeto(int operationType) {
+				        if (editor.isNewDocument() && !editor.isModified()) {
+				          editor.setModified(true);
+				        }
+				        wasSavedAnUntitle = editor.isNewDocument();
+				        oldUntitleLocation = editor.getEditorLocation().toExternalForm();
+				        return true;
+				      }
+
+				      @Override
+				      public void editorSaved(int operationType) {
+				        String editorLocation = editor.getEditorLocation().toExternalForm();
+				        if (!wasSaved) {
+				          wasSaved = true;
+				          if (wasSavedAnUntitle) {
+				            stateOfMainEditors.remove(oldUntitleLocation);
+				            stateOfMainEditors.put(editorLocation, Boolean.TRUE);
+				          }
+
+				          Boolean isNew = stateOfMainEditors.get(editorLocation);
+				          xmlUpdater.updateProlog(
+				              editor,
+				              isNew != null ? isNew : Boolean.FALSE);
+				          editor.save();
+				          wasSaved = false;
+				        }
+				      }
+				    });
+				  }
 				}
 			}
 			
@@ -117,50 +118,51 @@ public class PrologUpdaterExtension extends OptionPagePluginExtension implements
 			@Override
 			public void editorOpened(final URL editorLocation) {
 			  final WSEditor editor = workspace.getEditorAccess(editorLocation, PluginWorkspace.DITA_MAPS_EDITING_AREA);
-				
-			  boolean isNewDocument = editor.isNewDocument();
-				if (!isNewDocument) {
-				  isNewDocument = FileUtil.checkCurrentNewDocumentState(editorLocation);
-				}
-				stateOfDmmEditors.put(editorLocation.toExternalForm(), isNewDocument);
-				
-				// Check the document type name.
-				String docTypeName = getDocumentTypeName(editor);
-				if (docTypeName != null && docTypeName.toLowerCase().contains(DITA_TYPE_NAME)) {
-					// Add an WSEditorListener
-					editor.addEditorListener(new WSEditorListener() {
-						private boolean wasSaved = false;
-				    boolean wasSavedAnUntitle = false;
-            String oldUntitleLocation = "";
+			  if(editor != null) {
+			    boolean isNewDocument = editor.isNewDocument();
+			    if (!isNewDocument) {
+			      isNewDocument = FileUtil.checkCurrentNewDocumentState(editorLocation);
+			    }
+			    stateOfDmmEditors.put(editorLocation.toExternalForm(), isNewDocument);
 
-            @Override
-            public boolean editorAboutToBeSavedVeto(int operationType) {
-              wasSavedAnUntitle = editor.isNewDocument();
-              oldUntitleLocation = editor.getEditorLocation().toExternalForm();
-              return true;
-            }
-            
-						@Override
-						public void editorSaved(int operationType) {
-						  String editorLocation = editor.getEditorLocation().toExternalForm();
-							if (!wasSaved) {
-								wasSaved = true;
-								if (wasSavedAnUntitle) {
-								  stateOfDmmEditors.remove(oldUntitleLocation);
-								  stateOfDmmEditors.put(editorLocation, Boolean.TRUE);
-                }
-								
-                Boolean isNew = stateOfDmmEditors.get(editorLocation);
-								xmlUpdater.updateProlog(
-								    editor,
-								    isNew != null ? isNew : Boolean.FALSE);
-								editor.save();
-								wasSaved = false;
-							}
-							super.editorSaved(operationType);
-						}
-					});
-				}
+			    // Check the document type name.
+			    String docTypeName = getDocumentTypeName(editor);
+			    if (docTypeName != null && docTypeName.toLowerCase().contains(DITA_TYPE_NAME)) {
+			      // Add an WSEditorListener
+			      editor.addEditorListener(new WSEditorListener() {
+			        private boolean wasSaved = false;
+			        boolean wasSavedAnUntitle = false;
+			        String oldUntitleLocation = "";
+
+			        @Override
+			        public boolean editorAboutToBeSavedVeto(int operationType) {
+			          wasSavedAnUntitle = editor.isNewDocument();
+			          oldUntitleLocation = editor.getEditorLocation().toExternalForm();
+			          return true;
+			        }
+
+			        @Override
+			        public void editorSaved(int operationType) {
+			          String editorLocation = editor.getEditorLocation().toExternalForm();
+			          if (!wasSaved) {
+			            wasSaved = true;
+			            if (wasSavedAnUntitle) {
+			              stateOfDmmEditors.remove(oldUntitleLocation);
+			              stateOfDmmEditors.put(editorLocation, Boolean.TRUE);
+			            }
+
+			            Boolean isNew = stateOfDmmEditors.get(editorLocation);
+			            xmlUpdater.updateProlog(
+			                editor,
+			                isNew != null ? isNew : Boolean.FALSE);
+			            editor.save();
+			            wasSaved = false;
+			          }
+			          super.editorSaved(operationType);
+			        }
+			      });
+			    }
+			  }
 			}
 			
 			@Override
