@@ -3,7 +3,24 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>oxygen-dita-prolog-updater</groupId>
 	<artifactId>oxygen-dita-prolog-updater</artifactId>
-	<version>0.0.1</version>
+  	<version>0.0.1</version>
+  
+    <developers>
+      <developer>
+        <name>Cosmin Duna</name>
+        <email>cosmin_duna@sync.ro</email>
+        <roles>
+          <role>manager</role>
+        </roles>
+      </developer>
+      <developer>
+        <name>Radu Coravu</name>
+        <email>radu_coravu@sync.ro</email>
+        <roles>
+          <role>co-manager</role>
+        </roles>
+      </developer>
+    </developers>
 
 	<repositories>
 		<repository>
