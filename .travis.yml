@@ -21,6 +21,9 @@ before_script:
   - echo "https://${PROLOG_TOKEN}:@github.com" > .git/credentials
   - ./travis/checkForTag.sh
 script:
+  mvn clean install
+  - chmod +x travis/install-openjdk11.sh
+  - ./travis/install-openjdk11.sh --emit-java-home
  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar
 before_deploy:
   - ./travis/deploy.sh
