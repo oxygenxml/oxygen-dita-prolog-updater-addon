@@ -9,7 +9,7 @@ This add-on is compatible with Oxygen XML Editor (or XML Author) version 19.0 or
 1. In Oxygen, go to **Help->Install new add-ons** to open an add-on selection dialog box.
 2. Enter or paste https://raw.githubusercontent.com/oxygenxml/dita-prolog-updater/master/build/addon.xml in the **Show add-ons from** field.
 3. Select the **DITA Prolog Updater** add-on and click Next.
-4. Select the **I accept all terms of the end user license agreement** option and click **Finish**.
+4. Read the end-user license agreement. Then select the **I accept all terms of the end-user license agreement** option and click **Finish**.
 5. Restart the application.
 
 Result: A **DITA Prolog Updater** preferences page will now be available in **Options->Preferences->Plugins**. This preferences page includes various options for updating the prolog section of a DITA topic or map.
