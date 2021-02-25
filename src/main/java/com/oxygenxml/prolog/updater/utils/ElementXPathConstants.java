@@ -54,16 +54,6 @@ public class ElementXPathConstants {
 	public static final String TOPICMETA_AUTHORS = TOPICMETA_XPATH + "/author";
 
 	/**
-	 * Retrieve all "creator" authors from prolog element.
-	 */
-	public static final String PROLOG_AUTHORS_CREATOR = PROLOG_XPATH + "/author[@type='creator']";
-
-	/**
-	 * Retrieve all "creator" authors from topicMeta element.
-	 */
-	public static final String TOPICMETA_AUTHORS_CREATOR = TOPICMETA_XPATH + "/author[@type='creator']";
-
-	/**
 	 * Returns a "created" element.
 	 */
 	public static final String PROLOG_CREATED_ELEMENT = PROLOG_CRITDATES + "/created";

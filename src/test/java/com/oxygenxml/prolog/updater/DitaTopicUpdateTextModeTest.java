@@ -112,7 +112,7 @@ public class DitaTopicUpdateTextModeTest extends TestCase {
 		Mockito.when(wsTextEditorPage.findElementsByXPath(ElementXPathConstants.PROLOG_AUTHORS))
 				.thenReturn(new WSXMLTextNodeRange[1]);
 
-		Mockito.when(wsTextEditorPage.evaluateXPath(ElementXPathConstants.PROLOG_AUTHORS_CREATOR))
+		Mockito.when(wsTextEditorPage.evaluateXPath(ElementXPathUtils.getAuthorCreatorXpath(DocumentType.TOPIC)))
 				.thenReturn(new WSXMLTextNodeRange[1]);
 
 		Mockito.when(wsTextEditorPage.findElementsByXPath(ElementXPathConstants.PROLOG_CRITDATES))
@@ -141,7 +141,7 @@ public class DitaTopicUpdateTextModeTest extends TestCase {
 		Mockito.when(wsTextEditorPage.findElementsByXPath(ElementXPathConstants.PROLOG_AUTHORS))
 				.thenReturn(new WSXMLTextNodeRange[0]);
 
-		Mockito.when(wsTextEditorPage.evaluateXPath(ElementXPathConstants.PROLOG_AUTHORS_CREATOR))
+		Mockito.when(wsTextEditorPage.evaluateXPath(ElementXPathUtils.getAuthorCreatorXpath(DocumentType.TOPIC)))
 				.thenReturn(new WSXMLTextNodeRange[0]);
 
 		Mockito.when(wsTextEditorPage.findElementsByXPath(ElementXPathConstants.PROLOG_CRITDATES))
@@ -173,7 +173,7 @@ public class DitaTopicUpdateTextModeTest extends TestCase {
 		Mockito.when(wsTextEditorPage.findElementsByXPath(ElementXPathConstants.PROLOG_AUTHORS))
 				.thenReturn(new WSXMLTextNodeRange[1]);
 
-		Mockito.when(wsTextEditorPage.evaluateXPath(ElementXPathConstants.PROLOG_AUTHORS_CREATOR))
+		Mockito.when(wsTextEditorPage.evaluateXPath(ElementXPathUtils.getAuthorCreatorXpath(DocumentType.TOPIC)))
 				.thenReturn(new WSXMLTextNodeRange[1]);
 
 		Mockito.when(wsTextEditorPage.findElementsByXPath(ElementXPathConstants.PROLOG_CRITDATES))

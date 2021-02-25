@@ -3,12 +3,14 @@ package com.oxygenxml.prolog.updater.prolog.content;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.mockito.internal.matchers.Any;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import com.oxygenxml.prolog.updater.dita.editor.DocumentType;
 import com.oxygenxml.prolog.updater.tags.OptionKeys;
+import com.oxygenxml.prolog.updater.utils.XmlElementsConstants;
 
 import junit.framework.TestCase;
 import ro.sync.exml.workspace.api.PluginWorkspace;
@@ -123,6 +125,8 @@ public class PrologContentCreatorTopicTest extends TestCase {
 				.thenReturn(Boolean.FALSE.toString());
 		Mockito.when(wsOptionsStorage.getOption(OptionKeys.TOPIC_UPDATE_REVISED_DATES, Boolean.TRUE.toString()))
 				.thenReturn(Boolean.FALSE.toString());
+		Mockito.when(wsOptionsStorage.getOption(OptionKeys.CREATOR_TYPE_VALUE, XmlElementsConstants.CREATOR_TYPE))
+        .thenReturn(XmlElementsConstants.CREATOR_TYPE);
 
 		// When TOPIC_SET_CREATOR is false
 		PrologContentCreator prologContentCreator = new PrologContentCreator(AUTHOR_NAME, null);
@@ -203,6 +207,8 @@ public class PrologContentCreatorTopicTest extends TestCase {
 				.thenReturn(Boolean.TRUE.toString());
 		Mockito.when(wsOptionsStorage.getOption(OptionKeys.TOPIC_UPDATE_REVISED_DATES, Boolean.TRUE.toString()))
 				.thenReturn(Boolean.FALSE.toString());
+		Mockito.when(wsOptionsStorage.getOption(OptionKeys.CONTRIBUTOR_TYPE_VALUE, XmlElementsConstants.CONTRIBUTOR_TYPE))
+        .thenReturn(XmlElementsConstants.CONTRIBUTOR_TYPE);
 
 		// When TOPIC_SET_CREATOR is false
 		PrologContentCreator prologContentCreator = new PrologContentCreator(AUTHOR_NAME, null);

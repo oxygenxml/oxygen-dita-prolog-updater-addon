@@ -69,5 +69,15 @@ public class Tags {
 	 * en: Limit the number of revised dates to
 	 */
   public static final String LIMIT_REVISED_DATES_TO = "prolog.updater.limit.revised.dates.to";
+  
+  /**
+   * Value of type attribute for creator author.
+   */
+  public static final String VALUE_OF_TYPE_FOR_CREATOR = "value.of.type.attribute.for.creator";
+  
+  /**
+   * Value of type attribute for contributor author
+   */
+  public static final String VALUE_OF_TYPE_FOR_CONTRIBUTOR = "value.of.type.attribute.for.contributor";
 
 }

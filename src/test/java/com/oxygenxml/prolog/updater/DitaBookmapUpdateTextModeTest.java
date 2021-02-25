@@ -119,7 +119,7 @@ public class DitaBookmapUpdateTextModeTest extends TestCase {
 		Mockito.when(wsTextEditorPage.findElementsByXPath(ElementXPathConstants.TOPICMETA_AUTHORS))
 				.thenReturn(new WSXMLTextNodeRange[1]);
 
-		Mockito.when(wsTextEditorPage.evaluateXPath(ElementXPathConstants.TOPICMETA_AUTHORS_CREATOR))
+		Mockito.when(wsTextEditorPage.evaluateXPath(ElementXPathUtils.getAuthorCreatorXpath(DocumentType.MAP)))
 				.thenReturn(new WSXMLTextNodeRange[1]);
 
 		Mockito.when(wsTextEditorPage.findElementsByXPath(ElementXPathConstants.TOPICMETA_CRITDATES))
@@ -149,7 +149,7 @@ public class DitaBookmapUpdateTextModeTest extends TestCase {
 		Mockito.when(wsTextEditorPage.findElementsByXPath(ElementXPathConstants.TOPICMETA_AUTHORS))
 				.thenReturn(new WSXMLTextNodeRange[0]);
 
-		Mockito.when(wsTextEditorPage.evaluateXPath(ElementXPathConstants.TOPICMETA_AUTHORS_CREATOR))
+		Mockito.when(wsTextEditorPage.evaluateXPath(ElementXPathUtils.getAuthorCreatorXpath(DocumentType.MAP)))
 				.thenReturn(new WSXMLTextNodeRange[0]);
 
 		Mockito.when(wsTextEditorPage.findElementsByXPath(ElementXPathConstants.TOPICMETA_CRITDATES))
@@ -185,7 +185,7 @@ public class DitaBookmapUpdateTextModeTest extends TestCase {
 		Mockito.when(wsTextEditorPage.findElementsByXPath(ElementXPathConstants.TOPICMETA_AUTHORS))
 				.thenReturn(new WSXMLTextNodeRange[1]);
 
-		Mockito.when(wsTextEditorPage.evaluateXPath(ElementXPathConstants.TOPICMETA_AUTHORS_CREATOR))
+		Mockito.when(wsTextEditorPage.evaluateXPath(ElementXPathUtils.getAuthorCreatorXpath(DocumentType.MAP)))
 				.thenReturn(new WSXMLTextNodeRange[1]);
 
 		Mockito.when(wsTextEditorPage.findElementsByXPath(ElementXPathConstants.TOPICMETA_CRITDATES))

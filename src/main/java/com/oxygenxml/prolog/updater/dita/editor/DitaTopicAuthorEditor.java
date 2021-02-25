@@ -167,20 +167,22 @@ public class DitaTopicAuthorEditor implements DitaEditor {
 	private void addProlog(boolean isNewDocument) throws AuthorOperationException {
 		
 		String prologFragment = prologCreator.getPrologFragment(isNewDocument, documentType);
-		AuthorElement rootElement = documentController.getAuthorDocumentNode().getRootElement();
-		String prologXpath = AuthorPageDocumentUtil.findElementXPath(
-				documentController,
-				XmlElementsUtils.getPrologName(documentType),
-				ElementXPathUtils.getRootXpath(documentType),
-				rootElement
-				);
+		if (prologFragment != null) {
+		  AuthorElement rootElement = documentController.getAuthorDocumentNode().getRootElement();
+		  String prologXpath = AuthorPageDocumentUtil.findElementXPath(
+		      documentController,
+		      XmlElementsUtils.getPrologName(documentType),
+		      ElementXPathUtils.getRootXpath(documentType),
+		      rootElement
+		      );
 
-		if (prologXpath != null) {
-			AuthorPageDocumentUtil.insertFragmentSchemaAware(page, documentController, prologFragment, prologXpath,
-					AuthorConstants.POSITION_AFTER);
-		} else {
-			AuthorPageDocumentUtil.insertFragmentSchemaAware(page, documentController, prologFragment,
-					ElementXPathUtils.getRootXpath(documentType), AuthorConstants.POSITION_INSIDE_FIRST);
+		  if (prologXpath != null) {
+		    AuthorPageDocumentUtil.insertFragmentSchemaAware(page, documentController, prologFragment, prologXpath,
+		        AuthorConstants.POSITION_AFTER);
+		  } else {
+		    AuthorPageDocumentUtil.insertFragmentSchemaAware(page, documentController, prologFragment,
+		        ElementXPathUtils.getRootXpath(documentType), AuthorConstants.POSITION_INSIDE_FIRST);
+		  }
 		}
 	}
 
@@ -402,42 +404,45 @@ public class DitaTopicAuthorEditor implements DitaEditor {
 	 *           If the element could not be update.
 	 */
 	private void updateAuthorElements(AuthorElement prolog, boolean isNewDocument) throws AuthorOperationException {
-		String type = isNewDocument ? XmlElementsConstants.CREATOR_TYPE : XmlElementsConstants.CONTRIBUTOR_TYPE;
-
-		List<AuthorElement> authors = AuthorPageDocumentUtil.findElementsByClass(prolog,
+		List<AuthorElement> existentAuthorsElements = AuthorPageDocumentUtil.findElementsByClass(prolog,
 				XmlElementsConstants.PROLOG_AUTHOR_ELEMENT_CLASS);
-		final int length = authors.size();
-
-		// Search for author with given type.
-		boolean hasAuthor = AuthorPageDocumentUtil.hasAuthor(authors, type, prologCreator.getAuthor());
-
-		// Search for a xPath to insert the author element (in DMM the fragment is not inserted schema aware)
-		String xPath = AuthorPageDocumentUtil.findElementXPath(documentController,
-				XmlElementsConstants.AUTHOR_NAME,
-				ElementXPathUtils.getPrologXpath(documentType),
-				prolog);
 
 		String fragment = null;
 		int offset = prolog.getStartOffset() + 1;
-
-		if (!hasAuthor && XmlElementsConstants.CONTRIBUTOR_TYPE.equals(type)) {
-			// if wasn't found this contributor
-			fragment = prologCreator.getContributorFragment(documentType);
-			if (length > 0) {
-				AuthorElement lastAuthor = authors.get(length - 1);
-				offset = lastAuthor.getEndOffset() + 1;
-			}
-		} else if (!hasAuthor && XmlElementsConstants.CREATOR_TYPE.equals(type)) {
-			fragment = prologCreator.getCreatorFragment(documentType);
+		if (isNewDocument) {
+		  if (!AuthorPageDocumentUtil.hasCreator(existentAuthorsElements,
+		      prologCreator.getCreatorTypeValue())) {
+		    fragment = prologCreator.getCreatorFragment(documentType);
+		  }
+		} else {
+		  if (!AuthorPageDocumentUtil.hasContributor(
+		      existentAuthorsElements,
+		      prologCreator.getContributorTypeValue(),
+		      prologCreator.getAuthor())) {
+		    // if wasn't found this contributor
+		    fragment = prologCreator.getContributorFragment(documentType);
+		    int nuOfAuthors = existentAuthorsElements.size();
+		    if (nuOfAuthors > 0) {
+		      AuthorElement lastAuthor = existentAuthorsElements.get(nuOfAuthors - 1);
+		      offset = lastAuthor.getEndOffset() + 1;
+		    }
+		  }
 		}
 		
-		if(xPath != null) {
-			AuthorPageDocumentUtil.insertFragmentSchemaAware(page, documentController,
-					fragment,
-					xPath,
-					AuthorConstants.POSITION_AFTER);
-		} else {
-			AuthorPageDocumentUtil.insertFragmentSchemaAware(page, documentController, fragment, offset);
+		if (fragment != null) {
+		  // Search for a xPath to insert the author element (in DMM the fragment is not inserted schema aware)
+		  String xPath = AuthorPageDocumentUtil.findElementXPath(documentController,
+		      XmlElementsConstants.AUTHOR_NAME,
+		      ElementXPathUtils.getPrologXpath(documentType),
+	        prolog);
+		  if (xPath != null) {
+		    AuthorPageDocumentUtil.insertFragmentSchemaAware(page, documentController,
+		        fragment,
+		        xPath,
+		        AuthorConstants.POSITION_AFTER);
+		  } else {
+		    AuthorPageDocumentUtil.insertFragmentSchemaAware(page, documentController, fragment, offset);
+		  }
 		}
 	}
 

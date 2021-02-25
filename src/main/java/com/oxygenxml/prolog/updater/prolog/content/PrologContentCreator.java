@@ -71,14 +71,14 @@ public class PrologContentCreator {
 	private boolean updateMapContributor = true;
 
 	/**
-	 * <code>true</code> if the prolog must be update in DITA Topic.
+	 * <code>true</code> if the prolog update is allowed in DITA Topic.
 	 */
-	private boolean updateTopicProlog = true;
+	private boolean isAllowedTopicUpdate = true;
 
 	/**
-	 * <code>true</code> if the prolog(topicmeta) must be update in DITA Map.
+	 * <code>true</code> if the prolog(topicmeta) update is allowed in DITA Map.
 	 */
-	private boolean updateMapProlog = true;
+	private boolean isAllowedMapUpdate = true;
 
 	/**
 	 * <code>true</code> if the created date must be set in DITA Topic.
@@ -106,6 +106,16 @@ public class PrologContentCreator {
   private int maxNoOfRevised = -1;
 
   /**
+   * The value of the type attribute for a creator
+   */
+  private String creatorTypeValue = XmlElementsConstants.CREATOR_TYPE;
+
+  /**
+   * The value of the type attribute for a contributor.
+   */
+  private String contributorTypeValue = XmlElementsConstants.CONTRIBUTOR_TYPE;
+
+  /**
    * Constructor.
    * 
    * @param author      The name of the author.
@@ -126,11 +136,14 @@ public class PrologContentCreator {
 		this.authorName = author;
 		this.maxNoOfRevised = maxNoOfRevisedElements;
 		
+		// Get the setting from option storage.
+    loadOptions();
+		
 		if (authorName != null) {
 			// Creator
-			creatorFragment = XMLFragmentUtils.createAuthorFragment(authorName, XmlElementsConstants.CREATOR_TYPE);
+			creatorFragment = XMLFragmentUtils.createAuthorFragment(authorName, creatorTypeValue);
 			// Contributor
-			contributorXML = XMLFragmentUtils.createAuthorFragment(authorName, XmlElementsConstants.CONTRIBUTOR_TYPE);
+			contributorXML = XMLFragmentUtils.createAuthorFragment(authorName, contributorTypeValue);
 
 			// Generate current date in a specified format.
 			localDate = createLocalDate(dateFormat);
@@ -143,9 +156,6 @@ public class PrologContentCreator {
 			StringBuilder revised = XMLFragmentUtils.createGeneralXmlFragment("revised", "modified", localDate);
 			revisedDateFragment = (revisedDateFragment == null) ? revised : revisedDateFragment.append(revised);
 		}
-
-		// Get the setting from option storage.
-		loadOptions();
 	}
 
 	/**
@@ -159,51 +169,38 @@ public class PrologContentCreator {
 	 * @return The XML fragment in string format.
 	 */
 	public String getPrologFragment(boolean isNewDocument, DocumentType documentType) {
-		StringBuilder fragment = new StringBuilder();
-		StringBuilder aux = new StringBuilder();
+		String fragmentToReturn = null;
 
-		if ((updateTopicProlog && documentType.equals(DocumentType.TOPIC))
-				|| (updateMapProlog && !documentType.equals(DocumentType.TOPIC))) {
-			fragment.append('<');
-			fragment.append(XmlElementsUtils.getPrologName(documentType));
-			fragment.append('>');
-
-			if (isNewDocument) {
-				//
-				String creator = getCreatorFragment(documentType);
-				String createdDate = getCreatedDateFragment(documentType);
-
-				if (creator != null) {
-					aux.append(creator);
-				}
-				if (createdDate != null) {
-					aux.append(XMLFragmentUtils.createCritdateTag(createdDate));
-				}
-			} else {
-				String contributor = getContributorFragment(documentType);
-				String revisedDate = getRevisedDateFragment(documentType);
-
-				if (contributor != null) {
-					aux.append(contributor);
-				}
-				if (revisedDate != null) {
-					aux.append(XMLFragmentUtils.createCritdateTag(revisedDate));
-				}
-			}
-
-			// Avoid adding empty prolog element
-			if (aux.toString().isEmpty()) {
-				return null;
-			}
-
-			fragment.append(aux);
-			fragment.append("</");
-			fragment.append(XmlElementsUtils.getPrologName(documentType));
-			fragment.append('>');
+		boolean isUpdateAllowed = documentType.equals(DocumentType.TOPIC) ? isAllowedTopicUpdate : isAllowedMapUpdate;
+		if (isUpdateAllowed) {
+		  String authorElement;
+		  String dateElement;
+		  
+      if (isNewDocument) {
+        authorElement = getCreatorFragment(documentType);
+        dateElement = getCreatedDateFragment(documentType);
+      } else {
+        authorElement = getContributorFragment(documentType);
+        dateElement = getRevisedDateFragment(documentType);
+      }
+      
+      if(authorElement != null || dateElement != null) {
+        StringBuilder fragmentBuilder = new StringBuilder();
+        String prologElementName = XmlElementsUtils.getPrologName(documentType);
+        fragmentBuilder.append('<').append(prologElementName).append('>');
+        
+        if (authorElement != null) {
+          fragmentBuilder.append(authorElement);
+        }
+        if (dateElement != null) {
+          fragmentBuilder.append(XMLFragmentUtils.createCritdateTag(dateElement));
+        }
+        
+        fragmentBuilder.append("</").append(prologElementName).append('>');
+        fragmentToReturn = fragmentBuilder.toString();
+      }
 		}
-
-		// The generated fragment to be added
-		return fragment.toString().isEmpty() ? null : fragment.toString();
+		return fragmentToReturn;
 	}
 
 	/**
@@ -350,27 +347,39 @@ public class PrologContentCreator {
 			WSOptionsStorage optionsStorage = pluginWorkspace.getOptionsStorage();
 
 			String value = optionsStorage.getOption(OptionKeys.TOPIC_ENABLE_UPDATE_ON_SAVE, String.valueOf(true));
-			updateTopicProlog = Boolean.parseBoolean(value);
+			isAllowedTopicUpdate = Boolean.parseBoolean(value);
 			value = optionsStorage.getOption(OptionKeys.MAP_ENABLE_UPDATE_ON_SAVE, String.valueOf(true));
-			updateMapProlog = Boolean.parseBoolean(value);
+			isAllowedMapUpdate = Boolean.parseBoolean(value);
 
 			value = optionsStorage.getOption(OptionKeys.TOPIC_SET_CREATOR, String.valueOf(true));
-			setTopicCreator = Boolean.parseBoolean(value) && updateTopicProlog;
+			setTopicCreator = Boolean.parseBoolean(value) && isAllowedTopicUpdate;
 			value = optionsStorage.getOption(OptionKeys.MAP_SET_CREATOR, String.valueOf(true));
-			setMapCreator = Boolean.parseBoolean(value) && updateMapProlog;
+			setMapCreator = Boolean.parseBoolean(value) && isAllowedMapUpdate;
 			value = optionsStorage.getOption(OptionKeys.TOPIC_UPDATE_CONTRIBUTOR, String.valueOf(true));
-			updateTopicContributor = Boolean.parseBoolean(value) && updateTopicProlog;
+			updateTopicContributor = Boolean.parseBoolean(value) && isAllowedTopicUpdate;
 			value = optionsStorage.getOption(OptionKeys.MAP_UPDATE_CONTRIBUTOR, String.valueOf(true));
-			updateMapContributor = Boolean.parseBoolean(value) && updateMapProlog;
+			updateMapContributor = Boolean.parseBoolean(value) && isAllowedMapUpdate;
 
 			value = optionsStorage.getOption(OptionKeys.TOPIC_SET_CREATED_DATE, String.valueOf(true));
-			setTopicCreatedDate = Boolean.parseBoolean(value) && updateTopicProlog;
+			setTopicCreatedDate = Boolean.parseBoolean(value) && isAllowedTopicUpdate;
 			value = optionsStorage.getOption(OptionKeys.MAP_SET_CREATED_DATE, String.valueOf(true));
-			setMapCreatedDate = Boolean.parseBoolean(value) && updateMapProlog;
+			setMapCreatedDate = Boolean.parseBoolean(value) && isAllowedMapUpdate;
 			value = optionsStorage.getOption(OptionKeys.TOPIC_UPDATE_REVISED_DATES, String.valueOf(true));
-			updateTopicRevisedDate = Boolean.parseBoolean(value) && updateTopicProlog;
+			updateTopicRevisedDate = Boolean.parseBoolean(value) && isAllowedTopicUpdate;
 			value = optionsStorage.getOption(OptionKeys.MAP_UPDATE_REVISED_DATES, String.valueOf(true));
-			updateMapRevisedDate = Boolean.parseBoolean(value) && updateMapProlog;
+			updateMapRevisedDate = Boolean.parseBoolean(value) && isAllowedMapUpdate;
+			
+			creatorTypeValue = optionsStorage.getOption(OptionKeys.CREATOR_TYPE_VALUE, XmlElementsConstants.CREATOR_TYPE);
+			contributorTypeValue = optionsStorage.getOption(OptionKeys.CONTRIBUTOR_TYPE_VALUE, XmlElementsConstants.CONTRIBUTOR_TYPE);
 		}
 	}
+	
+	
+	public String getCreatorTypeValue() {
+    return creatorTypeValue;
+  }
+	
+	public String getContributorTypeValue() {
+    return contributorTypeValue;
+  }
 }

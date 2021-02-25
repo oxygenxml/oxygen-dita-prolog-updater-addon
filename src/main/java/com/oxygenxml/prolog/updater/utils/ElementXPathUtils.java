@@ -1,6 +1,11 @@
 package com.oxygenxml.prolog.updater.utils;
 
 import com.oxygenxml.prolog.updater.dita.editor.DocumentType;
+import com.oxygenxml.prolog.updater.tags.OptionKeys;
+
+import ro.sync.exml.workspace.api.PluginWorkspace;
+import ro.sync.exml.workspace.api.PluginWorkspaceProvider;
+import ro.sync.exml.workspace.api.options.WSOptionsStorage;
 
 /**
  * Utility class where XPaths for elements are generated.
@@ -96,9 +101,74 @@ public class ElementXPathUtils {
 	 * @return The XPath of last the creator element.
 	 */
 	public static String getAuthorCreatorXpath(DocumentType documentType) {
-		return documentType.equals(DocumentType.TOPIC) ? ElementXPathConstants.PROLOG_AUTHORS_CREATOR
-				: ElementXPathConstants.TOPICMETA_AUTHORS_CREATOR;
+		return documentType.equals(DocumentType.TOPIC) ? getAuthorCreatorXPathInternal(ElementXPathConstants.PROLOG_XPATH)
+				: getAuthorCreatorXPathInternal(ElementXPathConstants.TOPICMETA_XPATH);
 	}
+	
+  /**
+   * Get the xpath for retrieving all creator authors from prolog/topicmeta element.
+   * 
+   * @param prologTypeXpath The xpath to prolog/topicmeta element.
+   *  
+   * @return The xpath for retrieving all creator authors from prolog/topicmeta element.
+   */
+  private static String getAuthorCreatorXPathInternal(String prologTypeXpath) {
+    StringBuilder xpath = new StringBuilder();
+    xpath.append(prologTypeXpath);
+    xpath.append("/author[@type='");
+    
+    String creatorTypeValue = XmlElementsConstants.CREATOR_TYPE;
+    PluginWorkspace pluginWorkspace = PluginWorkspaceProvider.getPluginWorkspace();
+    if (pluginWorkspace != null) {
+      WSOptionsStorage optionsStorage = pluginWorkspace.getOptionsStorage();
+      creatorTypeValue = optionsStorage.getOption(OptionKeys.CREATOR_TYPE_VALUE, XmlElementsConstants.CREATOR_TYPE);
+    }
+    xpath.append(creatorTypeValue).append("']");
+
+    return xpath.toString();
+  }
+  
+  /**
+   * Get the XPath of the contributor element with the given author name.
+   * 
+   * @param documentType
+   *          The document type( {@link DocumentType#TOPIC},
+   *          {@link DocumentType#MAP}, {@link DocumentType#BOOKMAP} 
+   *          or {@link DocumentType#SUBJECT_SCHEME} ).
+   * @param authorName The name of the author.         
+   *        
+   * @return The XPath of last the creator element.
+   */
+  public static String getAuthorContributorXpath(DocumentType documentType, String authorName) {
+    return documentType.equals(DocumentType.TOPIC) 
+        ? getAuthorContributorXPathInternal(ElementXPathConstants.PROLOG_XPATH, authorName)
+        : getAuthorContributorXPathInternal(ElementXPathConstants.TOPICMETA_XPATH, authorName);
+  }
+  
+  /**
+   * Get the xpath for retrieving the contributor elements with the given author name.
+   * 
+   * @param prologTypeXpath The xpath to prolog/topicmeta element.
+   * @param authorName The name of the author.   
+   * 
+   * @return The xpath for retrieving all contributor elements with the given author name.
+   */
+  private static String getAuthorContributorXPathInternal(String prologTypeXpath, String authorName) {
+    StringBuilder xpath = new StringBuilder();
+    xpath.append(prologTypeXpath);
+    xpath.append("/author[@type='");
+    
+    String creatorTypeValue = XmlElementsConstants.CONTRIBUTOR_TYPE;
+    PluginWorkspace pluginWorkspace = PluginWorkspaceProvider.getPluginWorkspace();
+    if (pluginWorkspace != null) {
+      WSOptionsStorage optionsStorage = pluginWorkspace.getOptionsStorage();
+      creatorTypeValue = optionsStorage.getOption(OptionKeys.CONTRIBUTOR_TYPE_VALUE, XmlElementsConstants.CONTRIBUTOR_TYPE);
+    }
+    xpath.append(creatorTypeValue);
+    xpath.append("' and text()= '").append(authorName).append("']");
+
+    return xpath.toString();
+  }
 
 	/**
 	 * Get the XPath of the critdates element.

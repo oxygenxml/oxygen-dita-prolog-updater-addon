@@ -19,6 +19,16 @@ public class OptionKeys {
 	public static final String AUTHOR_NAME = "prolog.updater.author.name";
 
 	/**
+   * Option for the value of the creator author type
+   */
+	public static final String CREATOR_TYPE_VALUE = "creator.type.value";
+	
+	/**
+   * Option for the value of the contributor author type
+   */
+  public static final String CONTRIBUTOR_TYPE_VALUE = "contributor.type.value";
+	
+	/**
 	 * Option for the date format in prolog updater.
 	 */
 	public static final String DATE_FORMAT = "prolog.updater.date.format";

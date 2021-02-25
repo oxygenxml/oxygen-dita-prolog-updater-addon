@@ -9,6 +9,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import com.oxygenxml.prolog.updater.dita.editor.DocumentType;
 import com.oxygenxml.prolog.updater.tags.OptionKeys;
+import com.oxygenxml.prolog.updater.utils.XmlElementsConstants;
 
 import junit.framework.TestCase;
 import ro.sync.exml.workspace.api.PluginWorkspace;
@@ -126,6 +127,8 @@ public class PrologContentCreatorMapTest extends TestCase {
 				.thenReturn(Boolean.FALSE.toString());
 		Mockito.when(wsOptionsStorage.getOption(OptionKeys.MAP_UPDATE_REVISED_DATES, Boolean.TRUE.toString()))
 				.thenReturn(Boolean.FALSE.toString());
+		Mockito.when(wsOptionsStorage.getOption(OptionKeys.CREATOR_TYPE_VALUE, XmlElementsConstants.CREATOR_TYPE))
+        .thenReturn(XmlElementsConstants.CREATOR_TYPE);
 
 		// When MAP_SET_CREATOR is false
 		PrologContentCreator prologContentCreator = new PrologContentCreator(AUTHOR_NAME, null);
@@ -143,6 +146,41 @@ public class PrologContentCreatorMapTest extends TestCase {
 		assertNull("The fragment shouldn't be generated.", prologFragment);
 	}
 
+	/**
+   * <p><b>Description:</b> Test generated fragment contains a custom creator.</p>
+   * <p><b>Bug ID:</b> EXM-47281</p>
+   *
+   * @author cosmin_duna
+   *
+   * @throws Exception
+   */
+  @PrepareForTest({ PluginWorkspaceProvider.class })
+  @Test
+  public void testSetCustomCreatorValue() {
+    Mockito.when(wsOptionsStorage.getOption(OptionKeys.MAP_ENABLE_UPDATE_ON_SAVE, Boolean.TRUE.toString()))
+        .thenReturn(Boolean.TRUE.toString());
+    Mockito.when(wsOptionsStorage.getOption(OptionKeys.MAP_SET_CREATOR, Boolean.TRUE.toString()))
+        .thenReturn(Boolean.TRUE.toString());
+    Mockito.when(wsOptionsStorage.getOption(OptionKeys.MAP_SET_CREATED_DATE, Boolean.TRUE.toString()))
+        .thenReturn(Boolean.FALSE.toString());
+    Mockito.when(wsOptionsStorage.getOption(OptionKeys.MAP_UPDATE_CONTRIBUTOR, Boolean.TRUE.toString()))
+        .thenReturn(Boolean.FALSE.toString());
+    Mockito.when(wsOptionsStorage.getOption(OptionKeys.MAP_UPDATE_REVISED_DATES, Boolean.TRUE.toString()))
+        .thenReturn(Boolean.FALSE.toString());
+    Mockito.when(wsOptionsStorage.getOption(OptionKeys.CREATOR_TYPE_VALUE, XmlElementsConstants.CREATOR_TYPE))
+        .thenReturn("CustomCreator");
+
+    // When MAP_SET_CREATOR is false
+    PrologContentCreator prologContentCreator = new PrologContentCreator(AUTHOR_NAME, null);
+
+    // Get the prolog in new document.
+    String prologFragment = prologContentCreator.getPrologFragment(true, DocumentType.MAP);
+
+    // Check the generated prolog fragment.
+    assertEquals("The fragment is not generated according to options.",
+        "<topicmeta><author type=\"CustomCreator\">name</author></topicmeta>", prologFragment);
+  }
+	
 	/**
 	 * <p>
 	 * <b>Description:</b> Test the functionality when MAP_SET_CREATED_DATE
@@ -206,6 +244,8 @@ public class PrologContentCreatorMapTest extends TestCase {
 				.thenReturn(Boolean.TRUE.toString());
 		Mockito.when(wsOptionsStorage.getOption(OptionKeys.MAP_UPDATE_REVISED_DATES, Boolean.TRUE.toString()))
 				.thenReturn(Boolean.FALSE.toString());
+		Mockito.when(wsOptionsStorage.getOption(OptionKeys.CONTRIBUTOR_TYPE_VALUE, XmlElementsConstants.CONTRIBUTOR_TYPE))
+        .thenReturn(XmlElementsConstants.CONTRIBUTOR_TYPE);
 
 		// When MAP_SET_CREATOR is false
 		PrologContentCreator prologContentCreator = new PrologContentCreator(AUTHOR_NAME, null);
@@ -224,6 +264,48 @@ public class PrologContentCreatorMapTest extends TestCase {
 				"<topicmeta><author type=\"contributor\">name</author></topicmeta>", prologFragment);
 
 	}
+	
+	/**
+   * <p><b>Description:</b> Test generated fragment contains a custom contributor value.</p>
+   * <p><b>Bug ID:</b> EXM-47281</p>
+   *
+   * @author cosmin_duna
+   *
+   * @throws Exception
+   */
+  @PrepareForTest({ PluginWorkspaceProvider.class })
+  @Test
+  public void testUpdateCustomContributorValue() {
+    Mockito.when(wsOptionsStorage.getOption(OptionKeys.MAP_ENABLE_UPDATE_ON_SAVE, Boolean.TRUE.toString()))
+        .thenReturn(Boolean.TRUE.toString());
+    Mockito.when(wsOptionsStorage.getOption(OptionKeys.MAP_SET_CREATOR, Boolean.TRUE.toString()))
+        .thenReturn(Boolean.FALSE.toString());
+    Mockito.when(wsOptionsStorage.getOption(OptionKeys.MAP_SET_CREATED_DATE, Boolean.TRUE.toString()))
+        .thenReturn(Boolean.FALSE.toString());
+    Mockito.when(wsOptionsStorage.getOption(OptionKeys.MAP_UPDATE_CONTRIBUTOR, Boolean.TRUE.toString()))
+        .thenReturn(Boolean.TRUE.toString());
+    Mockito.when(wsOptionsStorage.getOption(OptionKeys.MAP_UPDATE_REVISED_DATES, Boolean.TRUE.toString()))
+        .thenReturn(Boolean.FALSE.toString());
+    Mockito.when(wsOptionsStorage.getOption(OptionKeys.CONTRIBUTOR_TYPE_VALUE, XmlElementsConstants.CONTRIBUTOR_TYPE))
+        .thenReturn("CustomContributor");
+
+    // When MAP_SET_CREATOR is false
+    PrologContentCreator prologContentCreator = new PrologContentCreator(AUTHOR_NAME, null);
+
+    // Get the prolog when document is new.
+    String prologFragment = prologContentCreator.getPrologFragment(true, DocumentType.MAP);
+
+    // Check the generated prolog fragment.
+    assertNull("The fragment shouldn't be generated.", prologFragment);
+
+    // Get the prolog when document isn't new.
+    prologFragment = prologContentCreator.getPrologFragment(false, DocumentType.MAP);
+
+    // Check the generated prolog fragment.
+    assertEquals("The fragment is not generated according to options.",
+        "<topicmeta><author type=\"CustomContributor\">name</author></topicmeta>", prologFragment);
+
+  }
 
 	/**
 	 * <p>

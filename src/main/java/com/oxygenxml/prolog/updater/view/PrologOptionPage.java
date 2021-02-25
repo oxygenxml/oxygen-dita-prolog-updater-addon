@@ -14,6 +14,7 @@ import javax.swing.JTextField;
 import com.oxygenxml.prolog.updater.prolog.content.DateFormats;
 import com.oxygenxml.prolog.updater.tags.OptionKeys;
 import com.oxygenxml.prolog.updater.tags.Tags;
+import com.oxygenxml.prolog.updater.utils.XmlElementsConstants;
 
 import ro.sync.exml.workspace.api.PluginResourceBundle;
 import ro.sync.exml.workspace.api.PluginWorkspaceProvider;
@@ -33,6 +34,16 @@ public class PrologOptionPage extends JPanel {
 	 * The text field that contains the author name;
 	 */
 	private JTextField authorTextField = new JTextField();
+	
+	/**
+   * The text field that the value of creator type;
+   */
+  private JTextField creatorTextField = new JTextField();
+  
+  /**
+   * The text field that the value of contributor type;
+   */
+  private JTextField contributorTextField = new JTextField();
 
 	/**
 	 * CheckBox for enable prolog update in DITA topics
@@ -164,20 +175,44 @@ public class PrologOptionPage extends JPanel {
 		// Author field
 		add(authorTextField, constr);
 
-		constr.gridx = 0;
-		constr.gridy++;
-		constr.weightx = 0;
-		constr.insets.left = 0;
-		constr.insets.top = 5;
-		// Date format label
-		add(new JLabel(messages.getMessage(Tags.DATE_FORMAT) + ":"), constr);
+    constr.gridx = 0;
+    constr.gridy++;
+    constr.weightx = 0;
+    constr.insets.left = 0;
+    constr.insets.top = 5;
+    add(new JLabel(messages.getMessage(Tags.VALUE_OF_TYPE_FOR_CREATOR) + ":"), constr);
 
-		constr.gridx++;
-		constr.weightx = 1;
-		constr.insets.left = leftIndent;
-		// Date format combo.
-		add(dateFormatCombo, constr);
+    constr.gridx++;
+    constr.weightx = 1;
+    constr.insets.left = leftIndent;
+    add(creatorTextField, constr);
+    
+    constr.gridx = 0;
+    constr.gridy++;
+    constr.weightx = 0;
+    constr.insets.left = 0;
+    constr.insets.top = 5;
+    add(new JLabel(messages.getMessage(Tags.VALUE_OF_TYPE_FOR_CONTRIBUTOR) + ":"), constr);
+
+    constr.gridx++;
+    constr.weightx = 1;
+    constr.insets.left = leftIndent;
+    add(contributorTextField, constr);
 		
+    constr.gridx = 0;
+    constr.gridy++;
+    constr.weightx = 0;
+    constr.insets.left = 0;
+    constr.insets.top = 5;
+    // Date format label
+    add(new JLabel(messages.getMessage(Tags.DATE_FORMAT) + ":"), constr);
+
+    constr.gridx++;
+    constr.weightx = 1;
+    constr.insets.left = leftIndent;
+    // Date format combo.
+    add(dateFormatCombo, constr);
+    
 		constr.gridx = 0;
 		constr.gridy++;
 		constr.weightx = 0;
@@ -300,6 +335,11 @@ public class PrologOptionPage extends JPanel {
 		if (optionsStorage != null) {
 			// Save the author name.
 			optionsStorage.setOption(OptionKeys.AUTHOR_NAME, authorTextField.getText());
+			// Save the creator value.
+      optionsStorage.setOption(OptionKeys.CREATOR_TYPE_VALUE, creatorTextField.getText());
+      // Save the contributor value.
+      optionsStorage.setOption(OptionKeys.CONTRIBUTOR_TYPE_VALUE, contributorTextField.getText());
+			
 			// Save the date format.
 			optionsStorage.setOption(OptionKeys.DATE_FORMAT, (String)dateFormatCombo.getSelectedItem());
 			
@@ -333,7 +373,15 @@ public class PrologOptionPage extends JPanel {
 			// Load the author name.
 			value = optionsStorage.getOption(OptionKeys.AUTHOR_NAME, AUTHOR_DEFAULT);
 			authorTextField.setText(value);
-		
+			
+			// Load the creator author type name.
+			value = optionsStorage.getOption(OptionKeys.CREATOR_TYPE_VALUE,  XmlElementsConstants.CREATOR_TYPE);
+			creatorTextField.setText(value);
+
+			// Load the contributor author type name
+			value = optionsStorage.getOption(OptionKeys.CONTRIBUTOR_TYPE_VALUE,  XmlElementsConstants.CONTRIBUTOR_TYPE);
+			contributorTextField.setText(value);
+
 			// Load the date format name.
 			value = optionsStorage.getOption(OptionKeys.DATE_FORMAT, DateFormats.DEFAULT_DATE_PATTERN);
 			dateFormatCombo.getModel().setSelectedItem(value);
@@ -388,6 +436,10 @@ public class PrologOptionPage extends JPanel {
 	public void restoreDefault() {
 		// Restore the textField with the author name.
 		authorTextField.setText(AUTHOR_DEFAULT);
+		
+		// Restore the values of type attribute of author element
+		creatorTextField.setText(XmlElementsConstants.CREATOR_TYPE);
+		contributorTextField.setText(XmlElementsConstants.CONTRIBUTOR_TYPE);
 	  
 		// Restore the date format.
     dateFormatCombo.getModel().setSelectedItem(DateFormats.DEFAULT_DATE_PATTERN);

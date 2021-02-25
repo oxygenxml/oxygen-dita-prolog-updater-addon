@@ -95,51 +95,61 @@ public class AuthorPageDocumentUtil {
 		return toReturn;
 	}
 
+	 /**
+   * Search for creator author with the given name
+   * 
+   * @param authors              The list with authors.
+   * @param contributorTypeValue The value of type attribute for a creator.
+   * 
+   * @return <code>true</code> if was found an author with given type.
+   */
+	public static boolean hasCreator(List<AuthorElement> authors, String creatorTypeValue) {
+    boolean foundCreator = false;
+    // Iterate over authors.
+    for (AuthorElement el : authors) {
+      // Get the type's value,
+      AttrValue typeAttr = el.getAttribute("type");
+      if (typeAttr != null && creatorTypeValue.equals(typeAttr.getValue())) {
+        foundCreator= true;
+        break;
+      }
+    }
+    return foundCreator;
+  
+	}
+	
+	
 	/**
-	 * Search for author according to given type.
+	 * Search for contributor author with the given name
 	 * 
-	 * @param authors
-	 *          The list with authors.
-	 * @param type
-	 *          The searched author type (
-	 *          {@link XmlElementsConstants#CREATOR_TYPE} or
-	 *          {@link XmlElementsConstants#CONTRIBUTOR_TYPE})
-	 * @param authorName
-	 *          The name of the author.
+	 * @param authors              The list with authors.
+	 * @param contributorTypeValue The value of type attribute for a contributor.
+	 * @param authorName           The name of the author.
 	 * 
 	 * @return <code>true</code> if was found an author with given type.
 	 */
-	public static boolean hasAuthor(List<AuthorElement> authors, String type, String authorName) {
-		boolean foundAuthor = false;
+	public static boolean hasContributor(List<AuthorElement> authors, String contributorTypeValue, String authorName) {
+		boolean foundContributor = false;
 
 		// Iterate over authors.
 		for (AuthorElement el : authors) {
 			// Get the type's value,
 			AttrValue typeAttr = el.getAttribute("type");
-			if (typeAttr != null) {
-				String typeAttrValue = typeAttr.getValue();
-
-				if (type.equals(typeAttrValue)) {
-					// Was found a creator.
-					foundAuthor = typeAttrValue.equals(XmlElementsConstants.CREATOR_TYPE);
-					if (typeAttrValue.equals(XmlElementsConstants.CONTRIBUTOR_TYPE)) {
-						try {
-							// Check the content of contributor element.
-							String textContent = el.getTextContent();
-							// Was found a valid contributor.
-							foundAuthor = authorName.equals(textContent);
-						} catch (BadLocationException e) {
-							logger.debug(e.getMessage(), e);
-						}
-					}
-
-					if (foundAuthor) {
-						break;
-					}
-				}
+			if (typeAttr != null && contributorTypeValue.equals(typeAttr.getValue())) {
+			  try {
+			    // Check the content of contributor element.
+			    String textContent = el.getTextContent();
+			    // Was found a valid contributor.
+			    if (authorName.equals(textContent)) {
+			      foundContributor = true;
+			      break;
+			    }
+			  } catch (BadLocationException e) {
+			    logger.debug(e.getMessage(), e);
+			  }
 			}
 		}
-		return foundAuthor;
+		return foundContributor;
 	}
 
 	/**

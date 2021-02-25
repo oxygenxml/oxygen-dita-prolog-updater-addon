@@ -109,7 +109,7 @@ public class DitaSubjectSchemaUpdateTextModeTest extends TestCase {
 		Mockito.when(wsTextEditorPage.findElementsByXPath(ElementXPathConstants.TOPICMETA_AUTHORS))
 				.thenReturn(new WSXMLTextNodeRange[1]);
 
-		Mockito.when(wsTextEditorPage.evaluateXPath(ElementXPathConstants.TOPICMETA_AUTHORS_CREATOR))
+		Mockito.when(wsTextEditorPage.evaluateXPath(ElementXPathUtils.getAuthorCreatorXpath(DocumentType.SUBJECT_SCHEME)))
 				.thenReturn(new WSXMLTextNodeRange[1]);
 
 		Mockito.when(wsTextEditorPage.findElementsByXPath(ElementXPathConstants.TOPICMETA_CRITDATES))
@@ -139,7 +139,7 @@ public class DitaSubjectSchemaUpdateTextModeTest extends TestCase {
 		Mockito.when(wsTextEditorPage.findElementsByXPath(ElementXPathConstants.TOPICMETA_AUTHORS))
 				.thenReturn(new WSXMLTextNodeRange[0]);
 
-		Mockito.when(wsTextEditorPage.evaluateXPath(ElementXPathConstants.TOPICMETA_AUTHORS_CREATOR))
+		Mockito.when(wsTextEditorPage.evaluateXPath(ElementXPathUtils.getAuthorCreatorXpath(DocumentType.SUBJECT_SCHEME)))
 				.thenReturn(new WSXMLTextNodeRange[0]);
 
 		Mockito.when(wsTextEditorPage.findElementsByXPath(ElementXPathConstants.TOPICMETA_CRITDATES))
@@ -175,7 +175,7 @@ public class DitaSubjectSchemaUpdateTextModeTest extends TestCase {
 		Mockito.when(wsTextEditorPage.findElementsByXPath(ElementXPathConstants.TOPICMETA_AUTHORS))
 				.thenReturn(new WSXMLTextNodeRange[1]);
 
-		Mockito.when(wsTextEditorPage.evaluateXPath(ElementXPathConstants.TOPICMETA_AUTHORS_CREATOR))
+		Mockito.when(wsTextEditorPage.evaluateXPath(ElementXPathUtils.getAuthorCreatorXpath(DocumentType.SUBJECT_SCHEME)))
 				.thenReturn(new WSXMLTextNodeRange[1]);
 
 		Mockito.when(wsTextEditorPage.findElementsByXPath(ElementXPathConstants.TOPICMETA_CRITDATES))

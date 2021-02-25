@@ -369,36 +369,25 @@ public class DitaTopicTextEditor implements DitaEditor {
 	 *           If the element could not be edited.
 	 */
 	private void editAuthor(boolean isNewDocument) throws XPathException, TextOperationException {
-		// prolog contains author elements
-		if (isNewDocument) {
-			// the document is new
-			// search for a author with value of attribute type equal with creator
-			Object[] creatorAuthorElements = wsTextEditorPage
-					.evaluateXPath(ElementXPathUtils.getAuthorCreatorXpath(documentType));
-			int creatorElementSize = creatorAuthorElements.length;
+	  // prolog contains author elements
+	  String xpath;
+	  String fragment;
+	  if (isNewDocument) {
+	    // The document isn't new. We should work with creators
+	    xpath = ElementXPathUtils.getAuthorCreatorXpath(documentType);
+	    fragment = prologCreator.getCreatorFragment(documentType);
+	  } else {
+	    // The document isn't new. We should work with contributors
+	    xpath = ElementXPathUtils.getAuthorContributorXpath(documentType, prologCreator.getAuthor());
+	    fragment = prologCreator.getContributorFragment(documentType);
+	  }
 
-			// check if creator author was found
-			if (creatorElementSize == 0) {
-				// there aren't creator author elements in prolog
-				// add the creator author xml fragment
-				TextPageDocumentUtil.insertXmlFragment(wsTextEditorPage, prologCreator.getCreatorFragment(documentType),
-						ElementXPathUtils.getLastAuthorXpath(documentType), RelativeInsertPosition.INSERT_LOCATION_AFTER);
-			}
-
-		} else {
-			// the document isn't new
-			// search for a contributor author that has local author name as text
-			Object[] contributorAuthorElements = wsTextEditorPage.evaluateXPath(ElementXPathUtils.getPrologXpath(documentType)
-					+ "/author[@type='contributor' and text()= '" + prologCreator.getAuthor() + "']");
-			int contributorElementSize = contributorAuthorElements.length;
-
-			if (contributorElementSize == 0) {
-				// there aren't contributor author elements in prolog
-				// add the contributor author xml content
-				TextPageDocumentUtil.insertXmlFragment(wsTextEditorPage, prologCreator.getContributorFragment(documentType),
-						ElementXPathUtils.getLastAuthorXpath(documentType), RelativeInsertPosition.INSERT_LOCATION_AFTER);
-			}
-		}
+	  Object[] authorElements = wsTextEditorPage.evaluateXPath(xpath);
+	  if (authorElements.length == 0) {
+	    // there aren't creator/contributor author elements in prolog
+	    TextPageDocumentUtil.insertXmlFragment(wsTextEditorPage, fragment,
+	        ElementXPathUtils.getLastAuthorXpath(documentType), RelativeInsertPosition.INSERT_LOCATION_AFTER);
+	  }
 	}
 
 	/**
