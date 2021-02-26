@@ -170,31 +170,7 @@ public class PrologOptionPage extends JPanel {
 		constr.gridx = 0;
 		constr.gridy = 0;
 		constr.anchor = GridBagConstraints.WEST;
-		add(new JLabel(messages.getMessage(Tags.VALUE_OF_TYPE_FOR_CREATOR) + ":"), constr);
-
-		constr.gridx++;
-		constr.weightx = 1;
 		constr.fill = GridBagConstraints.HORIZONTAL;
-		constr.insets.left = leftIndent;
-		add(creatorTextField, constr);
-
-		constr.gridx = 0;
-		constr.gridy++;
-		constr.weightx = 0;
-		constr.insets.left = 0;
-		constr.insets.top = 5;
-		add(new JLabel(messages.getMessage(Tags.VALUE_OF_TYPE_FOR_CONTRIBUTOR) + ":"), constr);
-		
-		constr.gridx++;
-		constr.weightx = 1;
-		constr.insets.left = leftIndent;
-		add(contributorTextField, constr);
-
-    constr.gridx = 0;
-    constr.gridy++;
-    constr.weightx = 0;
-    constr.insets.left = 0;
-    constr.insets.top = INDENT_BETWEEN_SECTIONS;
     // Author label
     add(new JLabel(messages.getMessage(Tags.AUTHOR) + ":"), constr);
 
@@ -232,6 +208,30 @@ public class PrologOptionPage extends JPanel {
     constr.insets.left = leftIndent;
     // Max number of revised element combo.
     add(maxRevisedElements, constr);
+
+    constr.gridx = 0;
+    constr.gridy++;
+    constr.weightx = 0;
+    constr.insets.left = 0;
+    constr.insets.top = INDENT_BETWEEN_SECTIONS;
+    add(new JLabel(messages.getMessage(Tags.VALUE_OF_TYPE_FOR_CREATOR) + ":"), constr);
+
+    constr.gridx++;
+    constr.weightx = 1;
+    constr.insets.left = leftIndent;
+    add(creatorTextField, constr);
+
+    constr.gridx = 0;
+    constr.gridy++;
+    constr.weightx = 0;
+    constr.insets.left = 0;
+    constr.insets.top = 5;
+    add(new JLabel(messages.getMessage(Tags.VALUE_OF_TYPE_FOR_CONTRIBUTOR) + ":"), constr);
+    
+    constr.gridx++;
+    constr.weightx = 1;
+    constr.insets.left = leftIndent;
+    add(contributorTextField, constr);
 
 		//
 		// DITA topic
