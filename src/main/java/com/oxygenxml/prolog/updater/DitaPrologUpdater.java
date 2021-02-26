@@ -51,7 +51,7 @@ public class DitaPrologUpdater {
 		WSEditorPage currentPage = wsEditor.getCurrentPage();
 
 		// create a PrologContentCreator
-		PrologContentCreator prologContentCreater = new PrologContentCreator(getAuthorName(), getDateFormat(), getMaxNoOfRevisedElements());
+		final PrologContentCreator prologContentCreater = new PrologContentCreator(getAuthorName(), getDateFormat(), getMaxNoOfRevisedElements());
 
 		final DitaEditor[] ditaEditor = new DitaEditor[1];
 		if (currentPage instanceof WSAuthorEditorPage) {
@@ -73,14 +73,12 @@ public class DitaPrologUpdater {
 		// Update prolog.
 		AWTUtil.invokeSynchronously(new Runnable() {
 			public void run() {
-				if (ditaEditor[0] != null) {
-				  if(prologContentCreater.isAllowedUpdate(ditaEditor[0].getDocumentType())) {
-				    boolean wasUpdated = ditaEditor[0].updateProlog(isNewDocument);
-				    if (!wasUpdated) {
-				      showWarnMessage(wsEditor);
-				    }
-				  }
-				}
+			  if(ditaEditor[0] != null && prologContentCreater.isAllowedUpdate(ditaEditor[0].getDocumentType())) {
+			    boolean wasUpdated = ditaEditor[0].updateProlog(isNewDocument);
+			    if (!wasUpdated) {
+			      showWarnMessage(wsEditor);
+			    }
+			  }
 			}
 		});
 	}
