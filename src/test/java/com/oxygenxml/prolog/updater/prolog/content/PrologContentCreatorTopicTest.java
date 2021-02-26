@@ -125,7 +125,7 @@ public class PrologContentCreatorTopicTest extends TestCase {
 				.thenReturn(Boolean.FALSE.toString());
 		Mockito.when(wsOptionsStorage.getOption(OptionKeys.TOPIC_UPDATE_REVISED_DATES, Boolean.TRUE.toString()))
 				.thenReturn(Boolean.FALSE.toString());
-		Mockito.when(wsOptionsStorage.getOption(OptionKeys.CREATOR_TYPE_VALUE, XmlElementsConstants.CREATOR_TYPE))
+		Mockito.when(wsOptionsStorage.getOption(OptionKeys.CUSTOM_CREATOR_TYPE_VALUE, ""))
         .thenReturn(XmlElementsConstants.CREATOR_TYPE);
 
 		// When TOPIC_SET_CREATOR is false
@@ -207,7 +207,7 @@ public class PrologContentCreatorTopicTest extends TestCase {
 				.thenReturn(Boolean.TRUE.toString());
 		Mockito.when(wsOptionsStorage.getOption(OptionKeys.TOPIC_UPDATE_REVISED_DATES, Boolean.TRUE.toString()))
 				.thenReturn(Boolean.FALSE.toString());
-		Mockito.when(wsOptionsStorage.getOption(OptionKeys.CONTRIBUTOR_TYPE_VALUE, XmlElementsConstants.CONTRIBUTOR_TYPE))
+		Mockito.when(wsOptionsStorage.getOption(OptionKeys.CUSTOM_CONTRIBUTOR_TYPE_VALUE, ""))
         .thenReturn(XmlElementsConstants.CONTRIBUTOR_TYPE);
 
 		// When TOPIC_SET_CREATOR is false

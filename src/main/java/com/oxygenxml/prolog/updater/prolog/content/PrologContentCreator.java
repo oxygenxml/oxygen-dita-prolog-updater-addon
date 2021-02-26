@@ -369,8 +369,14 @@ public class PrologContentCreator {
 			value = optionsStorage.getOption(OptionKeys.MAP_UPDATE_REVISED_DATES, String.valueOf(true));
 			updateMapRevisedDate = Boolean.parseBoolean(value) && isAllowedMapUpdate;
 			
-			creatorTypeValue = optionsStorage.getOption(OptionKeys.CREATOR_TYPE_VALUE, XmlElementsConstants.CREATOR_TYPE);
-			contributorTypeValue = optionsStorage.getOption(OptionKeys.CONTRIBUTOR_TYPE_VALUE, XmlElementsConstants.CONTRIBUTOR_TYPE);
+			value = optionsStorage.getOption(OptionKeys.CUSTOM_CREATOR_TYPE_VALUE, "");
+			if (value != null && !value.isEmpty()) {
+			  creatorTypeValue = value;
+			}
+			value = optionsStorage.getOption(OptionKeys.CUSTOM_CONTRIBUTOR_TYPE_VALUE, "");
+			if (value != null && !value.isEmpty()) {
+			  contributorTypeValue = value;
+      }
 		}
 	}
 	

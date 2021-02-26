@@ -121,7 +121,10 @@ public class ElementXPathUtils {
     PluginWorkspace pluginWorkspace = PluginWorkspaceProvider.getPluginWorkspace();
     if (pluginWorkspace != null) {
       WSOptionsStorage optionsStorage = pluginWorkspace.getOptionsStorage();
-      creatorTypeValue = optionsStorage.getOption(OptionKeys.CREATOR_TYPE_VALUE, XmlElementsConstants.CREATOR_TYPE);
+      String valueFromOptions = optionsStorage.getOption(OptionKeys.CUSTOM_CREATOR_TYPE_VALUE, "");
+      if (!valueFromOptions.isEmpty()) {
+        creatorTypeValue = valueFromOptions;
+      }
     }
     xpath.append(creatorTypeValue).append("']");
 
@@ -162,7 +165,10 @@ public class ElementXPathUtils {
     PluginWorkspace pluginWorkspace = PluginWorkspaceProvider.getPluginWorkspace();
     if (pluginWorkspace != null) {
       WSOptionsStorage optionsStorage = pluginWorkspace.getOptionsStorage();
-      creatorTypeValue = optionsStorage.getOption(OptionKeys.CONTRIBUTOR_TYPE_VALUE, XmlElementsConstants.CONTRIBUTOR_TYPE);
+      String valueFromOptions = optionsStorage.getOption(OptionKeys.CUSTOM_CONTRIBUTOR_TYPE_VALUE, "");
+      if (!valueFromOptions.isEmpty()) {
+        creatorTypeValue = valueFromOptions;
+      }
     }
     xpath.append(creatorTypeValue);
     xpath.append("' and text()= '").append(authorName).append("']");

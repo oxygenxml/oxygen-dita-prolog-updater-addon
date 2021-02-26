@@ -21,12 +21,12 @@ public class OptionKeys {
 	/**
    * Option for the value of the creator author type
    */
-	public static final String CREATOR_TYPE_VALUE = "creator.type.value";
+	public static final String CUSTOM_CREATOR_TYPE_VALUE = "custom.creator.type.value";
 	
 	/**
    * Option for the value of the contributor author type
    */
-  public static final String CONTRIBUTOR_TYPE_VALUE = "contributor.type.value";
+  public static final String CUSTOM_CONTRIBUTOR_TYPE_VALUE = "custom.contributor.type.value";
 	
 	/**
 	 * Option for the date format in prolog updater.
@@ -92,4 +92,9 @@ public class OptionKeys {
 	 * Option to set the revised dates in prolog for maps.
 	 */
 	public static final String MAP_UPDATE_REVISED_DATES = "prolog.updater.update.revised.dates.map";
+	
+	 /**
+   * Option to allow adding of original author as additional one.
+   */
+  public static final String ALLOW_ADDING_ORIGINAL_AUTHOR_AS_ADDITIONAL = "allow.adding.original.author.as.additional";
 }

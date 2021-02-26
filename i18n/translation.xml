@@ -59,11 +59,11 @@
 	</key>
 	<key value="prolog.updater.set.creator">
 		<comment>The text from the check box which set the creator</comment>
-		<val lang="en_US">Set creator name</val>
-		<val lang="de_DE">Set creator name</val>
-		<val lang="fr_FR">Set creator name</val>
-		<val lang="ja_JP">Set creator name</val>
-		<val lang="nl_NL">Set creator name</val>
+		<val lang="en_US">Set original author</val>
+		<val lang="de_DE">Set original author</val>
+		<val lang="fr_FR">Set original author</val>
+		<val lang="ja_JP">Set original author</val>
+		<val lang="nl_NL">Set original author</val>
 	</key>
 	<key value="prolog.updater.set.created.date">
 		<comment>The text from the check box which set the created date</comment>
@@ -75,11 +75,11 @@
 	</key>
 	<key value="prolog.updater.update.contributor">
 		<comment>The text from the check box which set the contributor</comment>
-		<val lang="en_US">Update contributor names</val>
-		<val lang="de_DE">Update contributor names</val>
-		<val lang="fr_FR">Update contributor names</val>
-		<val lang="ja_JP">Update contributor names</val>
-		<val lang="nl_NL">Update contributor names</val>
+		<val lang="en_US">Update additional authors</val>
+		<val lang="de_DE">Update additional authors</val>
+		<val lang="fr_FR">Update additional authors</val>
+		<val lang="ja_JP">Update additional authors</val>
+		<val lang="nl_NL">Update additional authors</val>
 	</key>
 	<key value="prolog.updater.update.revised.dates">
 		<comment>The text from the check box which set the revised date</comment>
@@ -101,18 +101,18 @@
 	
 	<key value="value.of.type.attribute.for.creator">
 		<comment>Label for the value of the type attribute used for original author of the content.</comment>
-		<val lang="en_US">"type" attribute value for the original author</val>
-		<val lang="de_DE">"type" attribute value for the original author</val>
-		<val lang="fr_FR">"type" attribute value for the original author</val>
-		<val lang="ja_JP">"type" attribute value for the original author</val>
-		<val lang="nl_NL">"type" attribute value for the original author</val>
+		<val lang="en_US">Custom "type" attribute value for the original author</val>
+		<val lang="de_DE">Custom "type" attribute value for the original author</val>
+		<val lang="fr_FR">Custom "type" attribute value for the original author</val>
+		<val lang="ja_JP">Custom "type" attribute value for the original author</val>
+		<val lang="nl_NL">Custom "type" attribute value for the original author</val>
 	</key>
 	<key value="value.of.type.attribute.for.contributor">
 		<comment>Label for the value of the type attribute used for additional author.</comment>
-		<val lang="en_US">"type" attribute value for an additional author</val>
-		<val lang="de_DE">"type" attribute value for an additional author</val>
-		<val lang="fr_FR">"type" attribute value for an additional author</val>
-		<val lang="ja_JP">"type" attribute value for an additional author</val>
-		<val lang="nl_NL">"type" attribute value for an additional author</val>
+		<val lang="en_US">Custom "type" attribute value for an additional author</val>
+		<val lang="de_DE">Custom "type" attribute value for an additional author</val>
+		<val lang="fr_FR">Custom "type" attribute value for an additional author</val>
+		<val lang="ja_JP">Custom "type" attribute value for an additional author</val>
+		<val lang="nl_NL">Custom "type" attribute value for an additional author</val>
 	</key>
 </translation>

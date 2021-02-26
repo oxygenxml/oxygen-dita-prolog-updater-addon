@@ -342,9 +342,9 @@ public class PrologOptionPage extends JPanel {
 			// Save the author name.
 			optionsStorage.setOption(OptionKeys.AUTHOR_NAME, authorTextField.getText());
 			// Save the creator value.
-      optionsStorage.setOption(OptionKeys.CREATOR_TYPE_VALUE, creatorTextField.getText());
+      optionsStorage.setOption(OptionKeys.CUSTOM_CREATOR_TYPE_VALUE, creatorTextField.getText());
       // Save the contributor value.
-      optionsStorage.setOption(OptionKeys.CONTRIBUTOR_TYPE_VALUE, contributorTextField.getText());
+      optionsStorage.setOption(OptionKeys.CUSTOM_CONTRIBUTOR_TYPE_VALUE, contributorTextField.getText());
 			
 			// Save the date format.
 			optionsStorage.setOption(OptionKeys.DATE_FORMAT, (String)dateFormatCombo.getSelectedItem());
@@ -381,11 +381,11 @@ public class PrologOptionPage extends JPanel {
 			authorTextField.setText(value);
 			
 			// Load the creator author type name.
-			value = optionsStorage.getOption(OptionKeys.CREATOR_TYPE_VALUE,  XmlElementsConstants.CREATOR_TYPE);
+			value = optionsStorage.getOption(OptionKeys.CUSTOM_CREATOR_TYPE_VALUE,  "");
 			creatorTextField.setText(value);
 
 			// Load the contributor author type name
-			value = optionsStorage.getOption(OptionKeys.CONTRIBUTOR_TYPE_VALUE,  XmlElementsConstants.CONTRIBUTOR_TYPE);
+			value = optionsStorage.getOption(OptionKeys.CUSTOM_CONTRIBUTOR_TYPE_VALUE,  "");
 			contributorTextField.setText(value);
 
 			// Load the date format name.
@@ -444,8 +444,8 @@ public class PrologOptionPage extends JPanel {
 		authorTextField.setText(AUTHOR_DEFAULT);
 		
 		// Restore the values of type attribute of author element
-		creatorTextField.setText(XmlElementsConstants.CREATOR_TYPE);
-		contributorTextField.setText(XmlElementsConstants.CONTRIBUTOR_TYPE);
+		creatorTextField.setText("");
+		contributorTextField.setText("");
 	  
 		// Restore the date format.
     dateFormatCombo.getModel().setSelectedItem(DateFormats.DEFAULT_DATE_PATTERN);
