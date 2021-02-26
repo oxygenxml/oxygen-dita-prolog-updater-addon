@@ -66,7 +66,6 @@ public class DitaTopicUpdaterAuthorTest extends AuthorTestCase{
 				"    <title > </title>" + 
 				"    <prolog >" + 
 				"        <author type=\"creator\" >"+AuthorTestCase.AUTHOR_NAME+"</author>" + 
-				"        <author type=\"contributor\" >"+AuthorTestCase.AUTHOR_NAME+"</author>" + 
 				"        <critdates>" + 
 				"           <!--"+AuthorTestCase.AUTHOR_NAME+"-->" + 
 				"            <revised modified=\""+localDate+"\" />" + 

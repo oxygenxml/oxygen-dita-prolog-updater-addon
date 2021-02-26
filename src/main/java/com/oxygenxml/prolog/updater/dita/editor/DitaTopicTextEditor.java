@@ -370,20 +370,26 @@ public class DitaTopicTextEditor implements DitaEditor {
 	 */
 	private void editAuthor(boolean isNewDocument) throws XPathException, TextOperationException {
 	  // prolog contains author elements
-	  String xpath;
-	  String fragment;
+	  String fragment = null;
+	  Object[] creatorElement = wsTextEditorPage.evaluateXPath(
+	      ElementXPathUtils.getAuthorCreatorXpath(documentType));
 	  if (isNewDocument) {
 	    // The document isn't new. We should work with creators
-	    xpath = ElementXPathUtils.getAuthorCreatorXpath(documentType);
-	    fragment = prologCreator.getCreatorFragment(documentType);
+	    if (creatorElement.length == 0) {
+	      fragment = prologCreator.getCreatorFragment(documentType);
+	    }
 	  } else {
 	    // The document isn't new. We should work with contributors
-	    xpath = ElementXPathUtils.getAuthorContributorXpath(documentType, prologCreator.getAuthor());
-	    fragment = prologCreator.getContributorFragment(documentType);
+	    if (creatorElement.length == 0) {
+	      Object[] contributorElement = wsTextEditorPage.evaluateXPath(
+	          ElementXPathUtils.getAuthorContributorXpath(documentType, prologCreator.getAuthor()));
+	      if(contributorElement.length == 0) {
+	        fragment = prologCreator.getContributorFragment(documentType);
+	      }
+	    } 
 	  }
 
-	  Object[] authorElements = wsTextEditorPage.evaluateXPath(xpath);
-	  if (authorElements.length == 0) {
+	  if (fragment != null) {
 	    // there aren't creator/contributor author elements in prolog
 	    TextPageDocumentUtil.insertXmlFragment(wsTextEditorPage, fragment,
 	        ElementXPathUtils.getLastAuthorXpath(documentType), RelativeInsertPosition.INSERT_LOCATION_AFTER);

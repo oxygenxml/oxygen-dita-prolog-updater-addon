@@ -8,6 +8,7 @@ import javax.swing.text.Position;
 import org.apache.log4j.Logger;
 
 import com.oxygenxml.prolog.updater.prolog.content.PrologContentCreator;
+import com.oxygenxml.prolog.updater.tags.OptionKeys;
 import com.oxygenxml.prolog.updater.utils.AuthorPageDocumentUtil;
 import com.oxygenxml.prolog.updater.utils.ElementXPathUtils;
 import com.oxygenxml.prolog.updater.utils.XMLFragmentUtils;
@@ -20,9 +21,12 @@ import ro.sync.ecss.extensions.api.AuthorOperationException;
 import ro.sync.ecss.extensions.api.node.AttrValue;
 import ro.sync.ecss.extensions.api.node.AuthorElement;
 import ro.sync.ecss.extensions.api.node.AuthorNode;
+import ro.sync.exml.workspace.api.PluginWorkspace;
+import ro.sync.exml.workspace.api.PluginWorkspaceProvider;
 import ro.sync.exml.workspace.api.editor.page.WSEditorPage;
 import ro.sync.exml.workspace.api.editor.page.author.WSAuthorEditorPage;
 import ro.sync.exml.workspace.api.editor.page.ditamap.WSDITAMapEditorPage;
+import ro.sync.exml.workspace.api.options.WSOptionsStorage;
 
 /**
  * Edit DITA topic in author mode.
@@ -415,10 +419,11 @@ public class DitaTopicAuthorEditor implements DitaEditor {
 		    fragment = prologCreator.getCreatorFragment(documentType);
 		  }
 		} else {
-		  if (!AuthorPageDocumentUtil.hasContributor(
-		      existentAuthorsElements,
-		      prologCreator.getContributorTypeValue(),
-		      prologCreator.getAuthor())) {
+		  if ( ! AuthorPageDocumentUtil.hasCreator(
+		      existentAuthorsElements, prologCreator.getCreatorTypeValue())
+		      &&
+		      ! AuthorPageDocumentUtil.hasContributor(
+		      existentAuthorsElements, prologCreator.getContributorTypeValue(), prologCreator.getAuthor())) {
 		    // if wasn't found this contributor
 		    fragment = prologCreator.getContributorFragment(documentType);
 		    int nuOfAuthors = existentAuthorsElements.size();

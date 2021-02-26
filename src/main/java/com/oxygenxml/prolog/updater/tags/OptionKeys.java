@@ -92,9 +92,4 @@ public class OptionKeys {
 	 * Option to set the revised dates in prolog for maps.
 	 */
 	public static final String MAP_UPDATE_REVISED_DATES = "prolog.updater.update.revised.dates.map";
-	
-	 /**
-   * Option to allow adding of original author as additional one.
-   */
-  public static final String ALLOW_ADDING_ORIGINAL_AUTHOR_AS_ADDITIONAL = "allow.adding.original.author.as.additional";
 }

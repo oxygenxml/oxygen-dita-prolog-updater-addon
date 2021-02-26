@@ -60,7 +60,6 @@ public class DitaMapUpdaterAuthorTest extends AuthorTestCase{
 		String expectedOldXmlWithCreator = "<?xml version=\"1.0\" encoding=\"utf-8\"?><map>" + 
 				"    <topicmeta >" + 
 				"        <author type=\"creator\" >"+AuthorTestCase.AUTHOR_NAME+"</author>" + 
-				"        <author type=\"contributor\" >"+AuthorTestCase.AUTHOR_NAME+"</author>" + 
 				"        <critdates>" + 
 				"           <!--"+AuthorTestCase.AUTHOR_NAME+"-->" + 
 				"            <revised modified=\""+localDate+"\" />" + 
