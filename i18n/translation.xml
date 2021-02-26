@@ -101,18 +101,18 @@
 	
 	<key value="value.of.type.attribute.for.creator">
 		<comment>Label for the value of the type attribute used for original author of the content.</comment>
-		<val lang="en_US">The value of the 'type' attribute for the original author</val>
-		<val lang="de_DE">The value of the 'type' attribute for the original author</val>
-		<val lang="fr_FR">The value of the 'type' attribute for the original author</val>
-		<val lang="ja_JP">The value of the 'type' attribute for the original author</val>
-		<val lang="nl_NL">The value of the 'type' attribute for the original author</val>
+		<val lang="en_US">"type" attribute value for the original author</val>
+		<val lang="de_DE">"type" attribute value for the original author</val>
+		<val lang="fr_FR">"type" attribute value for the original author</val>
+		<val lang="ja_JP">"type" attribute value for the original author</val>
+		<val lang="nl_NL">"type" attribute value for the original author</val>
 	</key>
 	<key value="value.of.type.attribute.for.contributor">
 		<comment>Label for the value of the type attribute used for additional author.</comment>
-		<val lang="en_US">The value of the 'type' attribute for the additional author</val>
-		<val lang="de_DE">The value of the 'type' attribute for the additional author</val>
-		<val lang="fr_FR">The value of the 'type' attribute for the additional author</val>
-		<val lang="ja_JP">The value of the 'type' attribute for the additional author</val>
-		<val lang="nl_NL">The value of the 'type' attribute for the additional author</val>
+		<val lang="en_US">"type" attribute value for an additional author</val>
+		<val lang="de_DE">"type" attribute value for an additional author</val>
+		<val lang="fr_FR">"type" attribute value for an additional author</val>
+		<val lang="ja_JP">"type" attribute value for an additional author</val>
+		<val lang="nl_NL">"type" attribute value for an additional author</val>
 	</key>
 </translation>

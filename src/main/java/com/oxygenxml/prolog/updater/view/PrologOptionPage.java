@@ -123,6 +123,11 @@ public class PrologOptionPage extends JPanel {
 	private int leftIndent = 0;
 
 	/**
+   * The top indent used between sections.
+   */
+  private static final int INDENT_BETWEEN_SECTIONS = 25;
+	
+	/**
 	 * Constructor.
 	 */
 	public PrologOptionPage() {
@@ -165,39 +170,40 @@ public class PrologOptionPage extends JPanel {
 		constr.gridx = 0;
 		constr.gridy = 0;
 		constr.anchor = GridBagConstraints.WEST;
-		// Author label
-		add(new JLabel(messages.getMessage(Tags.AUTHOR) + ":"), constr);
+		add(new JLabel(messages.getMessage(Tags.VALUE_OF_TYPE_FOR_CREATOR) + ":"), constr);
 
 		constr.gridx++;
 		constr.weightx = 1;
 		constr.fill = GridBagConstraints.HORIZONTAL;
 		constr.insets.left = leftIndent;
-		// Author field
-		add(authorTextField, constr);
+		add(creatorTextField, constr);
+
+		constr.gridx = 0;
+		constr.gridy++;
+		constr.weightx = 0;
+		constr.insets.left = 0;
+		constr.insets.top = 5;
+		add(new JLabel(messages.getMessage(Tags.VALUE_OF_TYPE_FOR_CONTRIBUTOR) + ":"), constr);
+		
+		constr.gridx++;
+		constr.weightx = 1;
+		constr.insets.left = leftIndent;
+		add(contributorTextField, constr);
 
     constr.gridx = 0;
     constr.gridy++;
     constr.weightx = 0;
     constr.insets.left = 0;
-    constr.insets.top = 5;
-    add(new JLabel(messages.getMessage(Tags.VALUE_OF_TYPE_FOR_CREATOR) + ":"), constr);
+    constr.insets.top = INDENT_BETWEEN_SECTIONS;
+    // Author label
+    add(new JLabel(messages.getMessage(Tags.AUTHOR) + ":"), constr);
 
     constr.gridx++;
     constr.weightx = 1;
     constr.insets.left = leftIndent;
-    add(creatorTextField, constr);
+    // Author field
+    add(authorTextField, constr);
     
-    constr.gridx = 0;
-    constr.gridy++;
-    constr.weightx = 0;
-    constr.insets.left = 0;
-    constr.insets.top = 5;
-    add(new JLabel(messages.getMessage(Tags.VALUE_OF_TYPE_FOR_CONTRIBUTOR) + ":"), constr);
-
-    constr.gridx++;
-    constr.weightx = 1;
-    constr.insets.left = leftIndent;
-    add(contributorTextField, constr);
 		
     constr.gridx = 0;
     constr.gridy++;
