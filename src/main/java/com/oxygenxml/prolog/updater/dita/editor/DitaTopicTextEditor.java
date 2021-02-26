@@ -402,7 +402,8 @@ public class DitaTopicTextEditor implements DitaEditor {
 	 * ( {@link DocumentType#TOPIC}, {@link DocumentType#MAP}, 
 	 * {@link DocumentType#BOOKMAP} or {@link DocumentType#SUBJECT_SCHEME} ).
 	 */
-	private DocumentType getDocumentType() {
+	@Override
+	public DocumentType getDocumentType() {
 		DocumentType docType = DocumentType.TOPIC;
 		
 		try {

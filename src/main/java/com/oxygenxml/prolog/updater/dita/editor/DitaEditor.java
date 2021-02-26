@@ -15,4 +15,11 @@ public interface DitaEditor {
 	 */
 	boolean updateProlog( boolean isNewDocument);
 	
+	/**
+   * Get the type of the current document.
+   * @return The type of the current document 
+   * ( {@link DocumentType#TOPIC}, {@link DocumentType#MAP}, 
+   * {@link DocumentType#BOOKMAP} or {@link DocumentType#SUBJECT_SCHEME} ).
+   */
+  public DocumentType getDocumentType(); 
 }

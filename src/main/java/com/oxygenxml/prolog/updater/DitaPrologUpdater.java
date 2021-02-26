@@ -74,10 +74,12 @@ public class DitaPrologUpdater {
 		AWTUtil.invokeSynchronously(new Runnable() {
 			public void run() {
 				if (ditaEditor[0] != null) {
-					boolean wasUpdated = ditaEditor[0].updateProlog(isNewDocument);
-					if (!wasUpdated) {
-						showWarnMessage(wsEditor);
-					}
+				  if(prologContentCreater.isAllowedUpdate(ditaEditor[0].getDocumentType())) {
+				    boolean wasUpdated = ditaEditor[0].updateProlog(isNewDocument);
+				    if (!wasUpdated) {
+				      showWarnMessage(wsEditor);
+				    }
+				  }
 				}
 			}
 		});

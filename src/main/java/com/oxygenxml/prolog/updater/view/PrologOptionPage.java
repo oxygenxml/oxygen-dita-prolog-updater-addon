@@ -14,7 +14,6 @@ import javax.swing.JTextField;
 import com.oxygenxml.prolog.updater.prolog.content.DateFormats;
 import com.oxygenxml.prolog.updater.tags.OptionKeys;
 import com.oxygenxml.prolog.updater.tags.Tags;
-import com.oxygenxml.prolog.updater.utils.XmlElementsConstants;
 
 import ro.sync.exml.workspace.api.PluginResourceBundle;
 import ro.sync.exml.workspace.api.PluginWorkspaceProvider;

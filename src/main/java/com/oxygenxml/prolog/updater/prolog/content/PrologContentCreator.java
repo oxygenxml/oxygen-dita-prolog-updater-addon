@@ -53,22 +53,22 @@ public class PrologContentCreator {
 	/**
 	 * <code>true</code> if the creator must be set in DITA Topic.
 	 */
-	private boolean setTopicCreator = true;
+	private boolean isAllowedTopicCreatorUpdate = true;
 
 	/**
 	 * <code>true</code> if the creator must be set in DITA Map.
 	 */
-	private boolean setMapCreator = true;
+	private boolean isAllowedMapCreatorUpdate = true;
 
 	/**
 	 * <code>true</code> if the contributor must be update in DITA Topic.
 	 */
-	private boolean updateTopicContributor = true;
+	private boolean isAllowedTopicContributorUpdate = true;
 
 	/**
 	 * <code>true</code> if the contributor must be update in DITA Map.
 	 */
-	private boolean updateMapContributor = true;
+	private boolean isAllowedMapContributorUpdate = true;
 
 	/**
 	 * <code>true</code> if the prolog update is allowed in DITA Topic.
@@ -83,22 +83,22 @@ public class PrologContentCreator {
 	/**
 	 * <code>true</code> if the created date must be set in DITA Topic.
 	 */
-	private boolean setTopicCreatedDate = true;
+	private boolean isAllowedTopicCreatedDateUpdate = true;
 
 	/**
 	 * <code>true</code> if the created date must be set in DITA Map.
 	 */
-	private boolean setMapCreatedDate = true;
+	private boolean isAllowedMapCreatedDateUpdate = true;
 
 	/**
 	 * <code>true</code> if the revised date must be update in DITA Topic.
 	 */
-	private boolean updateTopicRevisedDate = true;
+	private boolean isAllowedTopicRevisedDateUpdate = true;
 
 	/**
 	 * <code>true</code> if the revised date must be update in DITA Map.
 	 */
-	private boolean updateMapRevisedDate = true;
+	private boolean isAllowedMapRevisedDateUpdate = true;
 
 	/**
 	 * The maximum number of revised elements
@@ -212,8 +212,8 @@ public class PrologContentCreator {
 	 */
 	public String getCreatorFragment(DocumentType documentType) {
 		String fragment = null;
-		if ((setTopicCreator && documentType.equals(DocumentType.TOPIC))
-				|| (setMapCreator && !documentType.equals(DocumentType.TOPIC))) {
+		if ((isAllowedTopicCreatorUpdate && documentType.equals(DocumentType.TOPIC))
+				|| (isAllowedMapCreatorUpdate && !documentType.equals(DocumentType.TOPIC))) {
 			fragment = creatorFragment.toString();
 		}
 		return fragment;
@@ -228,8 +228,8 @@ public class PrologContentCreator {
 	 */
 	public String getContributorFragment(DocumentType documentType) {
 		String fragment = null;
-		if ((updateTopicContributor && documentType.equals(DocumentType.TOPIC))
-				|| (updateMapContributor && !documentType.equals(DocumentType.TOPIC))) {
+		if ((isAllowedTopicContributorUpdate && documentType.equals(DocumentType.TOPIC))
+				|| (isAllowedMapContributorUpdate && !documentType.equals(DocumentType.TOPIC))) {
 			fragment = contributorXML.toString();
 		}
 		return fragment;
@@ -244,8 +244,8 @@ public class PrologContentCreator {
 	 */
 	public String getCreatedDateFragment(DocumentType documentType) {
 		String fragment = null;
-		if ((setTopicCreatedDate && documentType.equals(DocumentType.TOPIC))
-				|| (setMapCreatedDate && !documentType.equals(DocumentType.TOPIC))) {
+		if ((isAllowedTopicCreatedDateUpdate && documentType.equals(DocumentType.TOPIC))
+				|| (isAllowedMapCreatedDateUpdate && !documentType.equals(DocumentType.TOPIC))) {
 			fragment = createdDateXML.toString();
 		}
 		return fragment;
@@ -260,8 +260,8 @@ public class PrologContentCreator {
 	 */
 	public String getRevisedDateFragment(DocumentType documentType) {
 		String fragment = null;
-		if ((updateTopicRevisedDate && documentType.equals(DocumentType.TOPIC))
-				|| (updateMapRevisedDate && !documentType.equals(DocumentType.TOPIC))) {
+		if ((isAllowedTopicRevisedDateUpdate && documentType.equals(DocumentType.TOPIC))
+				|| (isAllowedMapRevisedDateUpdate && !documentType.equals(DocumentType.TOPIC))) {
 			fragment = revisedDateFragment.toString();
 		}
 		return fragment;
@@ -352,22 +352,22 @@ public class PrologContentCreator {
 			isAllowedMapUpdate = Boolean.parseBoolean(value);
 
 			value = optionsStorage.getOption(OptionKeys.TOPIC_SET_CREATOR, String.valueOf(true));
-			setTopicCreator = Boolean.parseBoolean(value) && isAllowedTopicUpdate;
+			isAllowedTopicCreatorUpdate = Boolean.parseBoolean(value) && isAllowedTopicUpdate;
 			value = optionsStorage.getOption(OptionKeys.MAP_SET_CREATOR, String.valueOf(true));
-			setMapCreator = Boolean.parseBoolean(value) && isAllowedMapUpdate;
+			isAllowedMapCreatorUpdate = Boolean.parseBoolean(value) && isAllowedMapUpdate;
 			value = optionsStorage.getOption(OptionKeys.TOPIC_UPDATE_CONTRIBUTOR, String.valueOf(true));
-			updateTopicContributor = Boolean.parseBoolean(value) && isAllowedTopicUpdate;
+			isAllowedTopicContributorUpdate = Boolean.parseBoolean(value) && isAllowedTopicUpdate;
 			value = optionsStorage.getOption(OptionKeys.MAP_UPDATE_CONTRIBUTOR, String.valueOf(true));
-			updateMapContributor = Boolean.parseBoolean(value) && isAllowedMapUpdate;
+			isAllowedMapContributorUpdate = Boolean.parseBoolean(value) && isAllowedMapUpdate;
 
 			value = optionsStorage.getOption(OptionKeys.TOPIC_SET_CREATED_DATE, String.valueOf(true));
-			setTopicCreatedDate = Boolean.parseBoolean(value) && isAllowedTopicUpdate;
+			isAllowedTopicCreatedDateUpdate = Boolean.parseBoolean(value) && isAllowedTopicUpdate;
 			value = optionsStorage.getOption(OptionKeys.MAP_SET_CREATED_DATE, String.valueOf(true));
-			setMapCreatedDate = Boolean.parseBoolean(value) && isAllowedMapUpdate;
+			isAllowedMapCreatedDateUpdate = Boolean.parseBoolean(value) && isAllowedMapUpdate;
 			value = optionsStorage.getOption(OptionKeys.TOPIC_UPDATE_REVISED_DATES, String.valueOf(true));
-			updateTopicRevisedDate = Boolean.parseBoolean(value) && isAllowedTopicUpdate;
+			isAllowedTopicRevisedDateUpdate = Boolean.parseBoolean(value) && isAllowedTopicUpdate;
 			value = optionsStorage.getOption(OptionKeys.MAP_UPDATE_REVISED_DATES, String.valueOf(true));
-			updateMapRevisedDate = Boolean.parseBoolean(value) && isAllowedMapUpdate;
+			isAllowedMapRevisedDateUpdate = Boolean.parseBoolean(value) && isAllowedMapUpdate;
 			
 			value = optionsStorage.getOption(OptionKeys.CUSTOM_CREATOR_TYPE_VALUE, "");
 			if (value != null && !value.isEmpty()) {
@@ -380,11 +380,37 @@ public class PrologContentCreator {
 		}
 	}
 	
+	/**
+	 * Check if it's allowed the update for the given document type.
+	 * 
+	 * @param documentType The document type:  {@link DocumentType#TOPIC},
+   *          {@link DocumentType#MAP} or {@link DocumentType#BOOKMAP}
+	 * @return
+	 */
+	public boolean isAllowedUpdate(DocumentType documentType) {
+	  boolean isAllowed = false;
+	  if (documentType.equals(DocumentType.TOPIC)) {
+	    isAllowed = isAllowedTopicCreatorUpdate || isAllowedTopicContributorUpdate 
+	        || isAllowedTopicCreatedDateUpdate || isAllowedTopicRevisedDateUpdate;
+	  } else {
+	    isAllowed = isAllowedMapCreatorUpdate || isAllowedMapContributorUpdate
+	        || isAllowedMapCreatedDateUpdate || isAllowedMapRevisedDateUpdate;
+	  }
+	  return isAllowed;
+	}
 	
+	/**
+	 * Get the value of type attribute for creator.
+	 * @return The value of type attribute for creator.
+	 */
 	public String getCreatorTypeValue() {
     return creatorTypeValue;
   }
 	
+	 /**
+   * Get the value of type attribute for contributor.
+   * @return The value of type attribute for contributor.
+   */
 	public String getContributorTypeValue() {
     return contributorTypeValue;
   }

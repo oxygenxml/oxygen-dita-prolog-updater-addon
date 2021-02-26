@@ -8,7 +8,6 @@ import javax.swing.text.Position;
 import org.apache.log4j.Logger;
 
 import com.oxygenxml.prolog.updater.prolog.content.PrologContentCreator;
-import com.oxygenxml.prolog.updater.tags.OptionKeys;
 import com.oxygenxml.prolog.updater.utils.AuthorPageDocumentUtil;
 import com.oxygenxml.prolog.updater.utils.ElementXPathUtils;
 import com.oxygenxml.prolog.updater.utils.XMLFragmentUtils;
@@ -21,12 +20,9 @@ import ro.sync.ecss.extensions.api.AuthorOperationException;
 import ro.sync.ecss.extensions.api.node.AttrValue;
 import ro.sync.ecss.extensions.api.node.AuthorElement;
 import ro.sync.ecss.extensions.api.node.AuthorNode;
-import ro.sync.exml.workspace.api.PluginWorkspace;
-import ro.sync.exml.workspace.api.PluginWorkspaceProvider;
 import ro.sync.exml.workspace.api.editor.page.WSEditorPage;
 import ro.sync.exml.workspace.api.editor.page.author.WSAuthorEditorPage;
 import ro.sync.exml.workspace.api.editor.page.ditamap.WSDITAMapEditorPage;
-import ro.sync.exml.workspace.api.options.WSOptionsStorage;
 
 /**
  * Edit DITA topic in author mode.
@@ -452,12 +448,13 @@ public class DitaTopicAuthorEditor implements DitaEditor {
 	}
 
 	/**
-	 * Get the document type of the current document.
-	 * @return The document type of the current document 
+	 * Get the type of the current document.
+	 * @return The type of the current document 
 	 * ( {@link DocumentType#TOPIC}, {@link DocumentType#MAP}, 
 	 * {@link DocumentType#BOOKMAP} or {@link DocumentType#SUBJECT_SCHEME} ).
 	 */
-	private DocumentType getDocumentType() {
+	@Override
+	public DocumentType getDocumentType() {
 		DocumentType docType = DocumentType.TOPIC;
 		AuthorElement rootElement = documentController.getAuthorDocumentNode().getRootElement();
 		AttrValue classValue = rootElement.getAttribute(XmlElementsConstants.CLASS);
