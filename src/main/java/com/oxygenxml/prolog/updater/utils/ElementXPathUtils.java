@@ -132,50 +132,46 @@ public class ElementXPathUtils {
   }
   
   /**
-   * Get the XPath of the contributor element with the given author name.
+   * Get the XPath of the author element with the given type attribute and the given author name.
    * 
    * @param documentType
    *          The document type( {@link DocumentType#TOPIC},
    *          {@link DocumentType#MAP}, {@link DocumentType#BOOKMAP} 
    *          or {@link DocumentType#SUBJECT_SCHEME} ).
+   * @param authorType The type attribute of the author.
    * @param authorName The name of the author.         
    *        
-   * @return The XPath of last the creator element.
+   * @return The XPath of the author element with the given type attribute and the given author name.
    */
-  public static String getAuthorContributorXpath(DocumentType documentType, String authorName) {
+  public static String getAuthorXpathByTypeAndName(DocumentType documentType, String authorType, String authorName) {
     return documentType.equals(DocumentType.TOPIC) 
-        ? getAuthorContributorXPathInternal(ElementXPathConstants.PROLOG_XPATH, authorName)
-        : getAuthorContributorXPathInternal(ElementXPathConstants.TOPICMETA_XPATH, authorName);
+        ? getAuthorXpathByTypeAndNameInternal(ElementXPathConstants.PROLOG_XPATH, authorType, authorName)
+        : getAuthorXpathByTypeAndNameInternal(ElementXPathConstants.TOPICMETA_XPATH, authorType, authorName);
   }
   
   /**
-   * Get the xpath for retrieving the contributor elements with the given author name.
+   * Get the XPath of the author element with the given type attribute and the given author name.
    * 
    * @param prologTypeXpath The xpath to prolog/topicmeta element.
-   * @param authorName The name of the author.   
-   * 
-   * @return The xpath for retrieving all contributor elements with the given author name.
+   * @param authorType The type attribute of the author.
+   * @param authorName The name of the author.         
+   *        
+   * @return The XPath of the author element with the given type attribute and the given author name.
    */
-  private static String getAuthorContributorXPathInternal(String prologTypeXpath, String authorName) {
+  private static String getAuthorXpathByTypeAndNameInternal(String prologTypeXpath, String authorType, String authorName) {
     StringBuilder xpath = new StringBuilder();
     xpath.append(prologTypeXpath);
-    xpath.append("/author[@type='");
-    
-    String creatorTypeValue = XmlElementsConstants.CONTRIBUTOR_TYPE;
-    PluginWorkspace pluginWorkspace = PluginWorkspaceProvider.getPluginWorkspace();
-    if (pluginWorkspace != null) {
-      WSOptionsStorage optionsStorage = pluginWorkspace.getOptionsStorage();
-      String valueFromOptions = optionsStorage.getOption(OptionKeys.CUSTOM_CONTRIBUTOR_TYPE_VALUE, "");
-      if (!valueFromOptions.isEmpty()) {
-        creatorTypeValue = valueFromOptions;
-      }
+    xpath.append("/author");
+    if(authorType != null) {
+      xpath.append("[@type='");
+      xpath.append(authorType).append("']");
     }
-    xpath.append(creatorTypeValue);
-    xpath.append("' and text()= '").append(authorName).append("']");
-
+    if(authorName != null) {
+      xpath.append("[text()= '").append(authorName).append("']");
+    }
     return xpath.toString();
   }
-
+  
 	/**
 	 * Get the XPath of the critdates element.
 	 * 

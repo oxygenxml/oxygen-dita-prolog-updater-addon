@@ -415,10 +415,10 @@ public class DitaTopicAuthorEditor implements DitaEditor {
 		    fragment = prologCreator.getCreatorFragment(documentType);
 		  }
 		} else {
-		  if ( ! AuthorPageDocumentUtil.hasCreator(
-		      existentAuthorsElements, prologCreator.getCreatorTypeValue())
+		  if ( ! AuthorPageDocumentUtil.hasAuthorWithTypeAndName(
+		      existentAuthorsElements, prologCreator.getCreatorTypeValue(), prologCreator.getAuthor())
 		      &&
-		      ! AuthorPageDocumentUtil.hasContributor(
+		      ! AuthorPageDocumentUtil.hasAuthorWithTypeAndName(
 		      existentAuthorsElements, prologCreator.getContributorTypeValue(), prologCreator.getAuthor())) {
 		    // if wasn't found this contributor
 		    fragment = prologCreator.getContributorFragment(documentType);

@@ -120,22 +120,22 @@ public class AuthorPageDocumentUtil {
 	
 	
 	/**
-	 * Search for contributor author with the given name
+	 * Search for author with the type attribute and the given name
 	 * 
 	 * @param authors              The list with authors.
-	 * @param contributorTypeValue The value of type attribute for a contributor.
+	 * @param attributeType        The value of type attribute.
 	 * @param authorName           The name of the author.
 	 * 
 	 * @return <code>true</code> if was found an author with given type.
 	 */
-	public static boolean hasContributor(List<AuthorElement> authors, String contributorTypeValue, String authorName) {
+	public static boolean hasAuthorWithTypeAndName(List<AuthorElement> authors, String attributeType, String authorName) {
 		boolean foundContributor = false;
 
 		// Iterate over authors.
 		for (AuthorElement el : authors) {
 			// Get the type's value,
 			AttrValue typeAttr = el.getAttribute("type");
-			if (typeAttr != null && contributorTypeValue.equals(typeAttr.getValue())) {
+			if (typeAttr != null && attributeType.equals(typeAttr.getValue())) {
 			  try {
 			    // Check the content of contributor element.
 			    String textContent = el.getTextContent();

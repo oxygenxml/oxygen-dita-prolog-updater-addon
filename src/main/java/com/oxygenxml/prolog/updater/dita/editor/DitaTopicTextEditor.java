@@ -371,18 +371,23 @@ public class DitaTopicTextEditor implements DitaEditor {
 	private void editAuthor(boolean isNewDocument) throws XPathException, TextOperationException {
 	  // prolog contains author elements
 	  String fragment = null;
-	  Object[] creatorElement = wsTextEditorPage.evaluateXPath(
-	      ElementXPathUtils.getAuthorCreatorXpath(documentType));
 	  if (isNewDocument) {
+	    Object[] creatorElement = wsTextEditorPage.evaluateXPath(
+	        ElementXPathUtils.getAuthorXpathByTypeAndName(
+              documentType, prologCreator.getCreatorTypeValue(), null));
 	    // The document isn't new. We should work with creators
 	    if (creatorElement.length == 0) {
 	      fragment = prologCreator.getCreatorFragment(documentType);
 	    }
 	  } else {
 	    // The document isn't new. We should work with contributors
+	    Object[] creatorElement = wsTextEditorPage.evaluateXPath(
+          ElementXPathUtils.getAuthorXpathByTypeAndName(
+              documentType, prologCreator.getCreatorTypeValue(), prologCreator.getAuthor()));
 	    if (creatorElement.length == 0) {
 	      Object[] contributorElement = wsTextEditorPage.evaluateXPath(
-	          ElementXPathUtils.getAuthorContributorXpath(documentType, prologCreator.getAuthor()));
+	          ElementXPathUtils.getAuthorXpathByTypeAndName(
+	              documentType, prologCreator.getContributorTypeValue(), prologCreator.getAuthor()));
 	      if(contributorElement.length == 0) {
 	        fragment = prologCreator.getContributorFragment(documentType);
 	      }
