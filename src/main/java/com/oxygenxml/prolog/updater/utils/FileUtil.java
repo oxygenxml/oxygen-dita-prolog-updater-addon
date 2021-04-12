@@ -7,6 +7,8 @@ import java.nio.file.Files;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileTime;
 
+import ro.sync.util.URLUtil;
+
 /**
  * Utility methods for working with Files.
  * 
@@ -35,7 +37,7 @@ public class FileUtil {
     boolean isNew = false;
     try {
       if("file".equals(fileLocation.getProtocol())) {
-        File file = new File(fileLocation.getFile());
+        File file = URLUtil.getCanonicalFileFromFileUrl(fileLocation);
         BasicFileAttributes attr = Files.readAttributes(file.toPath(), BasicFileAttributes.class);
         FileTime creationFileTime = attr.creationTime();
         long currentTimeMillis = System.currentTimeMillis();
@@ -45,7 +47,7 @@ public class FileUtil {
         }
       }
     } catch (IOException e) {
-      // Ignore this
+      e.printStackTrace();
     }
 
     return isNew;
