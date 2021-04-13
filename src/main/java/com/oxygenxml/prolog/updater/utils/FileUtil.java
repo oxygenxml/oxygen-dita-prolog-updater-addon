@@ -7,6 +7,8 @@ import java.nio.file.Files;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileTime;
 
+import org.apache.log4j.Logger;
+
 import ro.sync.util.URLUtil;
 
 /**
@@ -16,7 +18,11 @@ import ro.sync.util.URLUtil;
  *
  */
 public class FileUtil {
-
+  /**
+   * Logger
+   */
+  private static final Logger logger = Logger.getLogger(FileUtil.class);
+  
   /**
    * Private constructor.
    */
@@ -42,14 +48,13 @@ public class FileUtil {
         FileTime creationFileTime = attr.creationTime();
         long currentTimeMillis = System.currentTimeMillis();
         if (creationFileTime != null &&
-            currentTimeMillis - creationFileTime.toMillis() < 2000) {
+            currentTimeMillis - creationFileTime.toMillis() < 20000) {
           isNew = true;
         }
       }
     } catch (IOException e) {
-      e.printStackTrace();
+      logger.debug(e.getMessage(), e);
     }
-
     return isNew;
   }
 }

@@ -35,9 +35,8 @@ public class FileUtilTest extends TestCase{
     	assertTrue("We consider that file is new when "
     			+ "creation time and last modification time differ with one second.", FileUtil.checkCurrentNewDocumentState(fileURL));
 
-    	// Sleep 2 seconds
-    	Thread.sleep(2000);  // NOSONAR
-    	assertFalse("The file isn't new.", FileUtil.checkCurrentNewDocumentState(fileURL));
+     URL oldFile = ro.sync.util.URLUtil.correct(new File("test/EXM-47809/oldFile.dita"));
+    	assertFalse("The file isn't new.", FileUtil.checkCurrentNewDocumentState(oldFile));
     } finally {
       testFile.delete();
       testFile.getParentFile().delete();
