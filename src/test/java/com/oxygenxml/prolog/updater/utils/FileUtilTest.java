@@ -42,4 +42,27 @@ public class FileUtilTest extends TestCase{
       testFile.getParentFile().delete();
     }
   }
+
+  /**
+   * <p><b>Description:</b> Test the 'checkCurrentNewDocumentState' method works properly when file has white-spaces in path.</p>
+   * <p><b>Bug ID:</b> EXM-47809</p>
+   *
+   * @author cosmin_duna
+   * @throws IOException 
+   *
+   * @throws Exception If it fails.
+   */ 
+  public void testCheckCurrentNewDocumentState_EXM_47809() throws Exception {
+    File testFile = new File("test/test with white spaces.dita");
+    testFile.getParentFile().mkdir();
+    try {
+    	testFile.createNewFile();
+    	Thread.sleep(100);
+    	URL fileURL = testFile.toURI().toURL();
+    	assertTrue(FileUtil.checkCurrentNewDocumentState(fileURL));
+    } finally {
+      testFile.delete();
+      testFile.getParentFile().delete();
+    }
+  }
 }
