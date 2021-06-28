@@ -24,7 +24,7 @@ https://www.oxygenxml.com/doc/versions/18.1/ug-editor/topics/packing-and-deployi
                     </div>
                     <hr/>
 					<div>
-						<h4>What's new in version 1.1.1</h4>
+						<h3>What's new in version 1.1.1</h3>
 						<ul>
 							<li>Fixed an issue where a 'contributor' author was inserted instead of a 'creator' author for newly created documents that have whitespaces in the path.</li>
 						</ul>
