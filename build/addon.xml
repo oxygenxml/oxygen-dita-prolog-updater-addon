@@ -7,8 +7,8 @@ https://www.oxygenxml.com/doc/versions/18.1/ug-editor/topics/packing-and-deployi
     <xt:extension xmlns:xt="http://www.oxygenxml.com/ns/extension"
         id="com.oxygenxml.prolog.updater">
         <xt:location
-            href="https://github.com/oxygenxml/dita-prolog-updater/releases/download/1.1.0/oxygen-dita-prolog-updater-1.1.0-plugin.jar"/>
-        <xt:version>1.1.0</xt:version>
+            href="https://github.com/oxygenxml/dita-prolog-updater/releases/download/1.1.1/oxygen-dita-prolog-updater-1.1.1-plugin.jar"/>
+        <xt:version>1.1.1</xt:version>
         <xt:oxy_version>19.0+</xt:oxy_version>
         <xt:type>plugin</xt:type>
         <xt:author>Syncro Soft</xt:author>
@@ -24,6 +24,12 @@ https://www.oxygenxml.com/doc/versions/18.1/ug-editor/topics/packing-and-deployi
                     </div>
                     <hr/>
                     <div>
+                        <h4>What's new in version 1.1.1</h4>
+                        <ul>
+                            <li>Fixed an issue where a 'contributor' author was inserted instead of a 'creator' author for newly created documents that have whitespaces in the path.</li>
+                        </ul>
+                    </div>
+                    <div>
                         <h3>What's new in version 1.1.0</h3>
                         <ol>
                             <li>Added a new option to customize the value of the <i>type</i> attribute for the <i>author</i> element that is inserted to allow you to specify the primary (<i>creator</i>) author. <a href="https://github.com/oxygenxml/oxygen-dita-prolog-updater/issues/20">#20</a></li>
@@ -32,7 +38,7 @@ https://www.oxygenxml.com/doc/versions/18.1/ug-editor/topics/packing-and-deployi
                             <li>Fixed an issue where a warning message was reported even though prolog updating was disabled. <a href="https://github.com/oxygenxml/oxygen-dita-prolog-updater/issues/15">#15</a></li>
                         </ol>
                     </div>
-            </body>
+                </body>
             </html>
         </xt:description>
         <xt:license><![CDATA[ Copyright 2018 Syncro Soft SRL
