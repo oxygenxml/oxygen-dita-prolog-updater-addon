@@ -4,13 +4,9 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.JComponent;
-
 import com.oxygenxml.prolog.updater.DitaPrologUpdater;
 import com.oxygenxml.prolog.updater.utils.FileUtil;
-import com.oxygenxml.prolog.updater.view.PrologOptionPage;
 
-import ro.sync.exml.plugin.option.OptionPagePluginExtension;
 import ro.sync.exml.plugin.workspace.WorkspaceAccessPluginExtension;
 import ro.sync.exml.workspace.api.PluginWorkspace;
 import ro.sync.exml.workspace.api.editor.WSEditor;
@@ -24,13 +20,7 @@ import ro.sync.exml.workspace.api.standalone.StandalonePluginWorkspace;
  * 
  * @author cosmin_duna
  */
-public class PrologUpdaterExtension extends OptionPagePluginExtension implements WorkspaceAccessPluginExtension {
-
-	/**
-	 * The page with option for this plugin.
-	 */
-	private PrologOptionPage prologOptionPage = null;
-
+public class PrologUpdaterExtension implements WorkspaceAccessPluginExtension {
 	/**
 	 * The name of the DITA type.
 	 */
@@ -207,30 +197,4 @@ public class PrologUpdaterExtension extends OptionPagePluginExtension implements
 	public boolean applicationClosing() {
 		return true;
 	}
-
-	@Override
-	public void apply(PluginWorkspace pluginWorkspace) {
-		if (prologOptionPage != null) {
-			prologOptionPage.savePageState();
-		}
-	}
-
-	@Override
-	public void restoreDefaults() {
-		if (prologOptionPage != null) {
-			prologOptionPage.restoreDefault();
-		}
-	}
-
-	@Override
-	public String getTitle() {
-		return PrologUpdaterPlugin.getInstance().getDescriptor().getName();
-	}
-
-	@Override
-	public JComponent init(PluginWorkspace pluginWorkspace) {
-		prologOptionPage = new PrologOptionPage();
-		return prologOptionPage;
-	}
-
 }

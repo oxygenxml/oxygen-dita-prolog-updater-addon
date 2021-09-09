@@ -23,7 +23,7 @@ import ro.sync.exml.workspace.api.standalone.StandalonePluginWorkspace;
 /**
  * The option page for the prolog updater plugin.
  */
-public class PrologOptionPage extends JPanel {
+public class PrologOptionPanel extends JPanel {
 	/**
 	 * THe serial ID
 	 */
@@ -129,7 +129,7 @@ public class PrologOptionPage extends JPanel {
 	/**
 	 * Constructor.
 	 */
-	public PrologOptionPage() {
+	public PrologOptionPanel() {
 		super(new GridBagLayout());
 
 		StandalonePluginWorkspace pluginWorkspace = (StandalonePluginWorkspace) PluginWorkspaceProvider
@@ -473,4 +473,28 @@ public class PrologOptionPage extends JPanel {
 		mapUpdateContributor.setSelected(CHECK_SELECTED_DEFAULT_BOOLEAN);
 		mapUpdateRevised.setSelected(CHECK_SELECTED_DEFAULT_BOOLEAN);
 	}
+
+	/**
+	 * Get the options' keys used in this panel.
+	 * @return
+	 */
+  public String[] getOptionsKeys() {
+    return new String[] {
+        OptionKeys.AUTHOR_NAME,
+        OptionKeys.CUSTOM_CREATOR_TYPE_VALUE,
+        OptionKeys.CUSTOM_CONTRIBUTOR_TYPE_VALUE,
+        OptionKeys.DATE_FORMAT,
+        OptionKeys.LIMIT_REVISED_ELEMENTS,
+        OptionKeys.MAX_REVISED_ELEMENTS,
+        OptionKeys.TOPIC_ENABLE_UPDATE_ON_SAVE,
+        OptionKeys.TOPIC_SET_CREATOR,
+        OptionKeys.TOPIC_SET_CREATED_DATE,
+        OptionKeys.TOPIC_UPDATE_CONTRIBUTOR,
+        OptionKeys.TOPIC_UPDATE_REVISED_DATES,
+        OptionKeys.MAP_ENABLE_UPDATE_ON_SAVE,
+        OptionKeys.MAP_SET_CREATOR,
+        OptionKeys.MAP_SET_CREATED_DATE,
+        OptionKeys.MAP_UPDATE_CONTRIBUTOR,
+        OptionKeys.MAP_UPDATE_REVISED_DATES};
+  }
 }
