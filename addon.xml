@@ -9,7 +9,7 @@ https://www.oxygenxml.com/doc/versions/18.1/ug-editor/topics/packing-and-deployi
         <xt:location
             href="https://github.com/oxygenxml/dita-prolog-updater/releases/download/${project.version}/${project.build.finalName}-plugin.jar"/>
         <xt:version>${project.version}</xt:version>
-        <xt:oxy_version>19.0+</xt:oxy_version>
+        <xt:oxy_version>22.1+</xt:oxy_version>
         <xt:type>plugin</xt:type>
         <xt:author>Syncro Soft</xt:author>
         <xt:name>DITA Prolog Updater</xt:name>
@@ -23,6 +23,15 @@ https://www.oxygenxml.com/doc/versions/18.1/ug-editor/topics/packing-and-deployi
                         <p>For more details, see: <a href="https://github.com/oxygenxml/oxygen-dita-prolog-updater">https://github.com/oxygenxml/oxygen-dita-prolog-updater</a></p>
                     </div>
                     <hr/>
+                    <div>
+                        <h3>What's new in version 1.1.2</h3>
+                        <ul>
+                            <li><b>Critical/Security:</b> The add-on no longer distributes log4j libraries to avoid the
+                                Log4Shell exploit. For more info see: <a
+                                    href="https://www.randori.com/blog/cve-2021-44228/"
+                                    >CVE-2021-44228</a>.</li>
+                        </ul>
+                    </div>
 					<div>
 						<h3>What's new in version 1.1.1</h3>
 						<ul>
