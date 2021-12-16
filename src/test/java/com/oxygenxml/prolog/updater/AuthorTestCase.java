@@ -13,8 +13,8 @@ import org.mockito.Mockito;
 import org.w3c.css.sac.InputSource;
 import org.xml.sax.SAXException;
 
-import com.oxygenxml.prolog.updater.DitaPrologUpdater;
 import junit.framework.TestCase;
+import ro.sync.ecss.component.CSSInputSource;
 import ro.sync.ecss.css.csstopdf.facade.AuthorDocumentFacade;
 import ro.sync.ecss.css.csstopdf.facade.AuthorDocumentFacadeFactory;
 import ro.sync.ecss.css.csstopdf.facade.CatalogResolverFacade;
@@ -111,7 +111,7 @@ public abstract class AuthorTestCase extends TestCase {
 		// Create a AuthorDocumentController
 		//
 		AuthorDocumentFacadeFactory facadeFactory = new AuthorDocumentFacadeFactory();
-		InputSource[] cssInputSources = new InputSource[] { new InputSource(new StringReader("* {display: block;}")) };
+		CSSInputSource[] cssInputSources = new CSSInputSource[] { new CSSInputSource(new InputSource(new StringReader("* {display: block;}")), (byte) 0) };
 		StringReader reader = new StringReader(inputXML);
 		AuthorDocumentFacade facade = facadeFactory.createFacade(new StreamSource(reader), cssInputSources, null,
 				new File("."));

@@ -51,14 +51,8 @@
 		<dependency>
 			<groupId>com.oxygenxml</groupId>
 			<artifactId>oxygen-sdk</artifactId>
-			<version>19.0.0.0</version>
+			<version>22.1.0.0</version>
 			<scope>provided</scope>
-			<exclusions>
-				<exclusion>
-					<groupId>log4j</groupId>
-  					<artifactId>log4j</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 
 		<dependency>
