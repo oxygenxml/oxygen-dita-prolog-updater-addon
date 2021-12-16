@@ -81,7 +81,31 @@ public abstract class AuthorTestCase extends TestCase {
 	 */
 	protected void testInAuthorMode(String inputXML, boolean isNewDocument, String expectedXML)
 			throws IOException, SAXException, BadLocationException, ParserConfigurationException, TransformerException {
-		initializeCatalogs();
+		String toXML = updateProlog(inputXML, isNewDocument);
+
+		String expected = XmlPrettyPrinterUtil.indent(expectedXML).replaceAll(" +", " ");
+		String actual = XmlPrettyPrinterUtil.indent(toXML).replaceAll(" +", " ");
+
+		expected = expected.replaceAll(" <", "<");
+		actual = actual.replaceAll(" <", "<");
+
+		expected = expected.replaceAll("> ", ">");
+		actual = actual.replaceAll("> ", ">");
+
+		assertEquals("The updated content is wrong", expected, actual);
+	}
+
+	/**
+	 * Update the prolog into the given input xml.
+	 * 
+   * @param inputXML The input xml content to update.
+   * @param isNewDocument <code>true</code> if document is new, <code>false</code> otherwise
+	 * 
+	 * @return The updated xml content.
+	 */
+  public String updateProlog(String inputXML, boolean isNewDocument)
+      throws IOException, SAXException, BadLocationException {
+    initializeCatalogs();
 
 		//
 		// Create a AuthorDocumentController
@@ -133,18 +157,8 @@ public abstract class AuthorTestCase extends TestCase {
 		AuthorDocument documentNode = controller.getAuthorDocumentNode();
 		AuthorDocumentFragment fragment = controller.createDocumentFragment(documentNode, true);
 		String toXML = controller.serializeFragmentToXML(fragment);
-
-		String expected = XmlPrettyPrinterUtil.indent(expectedXML).replaceAll(" +", " ");
-		String actual = XmlPrettyPrinterUtil.indent(toXML).replaceAll(" +", " ");
-
-		expected = expected.replaceAll(" <", "<");
-		actual = actual.replaceAll(" <", "<");
-
-		expected = expected.replaceAll("> ", ">");
-		actual = actual.replaceAll("> ", ">");
-
-		assertEquals("The updated content is wrong", expected, actual);
-	}
+    return toXML;
+  }
 
 	/**
 	 * Get the date format for TCs

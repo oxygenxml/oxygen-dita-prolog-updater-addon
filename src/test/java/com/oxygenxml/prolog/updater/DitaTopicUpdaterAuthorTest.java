@@ -222,5 +222,47 @@ public class DitaTopicUpdaterAuthorTest extends AuthorTestCase{
     
   }
 
+  /**
+   * <p><b>Description:</b>Test that resusable files are not updated.</p>
+   * <p><b>Bug ID:</b> EXM-49360</p>
+   *
+   * @author cosmin_duna
+   */
+  public void testReusableFileAreNotUpdated() throws IOException, SAXException, BadLocationException, ParserConfigurationException, TransformerException {
+  	String xml ="<?xml version='1.0' encoding='UTF-8'?>\n" + 
+  	    "<!DOCTYPE oXygen:ReusableComponent [\n" + 
+  	    "<!ELEMENT oXygen:ReusableComponent (oXygen:ComponentDescription, oXygen:ComponentDefinition)>\n" + 
+  	    "<!ATTLIST oXygen:ReusableComponent \n" + 
+  	    "    xmlns:oXygen CDATA #FIXED \"http://www.oxygenxml.com/ns/dita/reuse\" \n" + 
+  	    "    id CDATA #IMPLIED\n" + 
+  	    "    xml:lang CDATA #IMPLIED\n" + 
+  	    "    domains CDATA \"(topic abbrev-d)                            a(props deliveryTarget)                            (topic equation-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic mathml-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic svg-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)    (topic oXygen-reuse-d) \"\n" + 
+  	    "    class CDATA \"- topic/topic oXygen:ReusableComponent/oXygen:ReusableComponent \"    \n" + 
+  	    "    xmlns:ditaarch CDATA #FIXED \"http://dita.oasis-open.org/architecture/2005/\"\n" + 
+  	    "    ditaarch:DITAArchVersion CDATA #FIXED \"1.2\" \n" + 
+  	    "    >\n" + 
+  	    "<!ELEMENT oXygen:ComponentDescription (#PCDATA)>\n" + 
+  	    "<!ATTLIST oXygen:ComponentDescription \n" + 
+  	    " class CDATA \"- topic/title oXygen:ReusableComponent/oXygen:ComponentDescription \">\n" + 
+  	    "<!ELEMENT oXygen:ComponentDefinition ANY>\n" + 
+  	    "<!ATTLIST oXygen:ComponentDefinition\n" + 
+  	    "    class CDATA \"- topic/body oXygen:ReusableComponent/oXygen:ComponentDefinition \">\n" + 
+  	    "\n" + 
+  	    "<!ENTITY % dtd PUBLIC \"-//OASIS//DTD DITA Topic//EN\" \"topic.dtd\">\n" + 
+  	    "%dtd;\n" + 
+  	    "\n" + 
+  	    "]>\n" + 
+  	    "<oXygen:ReusableComponent id=\"ReusableComponent_ucc_kgx_xrb\">\n" + 
+  	    "    <oXygen:ComponentDescription></oXygen:ComponentDescription>\n" + 
+  	    "    <oXygen:ComponentDefinition>\n" + 
+  	    "        <p id=\"p_wcc_kgx_xrb\">Most of the information was taken from <xref\n" + 
+  	    "                href=\"http://www.wikipedia.com\" format=\"html\" scope=\"external\">Wikipedia</xref>, the\n" + 
+  	    "            free encyclopedia.</p></oXygen:ComponentDefinition>\n" + 
+  	    "</oXygen:ReusableComponent>\n" + 
+  	    "";
+  	
+  	String contentAfterUpdate = updateProlog(xml, true);
+  	assertFalse(contentAfterUpdate.contains("prolog"));
+  }
 	
 }

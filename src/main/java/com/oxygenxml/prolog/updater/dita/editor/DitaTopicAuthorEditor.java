@@ -177,11 +177,9 @@ public class DitaTopicAuthorEditor implements DitaEditor {
 		      );
 
 		  if (prologXpath != null) {
+		    // EXM-49360: Insert only when a valid xpath was found using schema
 		    AuthorPageDocumentUtil.insertFragmentSchemaAware(page, documentController, prologFragment, prologXpath,
 		        AuthorConstants.POSITION_AFTER);
-		  } else {
-		    AuthorPageDocumentUtil.insertFragmentSchemaAware(page, documentController, prologFragment,
-		        ElementXPathUtils.getRootXpath(documentType), AuthorConstants.POSITION_INSIDE_FIRST);
 		  }
 		}
 	}

@@ -119,13 +119,10 @@ public class DitaTopicTextEditor implements DitaEditor {
 				ElementXPathUtils.getRootXpath(documentType));
 		
 		if (xp != null) {
-			TextPageDocumentUtil.insertXmlFragment(wsTextEditorPage,
+		  // EXM-49360: Insert only when a valid xpath was found using schema
+		  TextPageDocumentUtil.insertXmlFragment(wsTextEditorPage,
 					prologCreator.getPrologFragment(isNewDocument, documentType), xp,
 					RelativeInsertPosition.INSERT_LOCATION_AFTER);
-		} else {
-			TextPageDocumentUtil.insertXmlFragment(wsTextEditorPage,
-					prologCreator.getPrologFragment(isNewDocument, documentType), ElementXPathUtils.getRootXpath(documentType),
-					RelativeInsertPosition.INSERT_LOCATION_AS_FIRST_CHILD);
 		}
 	}
 
