@@ -2,7 +2,7 @@
 Oxygen XML plugin that contributes a preferences page that includes various options for updating the "prolog" section of a DITA topic/map.
 
 ## Compatibility
-This add-on is compatible with Oxygen XML Editor (or XML Author) version 19.0 or higher. 
+This add-on is compatible with Oxygen XML Editor (or XML Author) version 22.1 or higher. 
 
 ## How to install
 

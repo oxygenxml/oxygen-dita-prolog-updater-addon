@@ -23,6 +23,13 @@ https://www.oxygenxml.com/doc/versions/18.1/ug-editor/topics/packing-and-deployi
                         <p>For more details, see: <a href="https://github.com/oxygenxml/oxygen-dita-prolog-updater">https://github.com/oxygenxml/oxygen-dita-prolog-updater</a></p>
                     </div>
                     <hr/>
+                    <div>
+						<h3>What's new in version 1.1.2</h3>
+						<ul>
+							<li>Added a new option for controlling where to store the options from the add-on preferences page (either in global options or in project-level options).</li>
+							<li>Fixed an issue where the prolog element was inserted in documents that do not allow it.</li>
+						</ul>
+					</div>
 					<div>
 						<h3>What's new in version 1.1.1</h3>
 						<ul>
