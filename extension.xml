@@ -1,54 +1,93 @@
-<!-- This is used to install the plugin as an add-on:
-https://www.oxygenxml.com/doc/versions/18.1/ug-editor/topics/packing-and-deploying-addons.html#packing-and-deploying-addons
- -->
-<xt:extensions xmlns:xt="http://www.oxygenxml.com/ns/extension"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.oxygenxml.com/ns/extension http://www.oxygenxml.com/ns/extension/extensions.xsd">
-    <xt:extension xmlns:xt="http://www.oxygenxml.com/ns/extension"
-        id="com.oxygenxml.prolog.updater">
-        <xt:location
-            href="https://github.com/oxygenxml/dita-prolog-updater/releases/download/${project.version}/${project.build.finalName}-plugin.jar"/>
-        <xt:version>${project.version}</xt:version>
-        <xt:oxy_version>22.1+</xt:oxy_version>
-        <xt:type>plugin</xt:type>
-        <xt:author>Syncro Soft</xt:author>
-        <xt:name>DITA Prolog Updater</xt:name>
-        <xt:description><html xmlns="http://www.w3.org/1999/xhtml">
-                <head>
-                    <title>Oxygen Dita Prolog Updater</title>
-                </head>
-                <body>
-                    <div>
-                        <p>This add-on contributes a preferences page that includes various options for updating the "prolog" section of a DITA topic/map.</p>
-                        <p>For more details, see: <a href="https://github.com/oxygenxml/oxygen-dita-prolog-updater">https://github.com/oxygenxml/oxygen-dita-prolog-updater</a></p>
-                    </div>
-                    <hr/>
-                    <div>
-						<h3>What's new in version 1.1.2</h3>
-						<ul>
-							<li>Added a new option for controlling where to store the options from the add-on preferences page (either in global options or in project-level options).</li>
-							<li>Fixed an issue where the prolog element was inserted in documents that do not allow it.</li>
-						</ul>
-					</div>
-					<div>
-						<h3>What's new in version 1.1.1</h3>
-						<ul>
-							<li>Fixed an issue where a 'contributor' author was inserted instead of a 'creator' author for newly created documents that have whitespaces in the path.</li>
-						</ul>
-					</div>
-                    <div>
-                        <h3>What's new in version 1.1.0</h3>
-                        <ol>
-                            <li>Added a new option to customize the value of the <i>type</i> attribute for the <i>author</i> element that is inserted to allow you to specify the primary (<i>creator</i>) author. <a href="https://github.com/oxygenxml/oxygen-dita-prolog-updater/issues/20">#20</a></li>
-                            <li>Added a new option to customize the value of the <i>type</i> attribute for the <i>author</i> element that is inserted to allow you to specify an additional author (<i>contributor</i>). <a href="https://github.com/oxygenxml/oxygen-dita-prolog-updater/issues/20">#20</a></li>
-                            <li>Improved the process so that an additional author (<i>contributor</i>) cannot be added if they are already specified as the primary (<i>creator</i>) author. <a href="https://github.com/oxygenxml/oxygen-dita-prolog-updater/issues/21">#21</a></li>
-                            <li>Fixed an issue where a warning message was reported even though prolog updating was disabled. <a href="https://github.com/oxygenxml/oxygen-dita-prolog-updater/issues/15">#15</a></li>
-                        </ol>
-                    </div>
-            </body>
-            </html>
-        </xt:description>
-        <xt:license><![CDATA[ Copyright 2018 Syncro Soft SRL
+<xt:extension
+	xmlns:xt="http://www.oxygenxml.com/ns/extension"
+	id="com.oxygenxml.prolog.updater">
+	<xt:location href="${project.build.finalName}-plugin.jar" />
+	<xt:version>${project.nosnapshot.version}</xt:version>
+	<xt:oxy_version>22.1+</xt:oxy_version>
+	<xt:type>plugin</xt:type>
+	<xt:author>Syncro Soft</xt:author>
+	<xt:name>DITA Prolog Updater</xt:name>
+	<xt:description>
+		<html xmlns="http://www.w3.org/1999/xhtml">
+			<head>
+				<title>Oxygen Dita Prolog Updater</title>
+			</head>
+			<body>
+				<div>
+					<p>This add-on contributes a preferences page that includes various
+						options for updating the "prolog" section of a DITA topic/map.</p>
+					<p>
+						For more details, see:
+						<a
+							href="https://github.com/oxygenxml/oxygen-dita-prolog-updater">https://github.com/oxygenxml/oxygen-dita-prolog-updater</a>
+					</p>
+				</div>
+				<hr />
+				<div>
+					<h3>What's new in version 1.1.2</h3>
+					<ul>
+						<li>Added a new option for controlling where to store the options
+							from the add-on preferences page (either in global options or in
+							project-level options).</li>
+						<li>Fixed an issue where the prolog element was inserted in
+							documents that do not allow it.</li>
+					</ul>
+				</div>
+				<div>
+					<h3>What's new in version 1.1.1</h3>
+					<ul>
+						<li>Fixed an issue where a 'contributor' author was inserted
+							instead of a 'creator' author for newly created documents that
+							have whitespaces in the path.</li>
+					</ul>
+				</div>
+				<div>
+					<h3>What's new in version 1.1.0</h3>
+					<ol>
+						<li>
+							Added a new option to customize the value of the
+							<i>type</i>
+							attribute for the
+							<i>author</i>
+							element that is inserted to allow you to specify the primary (
+							<i>creator</i>
+							) author.
+							<a
+								href="https://github.com/oxygenxml/oxygen-dita-prolog-updater/issues/20">#20</a>
+						</li>
+						<li>
+							Added a new option to customize the value of the
+							<i>type</i>
+							attribute for the
+							<i>author</i>
+							element that is inserted to allow you to specify an additional
+							author (
+							<i>contributor</i>
+							).
+							<a
+								href="https://github.com/oxygenxml/oxygen-dita-prolog-updater/issues/20">#20</a>
+						</li>
+						<li>
+							Improved the process so that an additional author (
+							<i>contributor</i>
+							) cannot be added if they are already specified as the primary (
+							<i>creator</i>
+							) author.
+							<a
+								href="https://github.com/oxygenxml/oxygen-dita-prolog-updater/issues/21">#21</a>
+						</li>
+						<li>
+							Fixed an issue where a warning message was reported even though
+							prolog updating was disabled.
+							<a
+								href="https://github.com/oxygenxml/oxygen-dita-prolog-updater/issues/15">#15</a>
+						</li>
+					</ol>
+				</div>
+			</body>
+		</html>
+	</xt:description>
+	<xt:license><![CDATA[ Copyright 2018 Syncro Soft SRL
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -62,5 +101,4 @@ https://www.oxygenxml.com/doc/versions/18.1/ug-editor/topics/packing-and-deployi
    See the License for the specific language governing permissions and
    limitations under the License.
 ]]></xt:license>
-    </xt:extension>
-</xt:extensions>
+</xt:extension>

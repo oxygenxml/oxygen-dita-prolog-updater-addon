@@ -110,16 +110,6 @@
 				<artifactId>maven-project-info-reports-plugin</artifactId>
 			</plugin>
 
-			<!-- We only want the final JAR package in the target folder so that it's 
-				easier for users to identify it. -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<configuration>
-					<outputDirectory>${project.build.directory}/build</outputDirectory>
-				</configuration>
-			</plugin>
-
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<executions>
