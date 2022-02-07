@@ -8,7 +8,8 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.Position;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import ro.sync.contentcompletion.xml.CIElement;
 import ro.sync.contentcompletion.xml.ContextElement;
@@ -34,7 +35,7 @@ public class TextPageDocumentUtil {
 	/**
 	 * Logger
 	 */
-	private static final Logger logger = Logger.getLogger(TextPageDocumentUtil.class);
+	private static final Logger logger = LoggerFactory.getLogger(TextPageDocumentUtil.class);
 
 	/**
 	 * Private constructor.
@@ -114,7 +115,7 @@ public class TextPageDocumentUtil {
 						fragment = fragment.substring(0, fragment.length() - 1);
 					}
 				} catch (PrettyPrintException e) {
-					logger.debug(e, e);
+					logger.debug(String.valueOf(e), e);
 				}
 			}
 		}
@@ -166,7 +167,7 @@ public class TextPageDocumentUtil {
 				}
 			}
 		} catch (XPathException e) {
-			logger.warn(e, e.getCause());
+			logger.warn(String.valueOf(e), e.getCause());
 		}
 		
 		return toReturn;

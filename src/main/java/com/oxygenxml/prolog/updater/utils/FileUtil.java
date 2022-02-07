@@ -7,7 +7,8 @@ import java.nio.file.Files;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileTime;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import ro.sync.util.URLUtil;
 
@@ -21,7 +22,7 @@ public class FileUtil {
   /**
    * Logger
    */
-  private static final Logger logger = Logger.getLogger(FileUtil.class);
+  private static final Logger logger = LoggerFactory.getLogger(FileUtil.class);
   
   /**
    * Private constructor.

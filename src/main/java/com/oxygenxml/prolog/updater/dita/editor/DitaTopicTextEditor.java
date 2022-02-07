@@ -2,7 +2,8 @@ package com.oxygenxml.prolog.updater.dita.editor;
 
 import javax.swing.text.BadLocationException;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.oxygenxml.prolog.updater.prolog.content.PrologContentCreator;
 import com.oxygenxml.prolog.updater.utils.ElementXPathConstants;
@@ -29,7 +30,7 @@ public class DitaTopicTextEditor implements DitaEditor {
 	/**
 	 * Logger
 	 */
-	private static final Logger logger = Logger.getLogger(DitaTopicTextEditor.class);
+	private static final Logger logger = LoggerFactory.getLogger(DitaTopicTextEditor.class);
 
 	/**
 	 * Contains all elements from prolog.
@@ -293,7 +294,7 @@ public class DitaTopicTextEditor implements DitaEditor {
       
       wsTextEditorPage.getDocument().remove(startOffsetToDelete, lengthToDelete);
     } catch (BadLocationException e) {
-     logger.debug(e, e);
+     logger.debug(String.valueOf(e), e);
     }
   }
 
@@ -424,7 +425,7 @@ public class DitaTopicTextEditor implements DitaEditor {
 				}
 			}
 		} catch (XPathException e) {
-			logger.debug(e, e.getCause());
+			logger.debug(String.valueOf(e), e.getCause());
 		}
 		
 		return docType;

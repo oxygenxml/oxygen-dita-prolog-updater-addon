@@ -4,7 +4,8 @@ import java.lang.reflect.InvocationTargetException;
 
 import javax.swing.SwingUtilities;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A collection of utility methods used in AWT invocations.
@@ -17,7 +18,7 @@ public class AWTUtil {
 	/**
 	 * Logger for logging.
 	 */
-	private static final Logger logger = Logger.getLogger(AWTUtil.class.getName());
+	private static final Logger logger = LoggerFactory.getLogger(AWTUtil.class.getName());
 
 	/**
 	 * Private constructor for utilities class. Avoid instantiation.
@@ -41,10 +42,9 @@ public class AWTUtil {
 				SwingUtilities.invokeAndWait(runnable);
 			}
 		} catch (InvocationTargetException ex) {
-			logger.error(ex, ex);
-			logger.error(ex.getCause(), ex.getCause());
+			logger.error(String.valueOf(ex), ex);
 		} catch (InterruptedException e) {
-			logger.debug(e, e);
+			logger.debug(String.valueOf(e), e);
 			Thread.currentThread().interrupt();
 		}
 	}

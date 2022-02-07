@@ -6,7 +6,8 @@ import java.util.List;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Position;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import ro.sync.contentcompletion.xml.CIElement;
 import ro.sync.contentcompletion.xml.ContextElement;
@@ -32,7 +33,7 @@ public class AuthorPageDocumentUtil {
 	/**
 	 * Logger for logging.
 	 */
-	private static final Logger logger = Logger.getLogger(AuthorPageDocumentUtil.class.getName());
+	private static final Logger logger = LoggerFactory.getLogger(AuthorPageDocumentUtil.class.getName());
 
 	/**
 	 * Private constructor. Avoid instantiation.
@@ -310,7 +311,7 @@ public class AuthorPageDocumentUtil {
 				try {
 					currentContext = schemaManager.createWhatElementsCanGoHereContext(offset + 1);
 				} catch (BadLocationException e) {
-					logger.warn(e, e.getCause());
+					logger.warn(String.valueOf(e), e.getCause());
 				}
 				
 				Boolean isContextForProlog = analyzeContextForElement(

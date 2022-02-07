@@ -5,7 +5,8 @@ import java.util.List;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Position;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.oxygenxml.prolog.updater.prolog.content.PrologContentCreator;
 import com.oxygenxml.prolog.updater.utils.AuthorPageDocumentUtil;
@@ -34,7 +35,7 @@ public class DitaTopicAuthorEditor implements DitaEditor {
 	/**
 	 * Logger
 	 */
-	private static final Logger logger = Logger.getLogger(DitaTopicAuthorEditor.class);
+	private static final Logger logger = LoggerFactory.getLogger(DitaTopicAuthorEditor.class);
 
 	/**
 	 * Contains all elements(tags) from prolog.
@@ -360,7 +361,7 @@ public class DitaTopicAuthorEditor implements DitaEditor {
           caretPosition = documentController.createPositionInContent(
               ((WSAuthorEditorPage)page).getCaretOffset());
         } catch (BadLocationException e) {
-          logger.error(e, e);
+          logger.error(String.valueOf(e), e);
         }
       }
       
