@@ -3,8 +3,8 @@ package com.oxygenxml.prolog.updater.prolog.content;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-import org.mockito.internal.matchers.Any;
 import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
@@ -21,6 +21,7 @@ import ro.sync.exml.workspace.api.options.WSOptionsStorage;
  * Test the content generated for the DITA topic according to setting.
  */
 @RunWith(PowerMockRunner.class)
+@PowerMockIgnore("jdk.internal.reflect.*")
 public class PrologContentCreatorTopicTest extends TestCase {
 	/**
 	 * The author name added in inserted content.
