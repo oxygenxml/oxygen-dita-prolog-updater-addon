@@ -88,7 +88,9 @@ public class PrologUpdaterExtension implements WorkspaceAccessPluginExtension {
 				          xmlUpdater.updateProlog(
 				              editor,
 				              isNew != null ? isNew : Boolean.FALSE);
-				          editor.save();
+				          if(editor.isModified()) {
+				            editor.save();
+				          }
 				          wasSaved = false;
 				        }
 				      }
